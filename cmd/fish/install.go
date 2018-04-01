@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -17,15 +16,15 @@ import (
 )
 
 const installDesc = `
-Install a fish food.
+Install fish food.
 `
 
-func newInstallCmd(out io.Writer) *cobra.Command {
+func newInstallCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "install [food]",
 		Short: "install food",
 		Long:  installDesc,
-		Args: cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fishFood := args[0]
 			if strings.Contains(fishFood, "./\\") {

@@ -26,10 +26,22 @@
   version = "v0.3.2"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/gosuri/uitable"
+  packages = [".","util/strutil","util/wordwrap"]
+  revision = "36ee7e946282a3fb1cfecd476ddc9b35d8847e42"
+
+[[projects]]
   name = "github.com/inconshreveable/mousetrap"
   packages = ["."]
   revision = "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
   version = "v1.0"
+
+[[projects]]
+  name = "github.com/mattn/go-runewidth"
+  packages = ["."]
+  revision = "9e777a8366cce605130a531d2cd6363d07ad7317"
+  version = "v0.0.2"
 
 [[projects]]
   branch = "master"
@@ -112,6 +124,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f25567af4d5795e731e98afec98c78a4ae8bb9862d88ca530b2e26f8791a18f0"
+  inputs-digest = "4b92bd71f455c9b3a7ef455c1bc105deb32079dce2e30bd7f0f0dff1cbf69c46"
   solver-name = "gps-cdcl"
   solver-version = 1

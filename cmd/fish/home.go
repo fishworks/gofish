@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/spf13/cobra"
 
@@ -10,17 +9,17 @@ import (
 )
 
 const homeDesc = `
-Display the location of fish's home directory. This is where barrels,
-cached downloads and rigs live.
+Display the location of fish's home directory. This is where barrels, cached downloads and rigs
+live.
 `
 
-func newHomeCmd(out io.Writer) *cobra.Command {
+func newHomeCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "home",
 		Short: "print the location of fish's home directory",
 		Long:  homeDesc,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Fprintln(out, fish.Home(fish.HomePath))
+			fmt.Println(fish.Home(fish.HomePath))
 			return nil
 		},
 	}

@@ -15,7 +15,7 @@ func ensureDirectories(dirs []string) error {
 	if err != nil {
 		return fmt.Errorf("Could not determine current user: %s", err)
 	}
-	fmt.Printf("The following new directories will be created and will have their owner set to %s:\n", curUser.Name)
+	fmt.Printf("The following new directories will be created:\n")
 	fmt.Println(strings.Join(dirs, "\n"))
 	for _, dir := range dirs {
 		if fi, err := os.Stat(dir); err != nil {
@@ -28,7 +28,8 @@ func ensureDirectories(dirs []string) error {
 		} else if !fi.IsDir() {
 			return fmt.Errorf("%s must be a directory", dir)
 		}
-		cmd := exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser.Name, curUser.Gid), dir)
+		fmt.Printf("sudo chown %s %s\n", fmt.Sprintf("%s:%s", curUser.Uid, curUser.Gid), dir)
+		cmd := exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser.Uid, curUser.Gid), dir)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {

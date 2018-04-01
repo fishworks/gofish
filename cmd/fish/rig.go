@@ -1,27 +1,21 @@
 package main
 
-import (
-	"fmt"
-	"io"
-
-	"github.com/spf13/cobra"
-
-	"github.com/fishworks/fish"
-)
+import "github.com/spf13/cobra"
 
 const rigDesc = `
-List all installed rigs.
+Manage rigs.
 `
 
-func newRigCmd(out io.Writer) *cobra.Command {
+func newRigCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "rig",
-		Short: "list installed rigs",
+		Short: "add rigs",
 		Long:  rigDesc,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Println(fish.Home(fish.HomePath).Rigs())
-			return nil
-		},
 	}
+	cmd.AddCommand(
+		newRigInstallCmd(),
+		newRigListCmd(),
+		newRigUninstallCmd(),
+	)
 	return cmd
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"os"
 
 	log "github.com/sirupsen/logrus"
@@ -11,12 +10,13 @@ import (
 var (
 	// logLevel is a value to indicate how verbose the user would like the logs to be.
 	logLevel   int
+	rootCmd *cobra.Command
 )
 
 var globalUsage = `The package manager.
 `
 
-func newRootCmd(out io.Writer, in io.Reader) *cobra.Command {
+func newRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:          "fish",
 		Short:        globalUsage,
@@ -30,18 +30,18 @@ func newRootCmd(out io.Writer, in io.Reader) *cobra.Command {
 	p.IntVar(&logLevel, "log-level", int(log.PanicLevel), "log level")
 
 	cmd.AddCommand(
-		newHomeCmd(out),
-		newInitCmd(out),
-		newInstallCmd(out),
-		newRigCmd(out),
+		newHomeCmd(),
+		newInitCmd(),
+		newInstallCmd(),
+		newRigCmd(),
 	)
 
 	return cmd
 }
 
 func main() {
-	cmd := newRootCmd(os.Stdout, os.Stdin)
-	if err := cmd.Execute(); err != nil {
+	rootCmd = newRootCmd()
+	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
 }
