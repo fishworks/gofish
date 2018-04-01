@@ -6,12 +6,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type rigUninstallCmd struct{}
+type rigRemoveCmd struct{}
 
-func newRigUninstallCmd() *cobra.Command {
+func newRigRemoveCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "uninstall",
-		Short: "uninstall rigs",
+		Use:   "remove",
+		Short: "remove rigs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return errors.New("not implemented")
 		},

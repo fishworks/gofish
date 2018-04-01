@@ -7,12 +7,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fishworks/fish"
+	"github.com/fishworks/fish/pkg/ohai"
 	"github.com/spf13/cobra"
 	"github.com/yuin/gluamapper"
 	"github.com/yuin/gopher-lua"
-
-	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/ohai"
 )
 
 const installDesc = `
@@ -39,7 +38,7 @@ func newInstallCmd() *cobra.Command {
 			if err := gluamapper.Map(l.GetGlobal(strings.ToLower(reflect.TypeOf(food).Name())).(*lua.LTable), &food); err != nil {
 				return err
 			}
-			ohai.Ohailn("Installing draft from fishworks/fish-food")
+			ohai.Ohailn("Installing draft from github.com/fishworks/fish-food")
 			start := time.Now()
 			if err := food.Install(); err != nil {
 				return err

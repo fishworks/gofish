@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/spf13/cobra"
-
 	"github.com/fishworks/fish"
+	"github.com/spf13/cobra"
 )
 
 const homeDesc = `

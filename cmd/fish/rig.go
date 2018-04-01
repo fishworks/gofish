@@ -13,9 +13,9 @@ func newRigCmd() *cobra.Command {
 		Long:  rigDesc,
 	}
 	cmd.AddCommand(
-		newRigInstallCmd(),
+		newRigAddCmd(),
 		newRigListCmd(),
-		newRigUninstallCmd(),
+		newRigRemoveCmd(),
 	)
 	return cmd
 }

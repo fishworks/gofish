@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
+	"path"
 
 	"github.com/fishworks/fish"
+	"github.com/spf13/cobra"
 )
 
 const (
@@ -41,6 +42,7 @@ func (i *initCmd) run() error {
 	home := fish.Home(fish.HomePath)
 	userHome := fish.UserHome(fish.UserHomePath)
 	dirs := []string{
+		path.Dir(home.String()),
 		home.String(),
 		home.Barrel(),
 		home.Rigs(),

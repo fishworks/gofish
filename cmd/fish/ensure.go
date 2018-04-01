@@ -1,8 +1,6 @@
 package main
 
 import (
-	"time"
-
 	"github.com/fishworks/fish/pkg/ohai"
 )
 
@@ -14,20 +12,12 @@ func ensureFood() error {
 	ohai.Ohailn("Installing default fish food...")
 
 	addArgs := []string{
-		"add",
-		"github.com/fishworks/fish-food",
+		"https://github.com/fishworks/fish-food",
 	}
 
-	rigCmd, _, err := rootCmd.Find([]string{"rig"})
+	rigCmd, _, err := rootCmd.Find([]string{"rig", "add"})
 	if err != nil {
 		return err
 	}
-
-	start := time.Now()
-	if err := rigCmd.RunE(rigCmd, addArgs); err != nil {
-		return err
-	}
-	t := time.Now()
-	ohai.Successf("fishworks/fish-food: installed in %s\n", t.Sub(start).String())
-	return nil
+	return rigCmd.RunE(rigCmd, addArgs)
 }

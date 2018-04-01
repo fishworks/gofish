@@ -19,10 +19,6 @@
   version = "v1.0.4"
 
 [[constraint]]
-  name = "github.com/fatih/color"
-  branch = "master"
-
-[[constraint]]
   name = "github.com/gosuri/uitable"
   branch = "master"
 
@@ -32,4 +28,8 @@
 
 [[constraint]]
   name = "github.com/docker/docker"
+  branch = "master"
+
+[[constraint]]
+  name = "github.com/kyokomi/emoji"
   branch = "master"

@@ -32,7 +32,7 @@ func (h Home) Rigs() string {
 
 // DefaultRig returns the path to the default fishing rig.
 func (h Home) DefaultRig() string {
-	return h.Path("Rigs", "fishworks", "fish-food")
+	return h.Path("Rigs", "github.com", "fishworks", "fish-food")
 }
 
 // String returns Home as a string.

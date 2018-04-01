@@ -7,7 +7,6 @@ import (
 
 	"github.com/fishworks/fish"
 	"github.com/fishworks/fish/pkg/ohai"
-
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 )

@@ -30,7 +30,7 @@ func ensureDirectories(dirs []string) error {
 		} else if !fi.IsDir() {
 			return fmt.Errorf("%s must be a directory", dir)
 		}
-		cmd := exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser.Name, "admin"), dir)
+		cmd := exec.Command("sudo", "chown", "-R", fmt.Sprintf("%s:%s", curUser.Name, "admin"), dir)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
