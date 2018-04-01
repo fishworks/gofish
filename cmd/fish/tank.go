@@ -1,0 +1,20 @@
+package main
+
+import (
+	"errors"
+
+	"github.com/spf13/cobra"
+)
+
+type tankCmd struct{}
+
+func newTankCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "tank",
+		Short: "display information about fish's environment",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return errors.New("not implemented")
+		},
+	}
+	return cmd
+}

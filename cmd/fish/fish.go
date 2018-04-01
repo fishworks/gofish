@@ -9,8 +9,8 @@ import (
 
 var (
 	// logLevel is a value to indicate how verbose the user would like the logs to be.
-	logLevel   int
-	rootCmd *cobra.Command
+	logLevel int
+	rootCmd  *cobra.Command
 )
 
 var globalUsage = `The package manager.
@@ -30,10 +30,23 @@ func newRootCmd() *cobra.Command {
 	p.IntVar(&logLevel, "log-level", int(log.PanicLevel), "log level")
 
 	cmd.AddCommand(
+		newCleanupCmd(),
 		newHomeCmd(),
+		newInfoCmd(),
 		newInitCmd(),
 		newInstallCmd(),
+		newLinkCmd(),
+		newListCmd(),
+		newPinCmd(),
 		newRigCmd(),
+		newRottenCmd(),
+		newSwitchCmd(),
+		newTankCmd(),
+		newUninstallCmd(),
+		newUnlinkCmd(),
+		newUnpinCmd(),
+		newUpdateCmd(),
+		newUpgradeCmd(),
 	)
 
 	return cmd

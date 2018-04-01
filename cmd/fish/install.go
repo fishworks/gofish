@@ -21,7 +21,7 @@ Install fish food.
 func newInstallCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "install [food]",
-		Short: "install food",
+		Short: "install fish food",
 		Long:  installDesc,
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
