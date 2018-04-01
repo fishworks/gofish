@@ -2,7 +2,6 @@ package installer
 
 import (
 	"os"
-	"path"
 	"path/filepath"
 
 	"github.com/fishworks/fish"
@@ -21,7 +20,7 @@ type Installer interface {
 
 // Install installs a rig.
 func Install(i Installer) error {
-	basePath := path.Dir(i.Path())
+	basePath := filepath.Dir(i.Path())
 	if _, pathErr := os.Stat(basePath); os.IsNotExist(pathErr) {
 		if err := os.MkdirAll(basePath, 0755); err != nil {
 			return err

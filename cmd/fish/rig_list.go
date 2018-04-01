@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/fishworks/fish"
 	"github.com/fishworks/fish/pkg/ohai"
@@ -47,7 +48,8 @@ func findRigs(dir string) []string {
 	var rigs []string
 	filepath.Walk(dir, func(path string, f os.FileInfo, err error) error {
 		if f.IsDir() && f.Name() == "Food" {
-			rigs = append(rigs, path)
+			rigName := strings.TrimPrefix(filepath.Dir(path), dir+string(os.PathSeparator))
+			rigs = append(rigs, rigName)
 		}
 		return nil
 	})
