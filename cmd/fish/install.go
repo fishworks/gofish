@@ -38,7 +38,7 @@ func newInstallCmd() *cobra.Command {
 			if err := gluamapper.Map(l.GetGlobal(strings.ToLower(reflect.TypeOf(food).Name())).(*lua.LTable), &food); err != nil {
 				return err
 			}
-			ohai.Ohailn("Installing draft from github.com/fishworks/fish-food")
+			ohai.Ohaif("Installing %s...\n", fishFood)
 			start := time.Now()
 			if err := food.Install(); err != nil {
 				return err
