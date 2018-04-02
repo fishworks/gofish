@@ -85,6 +85,7 @@ func existingVCSRepo(location string, home fish.Home) (Installer, error) {
 	i := &VCSInstaller{
 		Repo:   repo,
 		Source: repo.Remote(),
+		Home:   home,
 	}
 
 	return i, err
