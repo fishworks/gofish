@@ -25,6 +25,9 @@ func newInstallCmd() *cobra.Command {
 		Long:  installDesc,
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if err := updateRigs(); err != nil {
+				return err
+			}
 			fishFood := args[0]
 			if strings.Contains(fishFood, "./\\") {
 				return fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", fishFood)
