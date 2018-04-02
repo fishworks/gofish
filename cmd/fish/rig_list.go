@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/ohai"
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 )
@@ -29,11 +28,6 @@ func newRigListCmd() *cobra.Command {
 func (r *rigListCmd) run() error {
 	rigPath := fish.Home(fish.HomePath).Rigs()
 	rigs := findRigs(rigPath)
-
-	if len(rigs) == 0 {
-		ohai.Ohailn("No rigs found")
-		return nil
-	}
 
 	table := uitable.New()
 	table.AddRow("NAME")
