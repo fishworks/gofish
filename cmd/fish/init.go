@@ -1,8 +1,6 @@
 package main
 
 import (
-	"path/filepath"
-
 	"github.com/fishworks/fish"
 	"github.com/spf13/cobra"
 )
@@ -42,10 +40,10 @@ func (i *initCmd) run() error {
 	home := fish.Home(fish.HomePath)
 	userHome := fish.UserHome(fish.UserHomePath)
 	dirs := []string{
-		filepath.Dir(home.String()),
 		home.String(),
 		home.Barrel(),
 		home.Rigs(),
+		fish.BinPath,
 		userHome.Cache(),
 	}
 
