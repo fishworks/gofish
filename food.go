@@ -112,6 +112,9 @@ func (f *Food) GetPackage(os, arch string) *Package {
 func (f *Food) Link(pkg *Package) error {
 	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
 	destBin := filepath.Join(BinPath, f.Name)
+	if err := os.Chmod(filepath.Join(barrelDir, pkg.BinPath), 0755); err != nil {
+		return err
+	}
 	return osutil.SymlinkWithFallback(filepath.Join(barrelDir, pkg.BinPath), destBin)
 }
 
