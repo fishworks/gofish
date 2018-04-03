@@ -69,6 +69,7 @@ func (f *Food) Install() error {
 	if pkg.BinPath == "" {
 		pkg.BinPath = f.Name
 	}
+	// This is just a safety check to make sure that there's nothing there when we link the package.
 	f.Unlink()
 	if err := f.Link(pkg); err != nil {
 		return err
@@ -77,6 +78,15 @@ func (f *Food) Install() error {
 		fmt.Println(f.Caveats)
 	}
 	return nil
+}
+
+// Uninstall attempts to uninstall the package, returning errors if it fails.
+func (f *Food) Uninstall() error {
+	if err := f.Unlink(); err != nil {
+		return err
+	}
+	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
+	return os.RemoveAll(barrelDir)
 }
 
 func unarchiveOrCopy(src, dest string) error {

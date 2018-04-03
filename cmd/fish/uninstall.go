@@ -1,8 +1,9 @@
 package main
 
 import (
-	"errors"
+	"time"
 
+	"github.com/fishworks/fish/pkg/ohai"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +15,19 @@ func newUninstallCmd() *cobra.Command {
 		Short: "uninstall fish food",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return errors.New("not implemented")
+			fishFood := args[0]
+			food, err := getFood(fishFood)
+			if err != nil {
+				return err
+			}
+			ohai.Ohaif("Uninstalling %s...\n", fishFood)
+			start := time.Now()
+			if err := food.Uninstall(); err != nil {
+				return err
+			}
+			t := time.Now()
+			ohai.Successf("%s %s: uninstalled in %s\n", food.Name, food.Version, t.Sub(start).String())
+			return nil
 		},
 	}
 	return cmd
