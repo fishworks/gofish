@@ -2,12 +2,12 @@ package fish
 
 import (
 	"fmt"
-	"runtime"
-	"os"
-	"net/http"
 	"io"
+	"net/http"
+	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 
 	"github.com/docker/docker/pkg/archive"
 
@@ -50,42 +50,62 @@ type Package struct {
 
 // Install attempts to install the package, returning errors if it fails.
 func (f *Food) Install() error {
+	pkg := f.GetPackage(runtime.GOOS, runtime.GOARCH)
+	if pkg == nil {
+		return fmt.Errorf("food '%s' does not support the current platform (%s/%s)", f.Name, runtime.GOOS, runtime.GOARCH)
+	}
+	cachedFilePath, err := downloadCachedFileToPath(UserHome(UserHomePath).Cache(), pkg.URL)
+	if err != nil {
+		return err
+	}
+	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
+
+	if err := os.MkdirAll(barrelDir, 0755); err != nil {
+		return err
+	}
+
+	cf, err := os.Open(cachedFilePath)
+	if err != nil {
+		return err
+	}
+	defer cf.Close()
+	if err := archive.Untar(cf, barrelDir, &archive.TarOptions{NoLchown: true}); err != nil {
+		return err
+	}
+	// We assume the binary is located at the root of the archive if no binpath is given
+	if pkg.BinPath == "" {
+		pkg.BinPath = f.Name
+	}
+	f.Unlink()
+	if err := f.Link(pkg); err != nil {
+		return err
+	}
+	if f.Caveats != "" {
+		fmt.Println(f.Caveats)
+	}
+	return nil
+}
+
+// GetPackage does a lookup for a package supporting the given os/arch. If none were found, this
+// returns nil.
+func (f *Food) GetPackage(os, arch string) *Package {
 	for _, pkg := range f.Packages {
-		if pkg.OS == runtime.GOOS && pkg.Arch == runtime.GOARCH {
-			cachedFilePath, err := downloadCachedFileToPath(UserHome(UserHomePath).Cache(), pkg.URL)
-			if err != nil {
-				return err
-			}
-			barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
-
-			if err := os.MkdirAll(barrelDir, 0755); err != nil {
-				return err
-			}
-
-			cf, err := os.Open(cachedFilePath)
-			if err != nil {
-				return err
-			}
-			defer cf.Close()
-			if err := archive.Untar(cf, barrelDir, &archive.TarOptions{NoLchown: true}); err != nil {
-				return err
-			}
-			// We assume the binary is located at the root of the archive if no binpath is given
-			if pkg.BinPath == "" {
-				pkg.BinPath = f.Name
-			}
-			destBin := filepath.Join(BinPath, f.Name)
-			os.Remove(destBin)
-			if err := osutil.SymlinkWithFallback(filepath.Join(barrelDir, pkg.BinPath), destBin); err != nil {
-				return err
-			}
-			if f.Caveats != "" {
-				fmt.Println(f.Caveats)
-			}
-			return nil
+		if pkg.OS == os && pkg.Arch == arch {
+			return &pkg
 		}
 	}
-	return fmt.Errorf("food '%s' does not support the current platform (%s/%s)", f.Name, runtime.GOOS, runtime.GOARCH)
+	return nil
+}
+
+func (f *Food) Link(pkg *Package) error {
+	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
+	destBin := filepath.Join(BinPath, f.Name)
+	return osutil.SymlinkWithFallback(filepath.Join(barrelDir, pkg.BinPath), destBin)
+}
+
+func (f *Food) Unlink() error {
+	destBin := filepath.Join(BinPath, f.Name)
+	return os.Remove(destBin)
 }
 
 // downloadCachedFileToPath will download a file from the given url to a directory, returning the

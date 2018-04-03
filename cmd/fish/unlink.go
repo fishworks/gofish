@@ -1,8 +1,6 @@
 package main
 
 import (
-	"errors"
-
 	"github.com/spf13/cobra"
 )
 
@@ -12,8 +10,13 @@ func newUnlinkCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "unlink",
 		Short: "unlink fish food",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return errors.New("not implemented")
+			f, err := getFood(args[0])
+			if err != nil {
+				return err
+			}
+			return f.Unlink()
 		},
 	}
 	return cmd

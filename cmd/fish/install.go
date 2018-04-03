@@ -29,16 +29,8 @@ func newInstallCmd() *cobra.Command {
 				return err
 			}
 			fishFood := args[0]
-			if strings.Contains(fishFood, "./\\") {
-				return fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", fishFood)
-			}
-			l := lua.NewState()
-			defer l.Close()
-			if err := l.DoFile(filepath.Join(fish.Home(fish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", fishFood))); err != nil {
-				return err
-			}
-			var food fish.Food
-			if err := gluamapper.Map(l.GetGlobal(strings.ToLower(reflect.TypeOf(food).Name())).(*lua.LTable), &food); err != nil {
+			food, err := getFood(fishFood)
+			if err != nil {
 				return err
 			}
 			ohai.Ohaif("Installing %s...\n", fishFood)
@@ -52,4 +44,20 @@ func newInstallCmd() *cobra.Command {
 		},
 	}
 	return cmd
+}
+
+func getFood(name string) (*fish.Food, error) {
+	if strings.Contains(name, "./\\") {
+		return nil, fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", name)
+	}
+	l := lua.NewState()
+	defer l.Close()
+	if err := l.DoFile(filepath.Join(fish.Home(fish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", name))); err != nil {
+		return nil, err
+	}
+	var food fish.Food
+	if err := gluamapper.Map(l.GetGlobal(strings.ToLower(reflect.TypeOf(food).Name())).(*lua.LTable), &food); err != nil {
+		return nil, err
+	}
+	return &food, nil
 }
