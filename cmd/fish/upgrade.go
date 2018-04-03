@@ -10,8 +10,8 @@ type upgradeCmd struct{}
 
 func newUpgradeCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "upgrade",
-		Short: "upgrade fish food",
+		Use:   "upgrade [food..]",
+		Short: "upgrade all fish food. If arguments are provided, only the specified fish foods are upgraded.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return errors.New("not implemented")
 		},

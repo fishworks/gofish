@@ -10,7 +10,7 @@ type rigRemoveCmd struct{}
 
 func newRigRemoveCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "remove",
+		Use:   "remove <rig>",
 		Short: "remove rigs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return errors.New("not implemented")

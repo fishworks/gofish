@@ -10,7 +10,7 @@ type pinCmd struct{}
 
 func newPinCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "pin",
+		Use:   "pin <food>",
 		Short: "protect a fish food, preventing fish from installing upgrades",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return errors.New("not implemented")

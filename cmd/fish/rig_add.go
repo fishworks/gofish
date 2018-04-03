@@ -15,7 +15,7 @@ type rigAddCmd struct{}
 
 func newRigAddCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "add",
+		Use:   "add <rig>",
 		Short: "add rigs",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

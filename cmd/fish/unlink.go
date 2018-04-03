@@ -8,7 +8,7 @@ type unlinkCmd struct{}
 
 func newUnlinkCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "unlink",
+		Use:   "unlink <food>",
 		Short: "unlink fish food",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

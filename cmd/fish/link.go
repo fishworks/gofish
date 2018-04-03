@@ -11,7 +11,7 @@ type linkCmd struct{}
 
 func newLinkCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "link",
+		Use:   "link <food>",
 		Short: "link fish food",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -11,7 +11,7 @@ type uninstallCmd struct{}
 
 func newUninstallCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "uninstall",
+		Use:   "uninstall <food>",
 		Short: "uninstall fish food",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
