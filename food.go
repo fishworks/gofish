@@ -64,14 +64,7 @@ func (f *Food) Install() error {
 		return err
 	}
 
-	cf, err := os.Open(cachedFilePath)
-	if err != nil {
-		return err
-	}
-	defer cf.Close()
-	if err := archive.Untar(cf, barrelDir, &archive.TarOptions{NoLchown: true}); err != nil {
-		return err
-	}
+	unarchiveOrCopy(cachedFilePath, barrelDir)
 	// We assume the binary is located at the root of the archive if no binpath is given
 	if pkg.BinPath == "" {
 		pkg.BinPath = f.Name
@@ -84,6 +77,25 @@ func (f *Food) Install() error {
 		fmt.Println(f.Caveats)
 	}
 	return nil
+}
+
+func unarchiveOrCopy(src, dest string) error {
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+
+	if archive.IsArchivePath(src) {
+		return archive.Untar(in, dest, &archive.TarOptions{NoLchown: true})
+	}
+	out, err := os.Create(filepath.Join(dest, filepath.Base(src)))
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+	_, err = io.Copy(out, in)
+	return err
 }
 
 // GetPackage does a lookup for a package supporting the given os/arch. If none were found, this
