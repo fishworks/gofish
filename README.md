@@ -21,34 +21,35 @@ Fish takes the ideas of [Homebrew Formulas][formula] to the next level by instal
 tools. Fish food are simple Lua scripts:
 
 ```lua
-local version = "0.12.0"
+local name = "helm"
+local version = "2.8.2"
 
 food = {
-    name = "draft",
-    description = "A tool for developers to create cloud-native applications on Kubernetes",
-    homepage = "https://github.com/Azure/draft",
+    name = name,
+    description = "The Kubernetes Package Manager",
+    homepage = "https://github.com/kubernetes/helm",
     version = version,
     packages = {
         {
             os = "darwin",
             arch = "amd64",
-            url = "https://azuredraft.blob.core.windows.net/draft/draft-v" .. version .. "-darwin-amd64.tar.gz",
-            sha256 = "5caa5cc89d81f193615e3ad55f2c08be59052c3309f7c37d0ed0136d54b82228",
-            binpath = "darwin-amd64/draft"
+            url = "https://storage.googleapis.com/kubernetes-helm/helm-v" .. version .. "-darwin-amd64.tar.gz",
+            sha256 = "a0a8cf462080b2bc391f38b7cf617618b189cdef9f071c06fa0068c2418cc413",
+            binpath = "darwin-amd64/" .. name
         },
         {
             os = "linux",
             arch = "amd64",
-            url = "https://azuredraft.blob.core.windows.net/draft/draft-v" .. version .. "-linux-amd64.tar.gz",
-            sha256 = "89db5727cab7e0f295de149d914eaf32f4adcecabbb030a03300fca58be85b37",
-            binpath = "linux-amd64/draft"
+            url = "https://storage.googleapis.com/kubernetes-helm/helm-v" .. version .. "-linux-amd64.tar.gz",
+            sha256 = "614b5ac79de4336b37c9b26d528c6f2b94ee6ccacb94b0f4b8d9583a8dd122d3",
+            binpath = "linux-amd64/" .. name
         },
         {
             os = "windows",
             arch = "amd64",
-            url = "https://azuredraft.blob.core.windows.net/draft/draft-v" .. version .. "-windows-amd64.tar.gz",
-            sha256 = "ec1a5f5054e6c1a00477a1a2291155039165630891a5b10ed2ebb8947db16480",
-            binpath = "windows-amd64/draft"
+            url = "https://storage.googleapis.com/kubernetes-helm/helm-v" .. version .. "-windows-amd64.tar.gz",
+            sha256 = "cb6ea5d60f202c752f1f0777e4bebd98c619a2c18e52468df7a302e783216f23",
+            binpath = "windows-amd64\\" .. name
         }
     }
 }
