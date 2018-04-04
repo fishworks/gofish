@@ -32,7 +32,7 @@ func newListCmd() *cobra.Command {
 }
 
 func findFood(dir string) []string {
-	var fud []string
+	var fudz []string
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return []string{}
@@ -40,10 +40,13 @@ func findFood(dir string) []string {
 
 	for _, f := range files {
 		if f.IsDir() {
-			fud = append(fud, f.Name())
+			fud := fish.Food{Name: f.Name()}
+			if fud.Installed() {
+				fudz = append(fudz, f.Name())
+			}
 		}
 	}
-	return fud
+	return fudz
 }
 
 func findFoodVersions(dir, name string) []string {

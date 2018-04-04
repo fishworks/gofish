@@ -3,6 +3,7 @@ package fish
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -78,6 +79,16 @@ func (f *Food) Install() error {
 		fmt.Println(f.Caveats)
 	}
 	return nil
+}
+
+// Installed checks to see if this fish food is installed. This is actually just a check for if the
+// directory exists and is not empty.
+func (f *Food) Installed() bool {
+	files, err := ioutil.ReadDir(filepath.Join(Home(HomePath).Barrel(), f.Name))
+	if err != nil {
+		return false
+	}
+	return len(files) > 0
 }
 
 // Uninstall attempts to uninstall the package, returning errors if it fails.
