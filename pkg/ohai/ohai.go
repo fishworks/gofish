@@ -29,3 +29,15 @@ func Successf(format string, a ...interface{}) (int, error) {
 func Successln(a ...interface{}) (int, error) {
 	return Successf("%s\n", a...)
 }
+
+func Warning(a ...interface{}) (int, error) {
+	return Warningf("%s", a...)
+}
+
+func Warningf(format string, a ...interface{}) (int, error) {
+	return fmt.Printf(emoji.Sprintf("!!! %s", format), a...)
+}
+
+func Warningln(a ...interface{}) (int, error) {
+	return Warningf("%s\n", a...)
+}
