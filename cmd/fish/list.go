@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 
 	"github.com/fishworks/fish"
@@ -14,11 +15,16 @@ type listCmd struct{}
 func newListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
-		Short: "list installed fish food",
+		Short: "list installed fish food. If an argument is provided, list all installed versions of that fish food",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			var output []string
 			barrelPath := fish.Home(fish.HomePath).Barrel()
-			fishFood := findFood(barrelPath)
-			fmt.Println(strings.Join(fishFood, "\t\t\t"))
+			if len(args) == 0 {
+				output = findFood(barrelPath)
+			} else {
+				output = findFoodVersions(barrelPath, args[0])
+			}
+			fmt.Println(strings.Join(output, "\t\t\t"))
 			return nil
 		},
 	}
@@ -26,7 +32,7 @@ func newListCmd() *cobra.Command {
 }
 
 func findFood(dir string) []string {
-	var food []string
+	var fud []string
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return []string{}
@@ -34,8 +40,23 @@ func findFood(dir string) []string {
 
 	for _, f := range files {
 		if f.IsDir() {
-			food = append(food, f.Name())
+			fud = append(fud, f.Name())
 		}
 	}
-	return food
+	return fud
+}
+
+func findFoodVersions(dir, name string) []string {
+	var versions []string
+	files, err := ioutil.ReadDir(filepath.Join(dir, name))
+	if err != nil {
+		return []string{}
+	}
+
+	for _, f := range files {
+		if f.IsDir() {
+			versions = append(versions, f.Name())
+		}
+	}
+	return versions
 }
