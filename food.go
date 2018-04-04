@@ -27,7 +27,7 @@ type Food struct {
 	// The version of the software.
 	Version string
 	// The list of binary distributions available for this fish food.
-	Packages []Package
+	Packages []*Package
 }
 
 // Package provides metadata to install a piece of software on a given operating system and architecture.
@@ -113,7 +113,7 @@ func unarchiveOrCopy(src, dest string) error {
 func (f *Food) GetPackage(os, arch string) *Package {
 	for _, pkg := range f.Packages {
 		if pkg.OS == os && pkg.Arch == arch {
-			return &pkg
+			return pkg
 		}
 	}
 	return nil
