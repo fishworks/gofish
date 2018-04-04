@@ -1,8 +1,10 @@
 package main
 
 import (
-	"errors"
+	"fmt"
+	"strings"
 
+	"github.com/fishworks/fish"
 	"github.com/spf13/cobra"
 )
 
@@ -10,10 +12,23 @@ type infoCmd struct{}
 
 func newInfoCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "info <food>",
-		Short: "display information about a particular flavour of fish food (versions, caveats, etc)",
+		Use:   "info <food...>",
+		Short: "display information about a particular flavour of fish food",
+		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return errors.New("not implemented")
+			var b strings.Builder
+			barrelPath := fish.Home(fish.HomePath).Barrel()
+			for _, arg := range args {
+				versions := findFoodVersions(barrelPath, arg)
+				fmt.Fprintf(&b, "%s: ", arg)
+				if len(versions) == 0 {
+					fmt.Fprintln(&b, "no installed versions")
+				} else {
+					fmt.Fprintf(&b, "%s\n", strings.Join(versions, "\t"))
+				}
+			}
+			fmt.Print(b.String())
+			return nil
 		},
 	}
 	return cmd
