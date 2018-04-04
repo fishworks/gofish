@@ -1,8 +1,11 @@
 package main
 
 import (
-	"errors"
+	"fmt"
+	"io/ioutil"
+	"strings"
 
+	"github.com/fishworks/fish"
 	"github.com/spf13/cobra"
 )
 
@@ -13,8 +16,26 @@ func newListCmd() *cobra.Command {
 		Use:   "list",
 		Short: "list installed fish food",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return errors.New("not implemented")
+			barrelPath := fish.Home(fish.HomePath).Barrel()
+			fishFood := findFood(barrelPath)
+			fmt.Println(strings.Join(fishFood, "\t\t\t"))
+			return nil
 		},
 	}
 	return cmd
+}
+
+func findFood(dir string) []string {
+	var food []string
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return []string{}
+	}
+
+	for _, f := range files {
+		if f.IsDir() {
+			food = append(food, f.Name())
+		}
+	}
+	return food
 }

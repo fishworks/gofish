@@ -11,31 +11,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type rigListCmd struct{}
-
 func newRigListCmd() *cobra.Command {
-	rcmd := &rigListCmd{}
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "list rigs",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return rcmd.run()
+			rigPath := fish.Home(fish.HomePath).Rigs()
+			rigs := findRigs(rigPath)
+
+			table := uitable.New()
+			table.AddRow("NAME")
+			for _, rig := range rigs {
+				table.AddRow(rig)
+			}
+			fmt.Println(table)
+			return nil
 		},
 	}
 	return cmd
-}
-
-func (r *rigListCmd) run() error {
-	rigPath := fish.Home(fish.HomePath).Rigs()
-	rigs := findRigs(rigPath)
-
-	table := uitable.New()
-	table.AddRow("NAME")
-	for _, rig := range rigs {
-		table.AddRow(rig)
-	}
-	fmt.Println(table)
-	return nil
 }
 
 func findRigs(dir string) []string {
