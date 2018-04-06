@@ -74,7 +74,7 @@ food = {
 
 ## Troubleshooting
 
-For troubleshooting, see the [Toubleshooting Guide](docs/troubleshooting.md).
+For troubleshooting, see the [Troubleshooting Guide](docs/troubleshooting.md).
 
 ## Security
 
