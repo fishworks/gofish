@@ -4,7 +4,7 @@ Features, usage and installation instructions can be found in the [documentation
 
 ## What does Fish do?
 
-Fish is a cross-platform systems package manager, bringing the ease of use of Homebrew into
+Fish is a cross-platform systems package manager, bringing the ease of use of Homebrew to
 Linux and Windows.
 
 ```
