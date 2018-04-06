@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"time"
 
 	"github.com/fishworks/fish/pkg/ohai"
@@ -18,22 +17,24 @@ func newUpgradeCmd() *cobra.Command {
 			if err := updateRigs(); err != nil {
 				return err
 			}
+			var foodNames []string
 			if len(args) > 0 {
-				for _, arg := range args {
-					food, err := getFood(arg)
-					if err != nil {
-						return err
-					}
-					ohai.Ohaif("Upgrading %s...\n", food.Name)
-					start := time.Now()
-					if err := food.Install(); err != nil {
-						return err
-					}
-					t := time.Now()
-					ohai.Successf("%s %s: upgraded in %s\n", food.Name, food.Version, t.Sub(start).String())
-				}
+				foodNames = args
 			} else {
-				return errors.New("`fish upgrade` is not implemented")
+				foodNames = findFood()
+			}
+			for _, name := range foodNames {
+				food, err := getFood(name)
+				if err != nil {
+					return err
+				}
+				ohai.Ohaif("Upgrading %s...\n", food.Name)
+				start := time.Now()
+				if err := food.Install(); err != nil {
+					return err
+				}
+				t := time.Now()
+				ohai.Successf("%s %s: upgraded in %s\n", food.Name, food.Version, t.Sub(start).String())
 			}
 			return nil
 		},
