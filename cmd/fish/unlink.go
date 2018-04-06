@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"runtime"
+
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +19,11 @@ func newUnlinkCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return f.Unlink()
+			pkg := f.GetPackage(runtime.GOOS, runtime.GOARCH)
+			if pkg == nil {
+				return fmt.Errorf("food '%s' does not support the current platform (%s/%s)", f.Name, runtime.GOOS, runtime.GOARCH)
+			}
+			return f.Unlink(pkg)
 		},
 	}
 	return cmd

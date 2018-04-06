@@ -37,17 +37,23 @@ type Package struct {
 	// the running program's operating system target. One of darwin, linux, windows, and so on.
 	OS string
 	// the running program's architecture target. One of 386, amd64, arm, s390x, and so on.
-	Arch string
-	// BinPath is the path relative from the root of the unpacked archive to the executable binary. This binary is symlinked into the food’s bin directory (/usr/local/bin/) and made executable (chmod +x).
-	//
-	// If this is not set, then it is implied that the BinPath == the food's name.
-	BinPath string
+	Arch      string
+	Resources []*Resource
 	// The URL used to download the binary distribution for this version of the fish food. The file must be a gzipped tarball (.tar.gz) or a zipfile (.zip) for unpacking.
 	URL string
 	// Additional URLs for this version of the fish food.
 	Mirrors []string
 	// To verify the cached download's integrity and security, we verify the SHA-256 hash matches what we've declared in the fish food.
 	SHA256 string
+}
+
+type Resource struct {
+	// Path is the path relative from the root of the unpacked archive to the resource. The resource is symlinked into the InstallPath and, if Executable is set, made executable (chmod +x).
+	Path string
+	// InstallPath is the destination path relative from /usr/local. The resource is symlinked from Path to the InstallPath and, if Executable is set, made executable (chmod +x).
+	InstallPath string
+	// Executable defines whether or not this resource should be made executable (chmod +x). This only applies for MacOS/Linux and can be ignored on Windows.
+	Executable bool
 }
 
 // Install attempts to install the package, returning errors if it fails.
@@ -67,15 +73,11 @@ func (f *Food) Install() error {
 	}
 
 	unarchiveOrCopy(cachedFilePath, barrelDir)
-	// We assume the binary is located at the root of the archive if no binpath is given
-	if pkg.BinPath == "" {
-		pkg.BinPath = f.Name
-	}
-	// This is just a safety check to make sure that there's nothing there when we link the package.
-	f.Unlink()
+	f.Unlink(pkg)
 	if err := f.Link(pkg); err != nil {
 		return err
 	}
+	// This is just a safety check to make sure that there's nothing there when we link the package.
 	if f.Caveats != "" {
 		fmt.Println(f.Caveats)
 	}
@@ -94,7 +96,11 @@ func (f *Food) Installed() bool {
 
 // Uninstall attempts to uninstall the package, returning errors if it fails.
 func (f *Food) Uninstall() error {
-	if err := f.Unlink(); err != nil {
+	pkg := f.GetPackage(runtime.GOOS, runtime.GOARCH)
+	if pkg == nil {
+		return nil
+	}
+	if err := f.Unlink(pkg); err != nil {
 		return err
 	}
 	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
@@ -144,15 +150,28 @@ func (f *Food) Linked() bool {
 
 func (f *Food) Link(pkg *Package) error {
 	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
-	destBin := filepath.Join(BinPath, f.Name)
-	if err := os.Chmod(filepath.Join(barrelDir, pkg.BinPath), 0755); err != nil {
-		return err
+	for _, r := range pkg.Resources {
+		// TODO: run this in parallel
+		destPath := filepath.Join(HomePrefix, r.InstallPath)
+		if r.Executable {
+			if err := os.Chmod(filepath.Join(barrelDir, r.Path), 0755); err != nil {
+				return err
+			}
+		}
+		if err := osutil.SymlinkWithFallback(filepath.Join(barrelDir, r.Path), destPath); err != nil {
+			return err
+		}
 	}
-	return osutil.SymlinkWithFallback(filepath.Join(barrelDir, pkg.BinPath), destBin)
+	return nil
 }
 
-func (f *Food) Unlink() error {
-	return os.Remove(filepath.Join(BinPath, f.Name))
+func (f *Food) Unlink(pkg *Package) error {
+	for _, r := range pkg.Resources {
+		if err := os.RemoveAll(filepath.Join(HomePrefix, r.InstallPath)); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // downloadCachedFileToPath will download a file from the given url to a directory, returning the
