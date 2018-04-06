@@ -14,7 +14,7 @@ func newSwitchCmd() *cobra.Command {
 		Short: "switch fish food to another version",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return errors.New("not implemented")
+			return errors.New("`fish switch` is not implemented")
 		},
 	}
 	return cmd

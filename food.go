@@ -9,6 +9,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/docker/docker/pkg/archive"
 
@@ -84,7 +85,7 @@ func (f *Food) Install() error {
 // Installed checks to see if this fish food is installed. This is actually just a check for if the
 // directory exists and is not empty.
 func (f *Food) Installed() bool {
-	files, err := ioutil.ReadDir(filepath.Join(Home(HomePath).Barrel(), f.Name))
+	files, err := ioutil.ReadDir(filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version))
 	if err != nil {
 		return false
 	}
@@ -130,6 +131,17 @@ func (f *Food) GetPackage(os, arch string) *Package {
 	return nil
 }
 
+// Linked checks to see if a particular package owned by this fish food is linked to /usr/local/bin.
+// This is just a check if the binaries symlinked in /usr/local/bin link back to the barrel.
+func (f *Food) Linked() bool {
+	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
+	link, err := os.Readlink(filepath.Join(BinPath, f.Name))
+	if err != nil {
+		return false
+	}
+	return strings.Contains(link, barrelDir)
+}
+
 func (f *Food) Link(pkg *Package) error {
 	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
 	destBin := filepath.Join(BinPath, f.Name)
@@ -140,8 +152,7 @@ func (f *Food) Link(pkg *Package) error {
 }
 
 func (f *Food) Unlink() error {
-	destBin := filepath.Join(BinPath, f.Name)
-	return os.Remove(destBin)
+	return os.Remove(filepath.Join(BinPath, f.Name))
 }
 
 // downloadCachedFileToPath will download a file from the given url to a directory, returning the

@@ -25,15 +25,15 @@ func newInstallCmd() *cobra.Command {
 		Long:  installDesc,
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			fishFood := args[0]
 			if err := updateRigs(); err != nil {
 				return err
 			}
-			fishFood := args[0]
 			food, err := getFood(fishFood)
 			if err != nil {
 				return err
 			}
-			if food.Installed() {
+			if len(findFoodVersions(fishFood)) > 0 {
 				ohai.Ohaif("%s is already installed. Please use `fish upgrade %s` to upgrade.\n", fishFood, fishFood)
 				return nil
 			}

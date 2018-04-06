@@ -13,7 +13,7 @@ func newCleanupCmd() *cobra.Command {
 		Use:   "cleanup",
 		Short: "cleanup unlinked fish food",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return errors.New("not implemented")
+			return errors.New("`fish cleanup` is not implemented")
 		},
 	}
 	return cmd

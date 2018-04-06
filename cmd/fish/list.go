@@ -16,13 +16,13 @@ func newListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "list installed fish food. If an argument is provided, list all installed versions of that fish food",
+		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var output []string
-			barrelPath := fish.Home(fish.HomePath).Barrel()
 			if len(args) == 0 {
-				output = findFood(barrelPath)
+				output = findFood()
 			} else {
-				output = findFoodVersions(barrelPath, args[0])
+				output = findFoodVersions(args[0])
 			}
 			fmt.Println(strings.Join(output, "\t\t\t"))
 			return nil
@@ -31,17 +31,21 @@ func newListCmd() *cobra.Command {
 	return cmd
 }
 
-func findFood(dir string) []string {
+func findFood() []string {
+	barrelPath := fish.Home(fish.HomePath).Barrel()
 	var fudz []string
-	files, err := ioutil.ReadDir(dir)
+	files, err := ioutil.ReadDir(barrelPath)
 	if err != nil {
 		return []string{}
 	}
 
 	for _, f := range files {
 		if f.IsDir() {
-			fud := fish.Food{Name: f.Name()}
-			if fud.Installed() {
+			files, err := ioutil.ReadDir(filepath.Join(barrelPath, f.Name()))
+			if err != nil {
+				continue
+			}
+			if len(files) > 0 {
 				fudz = append(fudz, f.Name())
 			}
 		}
@@ -49,9 +53,10 @@ func findFood(dir string) []string {
 	return fudz
 }
 
-func findFoodVersions(dir, name string) []string {
+func findFoodVersions(name string) []string {
+	barrelPath := fish.Home(fish.HomePath).Barrel()
 	var versions []string
-	files, err := ioutil.ReadDir(filepath.Join(dir, name))
+	files, err := ioutil.ReadDir(filepath.Join(barrelPath, name))
 	if err != nil {
 		return []string{}
 	}

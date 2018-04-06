@@ -13,7 +13,7 @@ func newTankCmd() *cobra.Command {
 		Use:   "tank",
 		Short: "display information about fish's environment",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return errors.New("not implemented")
+			return errors.New("`fish tank` is not implemented")
 		},
 	}
 	return cmd

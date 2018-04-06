@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/fishworks/fish"
 	"github.com/spf13/cobra"
 )
 
@@ -17,9 +16,8 @@ func newInfoCmd() *cobra.Command {
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var b strings.Builder
-			barrelPath := fish.Home(fish.HomePath).Barrel()
 			for _, arg := range args {
-				versions := findFoodVersions(barrelPath, arg)
+				versions := findFoodVersions(arg)
 				fmt.Fprintf(&b, "%s: ", arg)
 				if len(versions) == 0 {
 					fmt.Fprintln(&b, "no installed versions")
