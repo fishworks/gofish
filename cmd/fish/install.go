@@ -33,6 +33,10 @@ func newInstallCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if food.Installed() {
+				ohai.Ohaif("%s is already installed. Please use `fish upgrade %s` to upgrade.\n", fishFood, fishFood)
+				return nil
+			}
 			ohai.Ohaif("Installing %s...\n", fishFood)
 			start := time.Now()
 			if err := food.Install(); err != nil {
