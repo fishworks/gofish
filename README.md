@@ -14,7 +14,7 @@ $ fish install helm
 ```
 
 Fish works across all three major operating systems (Windows, MacOS, and Linux). It installs
-packages into its own directory and symlinks their files into /usr/local (or C:\ for Windows).
+packages into its own directory and symlinks their files into /usr/local (or C:\ProgramData for Windows).
 You can think of it as the cross-platform Homebrew.
 
 Fish takes the ideas of [Homebrew Formulas][formula] to the next level by installing pre-packaged
