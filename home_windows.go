@@ -6,9 +6,9 @@ import (
 	"os"
 )
 
-const HomePrefix = "C:\\"
+const HomePrefix = "C:\\ProgramData"
 
-const BinPath = HomePrefix
+const BinPath = HomePrefix + "\\bin"
 
 var UserHomePath = homedir()
 
