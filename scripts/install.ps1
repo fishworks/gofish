@@ -22,7 +22,6 @@ param (
  )
 
   $downloader = new-object System.Net.WebClient
-
   $downloader.DownloadFile($url, $file)
 }
 
@@ -32,7 +31,7 @@ Download-File $url $file
 
 Write-Output "Preparing to install into $installPath"
 $installPath = "$env:SYSTEMDRIVE\ProgramData\bin"
-Expand-Archive -Path "$file" -DestinationPath "$tempDir" -Force
+Expand-Archive -Path "$file" -DestinationPath "$installPath" -Force
 
 Write-Output "fish installed into $installPath\fish"
 Write-Output "Run 'fish init' to get started!"
