@@ -77,7 +77,7 @@ verifySupported() {
 
 # getDownloadURL checks the latest available version.
 getDownloadURL() {
-  DOWNLOAD_URL="https://bacongobbler.blob.core.windows.net/gofish/fish-$VERSION-$OS-$ARCH.tar.gz"
+  DOWNLOAD_URL="https://gofish.blob.core.windows.net/releases/fish-$VERSION-$OS-$ARCH.tar.gz"
 }
 
 # downloadFile downloads the latest binary package and also the checksum
