@@ -78,7 +78,7 @@ For troubleshooting, see the [Troubleshooting Guide](docs/troubleshooting.md).
 
 ## Security
 
-Please email security issues to <mailto:matt.fisher+security-issues@fishworks.io>.
+Please email security issues to [Matt Fisher](mailto:matt.fisher+security-issues@fishworks.io).
 
 ## License
 
