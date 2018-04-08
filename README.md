@@ -1,6 +1,6 @@
 # Fish, The Package Manager
 
-Features, usage and installation instructions can be found in the [documentation](docs/README.md).
+Features, usage and installation instructions can be found on the [homepage](https://gofi.sh).
 
 ## What does Fish do?
 
@@ -74,7 +74,7 @@ food = {
 
 ## Troubleshooting
 
-For troubleshooting, see the [Troubleshooting Guide](docs/troubleshooting.md).
+For troubleshooting, see the [Troubleshooting Guide](https://gofi.sh#troubleshooting).
 
 ## Security
 

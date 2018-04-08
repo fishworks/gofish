@@ -1,5 +1,5 @@
 $version = "0.1.0"
-$url = "https://gofish.blob.core.windows.net/releases/fish-v$version-windows-amd64.zip"
+$url = "https://gofi.sh/releases/fish-v$version-windows-amd64.zip"
 
 if ($env:TEMP -eq $null) {
   $env:TEMP = Join-Path $env:SystemDrive 'temp'
