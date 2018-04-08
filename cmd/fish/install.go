@@ -26,9 +26,6 @@ func newInstallCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fishFood := args[0]
-			if err := updateRigs(); err != nil {
-				return err
-			}
 			food, err := getFood(fishFood)
 			if err != nil {
 				return err
