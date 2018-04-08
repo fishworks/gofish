@@ -11,6 +11,7 @@ type (
 	UserHome string
 )
 
+// HomePath is the path to Fish's configuration directory.
 var HomePath = filepath.Join(HomePrefix, "Fish")
 
 // Path returns Home with elements appended.

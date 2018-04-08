@@ -6,10 +6,13 @@ import (
 	"os"
 )
 
+// HomePrefix is the base path to Fish's configuration directory.
 const HomePrefix = "C:\\ProgramData"
 
+// BinPath is the path to where executables should be installed by fish.
 const BinPath = HomePrefix + "\\bin"
 
+// UserHomePath is the path to $HOME
 var UserHomePath = homedir()
 
 func homedir() string {

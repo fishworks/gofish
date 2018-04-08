@@ -47,6 +47,7 @@ type Package struct {
 	SHA256 string
 }
 
+// Resource is a installable thingy that should be moved into /usr/local from the install path, such as an executable, manpages, libraries, etc.
 type Resource struct {
 	// Path is the path relative from the root of the unpacked archive to the resource. The resource is symlinked into the InstallPath and, if Executable is set, made executable (chmod +x).
 	Path string
@@ -148,6 +149,7 @@ func (f *Food) Linked() bool {
 	return strings.Contains(link, barrelDir)
 }
 
+// Link creates links to any linked resources owned by the package.
 func (f *Food) Link(pkg *Package) error {
 	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
 	for _, r := range pkg.Resources {
@@ -165,8 +167,10 @@ func (f *Food) Link(pkg *Package) error {
 	return nil
 }
 
+// Unlink removes any linked resources owned by the package.
 func (f *Food) Unlink(pkg *Package) error {
 	for _, r := range pkg.Resources {
+		// TODO: check if the linked path we are about to remove is really owned by us
 		if err := os.RemoveAll(filepath.Join(HomePrefix, r.InstallPath)); err != nil {
 			return err
 		}
