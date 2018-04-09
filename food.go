@@ -1,6 +1,7 @@
 package fish
 
 import (
+	"archive/zip"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -117,6 +118,9 @@ func unarchiveOrCopy(src, dest string) error {
 
 	if archive.IsArchivePath(src) {
 		return archive.Untar(in, dest, &archive.TarOptions{NoLchown: true})
+	} else if isZipPath(src) {
+		in.Close()
+		return unzip(src, dest)
 	}
 	out, err := os.Create(filepath.Join(dest, filepath.Base(src)))
 	if err != nil {
@@ -207,4 +211,33 @@ func downloadCachedFileToPath(dir string, url string) (string, error) {
 
 	_, err = io.Copy(out, resp.Body)
 	return filePath, err
+}
+
+func isZipPath(path string) bool {
+	_, err := zip.OpenReader(path)
+	return err == zip.ErrFormat
+}
+
+func unzip(src, dest string) error {
+	r, err := zip.OpenReader(src)
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	for _, zf := range r.File {
+		dst, err := os.Create(filepath.Join(dest, zf.Name))
+		if err != nil {
+			return err
+		}
+		defer dst.Close()
+		src, err := zf.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
+
+		io.Copy(dst, src)
+	}
+	return nil
 }
