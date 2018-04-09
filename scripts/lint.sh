@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if ! hash gometalinter.v1 2>/dev/null ; then
+  go get -u gopkg.in/alecthomas/gometalinter.v1
+  gometalinter.v1 --install
+fi
+
 # Mandatory tests
 echo -e "\033[0;31mManadatory Linters: These must pass\033[0m"
 gometalinter --vendor --tests --deadline=20s --disable-all \
