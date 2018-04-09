@@ -45,15 +45,16 @@ checksum:
 	done
 
 .PHONY: test
-test: build
 test: TESTFLAGS += -race -v
-test: test-unit
+test: test-lint test-unit
+
+.PHONY: test-lint
+test-lint:
+	scripts/lint.sh
 
 .PHONY: test-unit
 test-unit:
-	@echo
-	@echo "==> Running unit tests <=="
-	HELM_HOME=/no/such/dir $(GO) test $(GOFLAGS) -run $(TESTS) $(PKG) $(TESTFLAGS)
+	$(GO) test $(GOFLAGS) -cover -run $(TESTS) ./... $(TESTFLAGS)
 
 .PHONY: protoc
 protoc:
