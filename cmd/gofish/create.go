@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -69,13 +70,18 @@ func newCreateCmd() *cobra.Command {
 		Short: "generate fish food and open it in the editor",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			f, err := os.Create(filepath.Join(fish.Home(fish.HomePath).DefaultRig(), "Food", args[0]))
+			destPath := filepath.Join(fish.Home(fish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", args[0]))
+			f, err := os.Create(destPath)
 			if err != nil {
 				return nil
 			}
 			defer f.Close()
 			t := template.Must(template.New("create").Parse(createTpl))
-			return t.Execute(f, struct{ Name string }{args[0]})
+			if err := t.Execute(f, struct{ Name string }{args[0]}); err != nil {
+				return err
+			}
+			fmt.Println(destPath)
+			return nil
 		},
 	}
 	return cmd
