@@ -17,6 +17,10 @@ Fish works across all three major operating systems (Windows, MacOS, and Linux).
 packages into its own directory and symlinks their files into /usr/local (or C:\ProgramData for Windows).
 You can think of it as the cross-platform Homebrew.
 
+## Want to add your project to the list of installable thingies?
+
+Make a PR at [fishworks/fish-food](https://github.com/fishworks/fish-food)! Just make sure to follow the [Contributing Guide](https://gofi.sh#contributing) first.
+
 ## Troubleshooting
 
 For troubleshooting, see the [Troubleshooting Guide](https://gofi.sh#troubleshooting).
