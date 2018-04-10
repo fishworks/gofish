@@ -36,4 +36,4 @@ make clean build-cross
 VERSION="${VERSION}" make dist checksum
 
 echo "Pushing binaries to Azure Blob Storage"
-az storage blob upload-batch --source _dist/ --destination "${AZURE_CONTAINER}" --pattern *.*
+az storage blob upload-batch --source _dist/ --destination "${AZURE_CONTAINER}" --pattern '*.*'
