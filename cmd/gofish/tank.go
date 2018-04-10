@@ -10,11 +10,14 @@ import (
 type tank map[string]string
 
 func (t tank) fill() {
-	home := fish.Home(fish.HomePath)
-	t["FISH_HOME"] = home.String()
-	t["FISH_BARREL"] = home.Barrel()
-	t["FISH_RIGS"] = home.Rigs()
-	t["FISH_DEFAULT_RIG"] = home.DefaultRig()
+	fishHome := fish.Home(fish.HomePath)
+	userHome := fish.UserHome(fish.UserHomePath)
+
+	t["FISH_HOME"] = fishHome.String()
+	t["FISH_CACHE"] = userHome.Cache()
+	t["FISH_BARREL"] = fishHome.Barrel()
+	t["FISH_RIGS"] = fishHome.Rigs()
+	t["FISH_DEFAULT_RIG"] = fishHome.DefaultRig()
 }
 
 func newTankCmd() *cobra.Command {
