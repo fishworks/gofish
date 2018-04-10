@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type tankCmd struct{}
-
 func newTankCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "tank",

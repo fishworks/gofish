@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type infoCmd struct{}
-
 func newInfoCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "info <food...>",

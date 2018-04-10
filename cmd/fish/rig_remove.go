@@ -10,8 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type rigRemoveCmd struct{}
-
 func newRigRemoveCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "remove <rig...>",

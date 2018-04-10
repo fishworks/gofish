@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type unpinCmd struct{}
-
 func newUnpinCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "unpin <food>",

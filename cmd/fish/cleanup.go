@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type cleanupCmd struct{}
-
 func newCleanupCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "cleanup",

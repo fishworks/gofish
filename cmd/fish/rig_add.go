@@ -11,8 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type rigAddCmd struct{}
-
 func newRigAddCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add <rig>",

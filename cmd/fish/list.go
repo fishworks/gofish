@@ -10,8 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type listCmd struct{}
-
 func newListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",

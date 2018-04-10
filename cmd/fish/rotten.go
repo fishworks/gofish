@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type rottenCmd struct{}
-
 func newRottenCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "rotten",

@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type uninstallCmd struct{}
-
 func newUninstallCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "uninstall <food>",

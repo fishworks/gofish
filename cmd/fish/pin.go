@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type pinCmd struct{}
-
 func newPinCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "pin <food>",

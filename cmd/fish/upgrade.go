@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type upgradeCmd struct{}
-
 func newUpgradeCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "upgrade [food..]",

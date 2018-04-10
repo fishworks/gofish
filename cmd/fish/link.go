@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type linkCmd struct{}
-
 func newLinkCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "link <food>",

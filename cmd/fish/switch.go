@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type switchCmd struct{}
-
 func newSwitchCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "switch <food> <version>",

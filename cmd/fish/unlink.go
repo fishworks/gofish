@@ -7,8 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type unlinkCmd struct{}
-
 func newUnlinkCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "unlink <food>",
