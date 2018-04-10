@@ -6,4 +6,5 @@ ROOT="${BASH_SOURCE[0]%/*}/.."
 
 cd "$ROOT"
 
+apt-get update && apt-get install -yq zip
 make bootstrap
