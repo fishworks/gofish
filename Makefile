@@ -1,4 +1,4 @@
-NAME              ?= fish
+NAME              ?= gofish
 TARGETS           ?= darwin/amd64 linux/amd64 linux/386 linux/arm linux/arm64 linux/ppc64le windows/amd64
 DIST_DIRS         = find * -type d -exec
 
@@ -26,7 +26,7 @@ build:
 .PHONY: build-cross
 build-cross: LDFLAGS += -extldflags "-static"
 build-cross:
-	CGO_ENABLED=0 gox -parallel=3 -output="_dist/{{.OS}}-{{.Arch}}/{{.Dir}}" -osarch='$(TARGETS)' $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' github.com/fishworks/$(NAME)/cmd/$(NAME)
+	CGO_ENABLED=0 gox -parallel=3 -output="_dist/{{.OS}}-{{.Arch}}/{{.Dir}}" -osarch='$(TARGETS)' $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' github.com/fishworks/fish/cmd/$(NAME)
 
 .PHONY: dist
 dist:

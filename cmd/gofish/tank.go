@@ -27,7 +27,7 @@ func newTankCmd() *cobra.Command {
 			for k, v := range t {
 				fmt.Printf("export %s=%q\n", k, v)
 			}
-			fmt.Print("# Run this command to configure your shell:\n# eval $(fish tank)\n")
+			fmt.Print("# Run this command to configure your shell:\n# eval $(gofish tank)\n")
 			return nil
 		},
 	}

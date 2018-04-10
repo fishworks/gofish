@@ -31,7 +31,7 @@ func newInstallCmd() *cobra.Command {
 				return err
 			}
 			if len(findFoodVersions(fishFood)) > 0 {
-				ohai.Ohaif("%s is already installed. Please use `fish upgrade %s` to upgrade.\n", fishFood, fishFood)
+				ohai.Ohaif("%s is already installed. Please use `gofish upgrade %s` to upgrade.\n", fishFood, fishFood)
 				return nil
 			}
 			ohai.Ohaif("Installing %s...\n", fishFood)

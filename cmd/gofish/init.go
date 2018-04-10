@@ -21,7 +21,7 @@ func newInitCmd() *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "init",
-		Short: "sets up local environment to work with Draft",
+		Short: "sets up local environment to work with fish",
 		Long:  initDesc,
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -35,7 +35,6 @@ func newInitCmd() *cobra.Command {
 	return cmd
 }
 
-// runInit initializes local config and installs Draft to Kubernetes Cluster
 func (i *initCmd) run() error {
 	home := fish.Home(fish.HomePath)
 	userHome := fish.UserHome(fish.UserHomePath)

@@ -22,8 +22,8 @@
 #
 # Ripped from github.com/technosophos/helm-template's get-binary.sh script, with a few tweaks to fetch fish.
 
-PROJECT_NAME="fish"
-PROJECT_GH="fishworks/$PROJECT_NAME"
+PROJECT_NAME="gofish"
+PROJECT_GH="fishworks/fish"
 
 : ${INSTALL_PREFIX:="/usr/local/bin"}
 : ${VERSION:="v0.1.0"}
@@ -77,7 +77,7 @@ verifySupported() {
 
 # getDownloadURL checks the latest available version.
 getDownloadURL() {
-  DOWNLOAD_URL="https://gofi.sh/releases/fish-$VERSION-$OS-$ARCH.tar.gz"
+  DOWNLOAD_URL="https://gofi.sh/releases/$PROJECT_NAME-$VERSION-$OS-$ARCH.tar.gz"
 }
 
 # downloadFile downloads the latest binary package and also the checksum
@@ -119,11 +119,11 @@ fail_trap() {
 testVersion() {
   set +e
   echo "$PROJECT_NAME installed into $INSTALL_PREFIX/$PROJECT_NAME"
-  echo "Run 'fish init' to get started!"
+  echo "Run '$PROJECT_NAME init' to get started!"
   # To avoid to keep track of the Windows suffix,
   # call the plugin assuming it is in the PATH
   PATH=$PATH:$INSTALL_PREFIX
-  fish -h > /dev/null
+  gofish -h > /dev/null
   set -e
 }
 

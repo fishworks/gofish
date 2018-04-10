@@ -18,7 +18,7 @@ var globalUsage = `The package manager.
 
 func newRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:          "fish",
+		Use:          "gofish",
 		Short:        globalUsage,
 		Long:         globalUsage,
 		SilenceUsage: true,

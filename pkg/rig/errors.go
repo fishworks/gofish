@@ -10,7 +10,7 @@ var (
 	// ErrDoesNotExist indicates that a rig does not exist
 	ErrDoesNotExist = errors.New("rig does not exist")
 	// ErrHomeMissing indicates that the directory expected to contain rigs does not exist
-	ErrHomeMissing = errors.New(`rig home "$(fish home)/Rigs" does not exist`)
+	ErrHomeMissing = errors.New(`rig home "$(gofish home)/Rigs" does not exist`)
 	// ErrMissingSource indicates that information about the source of the rig was not found
 	ErrMissingSource = errors.New("cannot get information about the source of this rig")
 	// ErrRepoDirty indicates that the rig repo was modified
