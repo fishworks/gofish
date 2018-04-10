@@ -1,12 +1,12 @@
-$version = "0.1.0"
-$url = "https://gofi.sh/releases/gofish-v$version-windows-amd64.zip"
+$version = "v0.2.0"
+$url = "https://gofi.sh/releases/gofish-$version-windows-amd64.zip"
 
 if ($env:TEMP -eq $null) {
   $env:TEMP = Join-Path $env:SystemDrive 'temp'
 }
 $tempDir = Join-Path $env:TEMP 'Fish'
 if (![System.IO.Directory]::Exists($tempDir)) {[void][System.IO.Directory]::CreateDirectory($tempDir)}
-$file = Join-Path $env:TEMP "gofish-v$version-windows-amd64.zip"
+$file = Join-Path $env:TEMP "gofish-$version-windows-amd64.zip"
 
 # Download fish
 Write-Output "Downloading $url"
