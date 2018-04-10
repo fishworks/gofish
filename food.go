@@ -215,7 +215,7 @@ func downloadCachedFileToPath(dir string, url string) (string, error) {
 
 func isZipPath(path string) bool {
 	_, err := zip.OpenReader(path)
-	return err == zip.ErrFormat
+	return err == nil
 }
 
 func unzip(src, dest string) error {
