@@ -8,9 +8,9 @@ Fish is a cross-platform systems package manager, bringing the ease of use of Ho
 Linux and Windows.
 
 ```
-$ gofish install helm
-==> Installing helm...
-🐠  helm 2.8.2: installed in 1.462258159s
+$ gofish install go
+==> Installing go...
+🐠  go 1.10.1: installed in 2.307602197s
 ```
 
 Fish works across all three major operating systems (Windows, MacOS, and Linux). It installs
