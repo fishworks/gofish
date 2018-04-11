@@ -98,7 +98,7 @@ installFile() {
   TMPDIR="/tmp/$PROJECT_NAME"
   mkdir -p "$TMPDIR"
   tar xf "$TMP_CACHE_FILE" -C "$TMPDIR"
-  TMPDIR_BIN="$TMPDIR/$OS-$ARCH/$NAME"
+  TMPDIR_BIN="$TMPDIR/$OS-$ARCH/"
   echo "Preparing to install into ${INSTALL_PREFIX}"
   # Use * to also copy the file withe the exe suffix on Windows
   mkdir -p "$INSTALL_PREFIX"
