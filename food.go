@@ -2,6 +2,7 @@ package fish
 
 import (
 	"archive/zip"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -60,6 +61,7 @@ type Resource struct {
 
 // Install attempts to install the package, returning errors if it fails.
 func (f *Food) Install() error {
+	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
 	pkg := f.GetPackage(runtime.GOOS, runtime.GOARCH)
 	if pkg == nil {
 		return fmt.Errorf("food '%s' does not support the current platform (%s/%s)", f.Name, runtime.GOOS, runtime.GOARCH)
@@ -68,21 +70,25 @@ func (f *Food) Install() error {
 	if err != nil {
 		return err
 	}
-	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
+	if err := checksumVerifyPath(cachedFilePath, pkg.SHA256); err != nil {
+		return fmt.Errorf("shasum verify check failed: %v", err)
+	}
 
 	if err := os.MkdirAll(barrelDir, 0755); err != nil {
 		return err
 	}
-
 	unarchiveOrCopy(cachedFilePath, barrelDir)
+
+	// This is just a safety check to make sure that there's nothing there when we link the package.
 	f.Unlink(pkg)
 	if err := f.Link(pkg); err != nil {
 		return err
 	}
-	// This is just a safety check to make sure that there's nothing there when we link the package.
+
 	if f.Caveats != "" {
 		fmt.Println(f.Caveats)
 	}
+
 	return nil
 }
 
@@ -238,6 +244,24 @@ func unzip(src, dest string) error {
 		defer src.Close()
 
 		io.Copy(dst, src)
+	}
+	return nil
+}
+
+func checksumVerifyPath(path string, checksum string) error {
+	hasher := sha256.New()
+	f, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	if _, err := io.Copy(hasher, f); err != nil {
+		return err
+	}
+
+	actualChecksum := fmt.Sprintf("%x", hasher.Sum(nil))
+	if strings.Compare(actualChecksum, checksum) != 0 {
+		return fmt.Errorf("checksums differ for %s: expected '%s', got '%s'", path, checksum, actualChecksum)
 	}
 	return nil
 }
