@@ -6,14 +6,13 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"os/user"
 	"strings"
 )
 
 func ensureDirectories(dirs []string) error {
-	curUser, err := user.Current()
-	if err != nil {
-		return fmt.Errorf("Could not determine current user: %s", err)
+	curUser := os.Getenv("USER")
+	if curUser == "" {
+		return fmt.Errorf("Could not determine current user: $USER is not present in the environment")
 	}
 	fmt.Printf("The following new directories will be created:\n")
 	fmt.Println(strings.Join(dirs, "\n"))
@@ -28,7 +27,7 @@ func ensureDirectories(dirs []string) error {
 		} else if !fi.IsDir() {
 			return fmt.Errorf("%s must be a directory", dir)
 		}
-		cmd := exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser.Uid, curUser.Gid), dir)
+		cmd := exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser, curUser), dir)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
