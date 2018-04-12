@@ -1,4 +1,7 @@
 $version = "v0.2.0"
+if (-Not $env:VERSION -eq $null) {
+  $version = "$env:VERSION"
+}
 $url = "https://gofi.sh/releases/gofish-$version-windows-amd64.zip"
 
 if ($env:TEMP -eq $null) {
