@@ -1,10 +1,10 @@
-# Fish, The Package Manager
+# GoFish, The Package Manager
 
 Features, usage and installation instructions can be found on the [homepage](https://gofi.sh).
 
-## What does Fish do?
+## What does GoFish do?
 
-Fish is a cross-platform systems package manager, bringing the ease of use of Homebrew to
+GoFish is a cross-platform systems package manager, bringing the ease of use of Homebrew to
 Linux and Windows.
 
 ```
@@ -13,7 +13,7 @@ $ gofish install go
 🐠  go 1.10.1: installed in 2.307602197s
 ```
 
-Fish works across all three major operating systems (Windows, MacOS, and Linux). It installs
+GoFish works across all three major operating systems (Windows, MacOS, and Linux). It installs
 packages into its own directory and symlinks their files into /usr/local (or C:\ProgramData for Windows).
 You can think of it as the cross-platform Homebrew.
 
@@ -31,4 +31,4 @@ Please email security issues to [Matt Fisher](mailto:matt.fisher+security-issues
 
 ## License
 
-Fish is licensed under the [Apache v2 License](LICENSE).
+GoFish is licensed under the [Apache v2 License](LICENSE).

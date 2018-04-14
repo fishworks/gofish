@@ -9,8 +9,8 @@ import (
 	"github.com/Masterminds/semver"
 	"github.com/Masterminds/vcs"
 
-	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/rig"
+	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/rig"
 )
 
 //VCSInstaller installs rigs from a remote repository
@@ -18,11 +18,11 @@ type VCSInstaller struct {
 	Repo    vcs.Repo
 	Version string
 	Source  string
-	Home    fish.Home
+	Home    gofish.Home
 }
 
 // NewVCSInstaller creates a new VCSInstaller.
-func NewVCSInstaller(source, version string, home fish.Home) (*VCSInstaller, error) {
+func NewVCSInstaller(source, version string, home gofish.Home) (*VCSInstaller, error) {
 	i := &VCSInstaller{
 		Version: version,
 		Source:  source,
@@ -77,7 +77,7 @@ func (i *VCSInstaller) Update() error {
 	return nil
 }
 
-func existingVCSRepo(location string, home fish.Home) (Installer, error) {
+func existingVCSRepo(location string, home gofish.Home) (Installer, error) {
 	repo, err := vcs.NewRepo("", location)
 	if err != nil {
 		return nil, err

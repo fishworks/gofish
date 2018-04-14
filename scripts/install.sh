@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-# Ripped from github.com/technosophos/helm-template's get-binary.sh script, with a few tweaks to fetch fish.
+# Ripped from github.com/technosophos/helm-template's get-binary.sh script, with a few tweaks to fetch gofish.
 
 PROJECT_NAME="gofish"
-PROJECT_GH="fishworks/fish"
+PROJECT_GH="fishworks/gofish"
 
 : ${INSTALL_PREFIX:="/usr/local/bin"}
 : ${VERSION:="v0.3.0"}

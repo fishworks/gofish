@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/ohai"
+	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/ohai"
 	"github.com/spf13/cobra"
 	"github.com/yuin/gluamapper"
 	"github.com/yuin/gopher-lua"
@@ -47,16 +47,16 @@ func newInstallCmd() *cobra.Command {
 	return cmd
 }
 
-func getFood(name string) (*fish.Food, error) {
+func getFood(name string) (*gofish.Food, error) {
 	if strings.Contains(name, "./\\") {
 		return nil, fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", name)
 	}
 	l := lua.NewState()
 	defer l.Close()
-	if err := l.DoFile(filepath.Join(fish.Home(fish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", name))); err != nil {
+	if err := l.DoFile(filepath.Join(gofish.Home(gofish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", name))); err != nil {
 		return nil, err
 	}
-	var food fish.Food
+	var food gofish.Food
 	if err := gluamapper.Map(l.GetGlobal(strings.ToLower(reflect.TypeOf(food).Name())).(*lua.LTable), &food); err != nil {
 		return nil, err
 	}

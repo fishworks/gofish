@@ -3,11 +3,10 @@ package main
 import (
 	"time"
 
-	"github.com/fishworks/fish/pkg/ohai"
+	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/ohai"
 
-	"github.com/fishworks/fish"
-
-	"github.com/fishworks/fish/pkg/rig/installer"
+	"github.com/fishworks/gofish/pkg/rig/installer"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +16,7 @@ func newRigAddCmd() *cobra.Command {
 		Short: "add rigs",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			i, err := installer.New(args[0], "", fish.Home(fish.HomePath))
+			i, err := installer.New(args[0], "", gofish.Home(gofish.HomePath))
 			if err != nil {
 				return err
 			}

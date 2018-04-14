@@ -4,8 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/rig"
+	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/rig"
 )
 
 // Installer provides an interface for installing client rigs.
@@ -44,7 +44,7 @@ func Update(i Installer) error {
 }
 
 // FindSource determines the correct Installer for the given source.
-func FindSource(location string, home fish.Home) (Installer, error) {
+func FindSource(location string, home gofish.Home) (Installer, error) {
 	installer, err := existingVCSRepo(location, home)
 	if err != nil && err.Error() == "Cannot detect VCS" {
 		return installer, rig.ErrMissingSource
@@ -53,7 +53,7 @@ func FindSource(location string, home fish.Home) (Installer, error) {
 }
 
 // New determines and returns the correct Installer for the given source
-func New(source, version string, home fish.Home) (Installer, error) {
+func New(source, version string, home gofish.Home) (Installer, error) {
 	if isLocalReference(source) {
 		return NewLocalInstaller(source, home)
 	}

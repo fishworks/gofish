@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/fishworks/fish"
+	"github.com/fishworks/gofish"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,7 @@ func newHomeCmd() *cobra.Command {
 		Short: "print the location of fish's home directory",
 		Long:  homeDesc,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Println(fish.Home(fish.HomePath))
+			fmt.Println(gofish.Home(gofish.HomePath))
 			return nil
 		},
 	}

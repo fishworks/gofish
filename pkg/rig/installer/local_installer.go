@@ -3,19 +3,19 @@ package installer
 import (
 	"path/filepath"
 
-	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/osutil"
-	"github.com/fishworks/fish/pkg/rig"
+	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/osutil"
+	"github.com/fishworks/gofish/pkg/rig"
 )
 
 // LocalInstaller installs rigs from the filesystem
 type LocalInstaller struct {
 	Source string
-	Home   fish.Home
+	Home   gofish.Home
 }
 
 // NewLocalInstaller creates a new LocalInstaller
-func NewLocalInstaller(source string, home fish.Home) (*LocalInstaller, error) {
+func NewLocalInstaller(source string, home gofish.Home) (*LocalInstaller, error) {
 	i := &LocalInstaller{
 		Source: source,
 		Home:   home,

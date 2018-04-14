@@ -8,8 +8,8 @@ import (
 
 	"github.com/Masterminds/vcs"
 
-	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/rig"
+	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/rig"
 )
 
 var _ Installer = new(VCSInstaller)
@@ -40,7 +40,7 @@ func TestVCSInstallerSuccess(t *testing.T) {
 	}
 	defer os.RemoveAll(dh)
 
-	home := fish.Home(dh)
+	home := gofish.Home(dh)
 	if err := os.MkdirAll(home.Rigs(), 0755); err != nil {
 		t.Fatalf("Could not create %s: %s", home.Rigs(), err)
 	}
@@ -90,7 +90,7 @@ func TestVCSInstallerUpdate(t *testing.T) {
 	}
 	defer os.RemoveAll(dh)
 
-	home := fish.Home(dh)
+	home := gofish.Home(dh)
 	if err := os.MkdirAll(home.Rigs(), 0755); err != nil {
 		t.Fatalf("Could not create %s: %s", home.Rigs(), err)
 	}

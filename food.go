@@ -1,4 +1,4 @@
-package fish
+package gofish
 
 import (
 	"archive/zip"
@@ -14,8 +14,7 @@ import (
 	"strings"
 
 	"github.com/docker/docker/pkg/archive"
-
-	"github.com/fishworks/fish/pkg/osutil"
+	"github.com/fishworks/gofish/pkg/osutil"
 )
 
 // Food provides metadata to install a piece of software.
