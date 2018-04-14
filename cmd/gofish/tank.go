@@ -8,9 +8,9 @@ func (t tank) fill() {
 	fishHome := gofish.Home(gofish.HomePath)
 	userHome := gofish.UserHome(gofish.UserHomePath)
 
-	t["FISH_HOME"] = fishHome.String()
-	t["FISH_CACHE"] = userHome.Cache()
-	t["FISH_BARREL"] = fishHome.Barrel()
-	t["FISH_RIGS"] = fishHome.Rigs()
-	t["FISH_DEFAULT_RIG"] = fishHome.DefaultRig()
+	t["GOFISH_HOME"] = fishHome.String()
+	t["GOFISH_CACHE"] = userHome.Cache()
+	t["GOFISH_BARREL"] = fishHome.Barrel()
+	t["GOFISH_RIGS"] = fishHome.Rigs()
+	t["GOFISH_DEFAULT_RIG"] = fishHome.DefaultRig()
 }
