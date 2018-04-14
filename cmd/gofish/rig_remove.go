@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/ohai"
+	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/ohai"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +16,7 @@ func newRigRemoveCmd() *cobra.Command {
 		Short: "remove rigs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			start := time.Now()
-			rigPath := fish.Home(fish.HomePath).Rigs()
+			rigPath := gofish.Home(gofish.HomePath).Rigs()
 			rigs := findRigs(rigPath)
 			foundRigs := map[string]bool{}
 			for _, arg := range args {

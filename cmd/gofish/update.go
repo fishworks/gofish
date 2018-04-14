@@ -5,9 +5,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/fishworks/fish"
-	"github.com/fishworks/fish/pkg/ohai"
-	"github.com/fishworks/fish/pkg/rig/installer"
+	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/ohai"
+	"github.com/fishworks/gofish/pkg/rig/installer"
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 )
@@ -25,7 +25,7 @@ func newUpdateCmd() *cobra.Command {
 
 func updateRigs() error {
 	start := time.Now()
-	home := fish.Home(fish.HomePath)
+	home := gofish.Home(gofish.HomePath)
 	rigs := findRigs(home.Rigs())
 	for _, rig := range rigs {
 		i, err := installer.FindSource(filepath.Join(home.Rigs(), rig), home)

@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/fishworks/fish"
+	"github.com/fishworks/gofish"
 	"github.com/spf13/cobra"
 )
 
@@ -70,7 +70,7 @@ func newCreateCmd() *cobra.Command {
 		Short: "generate fish food and open it in the editor",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			destPath := filepath.Join(fish.Home(fish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", args[0]))
+			destPath := filepath.Join(gofish.Home(gofish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", args[0]))
 			f, err := os.Create(destPath)
 			if err != nil {
 				return nil

@@ -1,6 +1,6 @@
 // +build !windows,!darwin
 
-package fish
+package gofish
 
 import (
 	"os"
@@ -9,7 +9,7 @@ import (
 // HomePrefix is the base path to Fish's configuration directory.
 const HomePrefix = "/usr/local"
 
-// BinPath is the path to where executables should be installed by fish.
+// BinPath is the path to where executables should be installed by gofish.
 const BinPath = HomePrefix + "/bin"
 
 // UserHomePath is the path to $HOME

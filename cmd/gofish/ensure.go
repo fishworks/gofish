@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/fishworks/fish/pkg/ohai"
+	"github.com/fishworks/gofish/pkg/ohai"
 )
 
 // ensureFood checks to see if the default fish food exists.

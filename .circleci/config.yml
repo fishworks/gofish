@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/fishworks/fish
+    working_directory: /go/src/github.com/fishworks/gofish
     docker:
       - image: golang:1.10
     environment:
@@ -9,7 +9,7 @@ jobs:
       AZURE_STORAGE_ACCOUNT: "gofish"
     steps:
       - checkout
-      - run: echo 'export PATH=/go/src/github.com/fishworks/fish/bin:$PATH' >> $BASH_ENV
+      - run: echo 'export PATH=/go/src/github.com/fishworks/gofish/bin:$PATH' >> $BASH_ENV
       - run:
           name: install dependencies
           command: .circleci/bootstrap.sh
