@@ -16,7 +16,7 @@ func newTankCmd() *cobra.Command {
 			t := tank{}
 			t.fill()
 			for k, v := range t {
-				fmt.Printf("$env:%s = \"%q\"\n", k, v)
+				fmt.Printf("$env:%s = %q\n", k, v)
 			}
 			fmt.Print("# Run this command to configure your shell:\n# iex (\"gofish tank\")\n")
 			return nil
