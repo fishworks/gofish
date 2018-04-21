@@ -107,8 +107,10 @@ func (f *Food) Uninstall() error {
 	if pkg == nil {
 		return nil
 	}
-	if err := f.Unlink(pkg); err != nil {
-		return err
+	if f.Linked() {
+		if err := f.Unlink(pkg); err != nil {
+			return err
+		}
 	}
 	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
 	return os.RemoveAll(barrelDir)
