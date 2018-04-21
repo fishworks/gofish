@@ -1,8 +1,10 @@
 package main
 
 import (
-	"github.com/fishworks/gofish"
+	"fmt"
 
+	"github.com/fishworks/gofish"
+	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 )
 
@@ -11,6 +13,8 @@ func newRottenCmd() *cobra.Command {
 		Use:   "rotten",
 		Short: "show fish food past their best before date (outdated)",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			table := uitable.New()
+			table.AddRow("NAME", "VERSION")
 			for _, name := range findFood() {
 				versions := findFoodVersions(name)
 				if len(versions) > 1 {
@@ -20,13 +24,12 @@ func newRottenCmd() *cobra.Command {
 							Version: ver,
 						}
 						if !f.Linked() {
-							if err := f.Uninstall(); err != nil {
-								return err
-							}
+							table.AddRow(f.Name, f.Version)
 						}
 					}
 				}
 			}
+			fmt.Println(table)
 			return nil
 		},
 	}
