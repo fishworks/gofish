@@ -23,7 +23,7 @@
   branch = "master"
   name = "github.com/containerd/continuity"
   packages = ["pathdriver"]
-  revision = "3e8f2ea4b190484acb976a5b378d373429639a1a"
+  revision = "c6cef34830231743494fe2969284df7b82cc0ad0"
 
 [[projects]]
   branch = "master"
@@ -38,7 +38,7 @@
     "pkg/pools",
     "pkg/system"
   ]
-  revision = "5c2e6064a1c5cb816081958e5a7079bc6b474940"
+  revision = "cf9c48bb3ecf47ed56a4b7b466eda577913f838e"
 
 [[projects]]
   name = "github.com/docker/go-units"
@@ -111,6 +111,12 @@
   version = "v0.8.0"
 
 [[projects]]
+  name = "github.com/renstrom/fuzzysearch"
+  packages = ["fuzzy"]
+  revision = "d4ca9dfccd55dc6b076f9880d49c35315922c1f4"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
@@ -143,19 +149,19 @@
     "parse",
     "pm"
   ]
-  revision = "84ea3a3c79b3c4b3b39606cc96f255cd63635ce0"
+  revision = "b0fa786cf4ea360285924c4a7fd42325be57aec8"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  revision = "d6449816ce06963d9d136eee5a56fca5b0616e7e"
+  revision = "e73bf333ef8920dbb52ad18d4bd38ad9d9bc76d7"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context"]
-  revision = "61147c48b25b599e5b561d2e9c4f3e1ef489ca41"
+  revision = "5f9ae10d9af5b1c89ae6904293b14b064d4ada23"
 
 [[projects]]
   branch = "master"
@@ -164,11 +170,11 @@
     "unix",
     "windows"
   ]
-  revision = "2281fa97ef7b0c26324634d5a22f04babdac8713"
+  revision = "79b0c6888797020a994db17c8510466c72fe75d9"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "569703303b57916c8cd44ceacad84f37b3826f4fb34dcb4dfea985bbd7e97383"
+  inputs-digest = "977b740c726ed063d05fdc32c6781269bda491cee51aba7bd63bad75fa94b6cd"
   solver-name = "gps-cdcl"
   solver-version = 1
