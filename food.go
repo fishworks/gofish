@@ -23,6 +23,8 @@ type Food struct {
 	Name string
 	// A (short) description of the software.
 	Description string
+	// The license identifier for the software.
+	License string
 	// The homepage URL for the software.
 	Homepage string
 	// Caveats inform the user about any Draft-specific caveats regarding this fish food.
