@@ -80,6 +80,20 @@ func (f *Food) Install() error {
 
 	// This is just a safety check to make sure that there's nothing there when we link the package.
 	f.Unlink(pkg)
+	// special case: gofish is replacing itself on windows
+	// https://github.com/fishworks/gofish/issues/46
+	if runtime.GOOS == "windows" && f.Name == "gofish" {
+		gofishBinPath := filepath.Join(HomePrefix, "bin/gofish.exe")
+		exists, err := osutil.Exists(gofishBinPath)
+		if err != nil {
+			return err
+		}
+		if exists {
+			if err := os.Rename(gofishBinPath, fmt.Sprintf("%s.rotten", gofishBinPath)); err != nil {
+				return err
+			}
+		}
+	}
 	if err := f.Link(pkg); err != nil {
 		return err
 	}
