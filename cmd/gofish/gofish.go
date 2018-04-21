@@ -41,6 +41,7 @@ func newRootCmd() *cobra.Command {
 		newPinCmd(),
 		newRigCmd(),
 		newRottenCmd(),
+		newSearchCmd(),
 		newSwitchCmd(),
 		newTankCmd(),
 		newUninstallCmd(),
