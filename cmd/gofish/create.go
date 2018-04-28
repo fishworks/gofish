@@ -22,7 +22,7 @@ food = {
         {
             os = "darwin",
             arch = "amd64",
-            url = "https://github.com/example/" .. name .. "/releases/download/v" .. version .. "/" .. name .. "-v" .. version .. "darwin-amd64.tar.gz",
+            url = "https://github.com/example/" .. name .. "/releases/download/v" .. version .. "/" .. name .. "-v" .. version .. "-darwin-amd64.tar.gz",
             -- shasum of the release archive
             sha256 = "",
             resources = {
@@ -36,7 +36,7 @@ food = {
         {
             os = "linux",
             arch = "amd64",
-            url = "https://github.com/example/" .. name .. "/releases/download/v" .. version .. "/" .. name .. "-v" .. version .. "linux-amd64.tar.gz",
+            url = "https://github.com/example/" .. name .. "/releases/download/v" .. version .. "/" .. name .. "-v" .. version .. "-linux-amd64.tar.gz",
             -- shasum of the release archive
             sha256 = "",
             resources = {
