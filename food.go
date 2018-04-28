@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -67,8 +66,8 @@ func (f *Food) Install() error {
 	if pkg == nil {
 		return fmt.Errorf("food '%s' does not support the current platform (%s/%s)", f.Name, runtime.GOOS, runtime.GOARCH)
 	}
-	cachedFilePath, err := downloadCachedFileToPath(UserHome(UserHomePath).Cache(), pkg.URL)
-	if err != nil {
+	cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s%s", f.Name, f.Version, filepath.Ext(pkg.URL)))
+	if err := downloadCachedFileToPath(cachedFilePath, pkg.URL); err != nil {
 		return err
 	}
 	if err := checksumVerifyPath(cachedFilePath, pkg.SHA256); err != nil {
@@ -208,32 +207,30 @@ func (f *Food) Unlink(pkg *Package) error {
 // downloadCachedFileToPath will download a file from the given url to a directory, returning the
 // path to the cached file. If it already exists, it'll skip downloading the file and just return
 // the path to the cached file.
-func downloadCachedFileToPath(dir string, url string) (string, error) {
+func downloadCachedFileToPath(filePath string, url string) error {
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	filePath := filepath.Join(dir, path.Base(req.URL.Path))
-
 	if _, err = os.Stat(filePath); err == nil {
-		return filePath, nil
+		return nil
 	}
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return err
 	}
 	defer resp.Body.Close()
 
 	out, err := os.Create(filePath)
 	if err != nil {
-		return "", err
+		return err
 	}
 	defer out.Close()
 
 	_, err = io.Copy(out, resp.Body)
-	return filePath, err
+	return err
 }
 
 func isZipPath(path string) bool {
