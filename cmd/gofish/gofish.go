@@ -49,6 +49,7 @@ func newRootCmd() *cobra.Command {
 		newUnpinCmd(),
 		newUpdateCmd(),
 		newUpgradeCmd(),
+		newVersionCmd(),
 	)
 
 	return cmd
