@@ -4,11 +4,10 @@ DIST_DIRS         = find * -type d -exec
 
 # go option
 GO        ?= go
-PKG       := $(shell glide novendor)
 TAGS      :=
 TESTS     := .
 TESTFLAGS :=
-LDFLAGS   := -w -s
+LDFLAGS   :=
 GOFLAGS   :=
 BINDIR    := $(CURDIR)/bin
 
