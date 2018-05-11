@@ -18,8 +18,8 @@ func TestSearch(t *testing.T) {
 	gofish.HomePath = filepath.Join(cwd, "testdata")
 
 	expectedFoodList := []string{
+		"github.com/customorg/fish-food/hugo",
 		"hugo",
-		"github.com/myorg/fish-food/hugo",
 	}
 
 	foodList := search([]string{})
