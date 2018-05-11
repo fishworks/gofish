@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
-	"strings"
 
 	"github.com/fishworks/gofish"
+	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 )
 
@@ -16,13 +16,23 @@ func newListCmd() *cobra.Command {
 		Short: "list installed fish food. If an argument is provided, list all installed versions of that fish food",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			var output []string
+			table := uitable.New()
 			if len(args) == 0 {
-				output = findFood()
+				table.AddRow("NAME")
+				for _, food := range findFood() {
+					table.AddRow(food)
+				}
 			} else {
-				output = findFoodVersions(args[0])
+				table.AddRow("NAME", "VERSION", "LINKED")
+				for _, ver := range findFoodVersions(args[0]) {
+					f := gofish.Food{
+						Name:    args[0],
+						Version: ver,
+					}
+					table.AddRow(f.Name, f.Version, f.Linked())
+				}
 			}
-			fmt.Println(strings.Join(output, "\t\t\t"))
+			fmt.Println(table)
 			return nil
 		},
 	}

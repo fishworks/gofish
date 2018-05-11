@@ -22,7 +22,7 @@ func newUpgradeCmd() *cobra.Command {
 				foodNames = findFood()
 			}
 			for _, name := range foodNames {
-				food, err := getFood(name)
+				food, _, err := getFood(name)
 				if err != nil {
 					return err
 				}

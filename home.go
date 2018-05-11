@@ -1,6 +1,7 @@
 package gofish
 
 import (
+	"path"
 	"path/filepath"
 )
 
@@ -31,9 +32,9 @@ func (h Home) Rigs() string {
 	return h.Path("Rigs")
 }
 
-// DefaultRig returns the path to the default fishing rig.
+// DefaultRig returns the name of the default fishing rig.
 func (h Home) DefaultRig() string {
-	return h.Path("Rigs", "github.com", "fishworks", "fish-food")
+	return path.Join("github.com", "fishworks", "fish-food")
 }
 
 // String returns Home as a string.

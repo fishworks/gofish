@@ -14,7 +14,7 @@ func newUninstallCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fishFood := args[0]
-			food, err := getFood(fishFood)
+			food, _, err := getFood(fishFood)
 			if err != nil {
 				return err
 			}
