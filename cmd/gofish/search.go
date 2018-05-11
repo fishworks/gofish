@@ -51,7 +51,7 @@ func search(keywords []string) []string {
 			}
 		}
 	}
-	var names []string
+	names := []string{}
 	for n := range foundFood {
 		names = append(names, n)
 	}
@@ -63,9 +63,14 @@ func findFishFood() []string {
 	rigPath := home.Rigs()
 	var fudz []string
 	filepath.Walk(rigPath, func(p string, f os.FileInfo, err error) error {
-		if strings.HasSuffix(f.Name(), ".lua") {
+		if err != nil {
+			log.Errorln(err)
+			return nil
+		}
+		if !f.IsDir() && strings.HasSuffix(f.Name(), ".lua") {
 			foodName := strings.TrimSuffix(f.Name(), ".lua")
-			repoName := strings.TrimPrefix(path.Dir(path.Dir(p)), rigPath+"/")
+			repoName := strings.TrimPrefix(p, rigPath+"/")
+			repoName = strings.TrimSuffix(repoName, "/"+path.Join("Food", f.Name()))
 			name := foodName
 			if repoName != home.DefaultRig() {
 				name = path.Join(repoName, foodName)
