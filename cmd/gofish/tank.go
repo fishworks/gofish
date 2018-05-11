@@ -1,6 +1,10 @@
 package main
 
-import "github.com/fishworks/gofish"
+import (
+	"path/filepath"
+
+	"github.com/fishworks/gofish"
+)
 
 type tank map[string]string
 
@@ -12,5 +16,5 @@ func (t tank) fill() {
 	t["GOFISH_CACHE"] = userHome.Cache()
 	t["GOFISH_BARREL"] = fishHome.Barrel()
 	t["GOFISH_RIGS"] = fishHome.Rigs()
-	t["GOFISH_DEFAULT_RIG"] = fishHome.DefaultRig()
+	t["GOFISH_DEFAULT_RIG"] = filepath.Join(fishHome.Rigs(), fishHome.DefaultRig())
 }

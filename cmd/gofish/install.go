@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"path"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -26,7 +27,23 @@ func newInstallCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fishFood := args[0]
-			food, err := getFood(fishFood)
+			relevantFood := search([]string{fishFood})
+			switch len(relevantFood) {
+			case 0:
+				return fmt.Errorf("no fish food with the name '%s' was found", fishFood)
+			case 1:
+				fishFood = relevantFood[0]
+			default:
+				// check if we have an exact match
+				for _, f := range relevantFood {
+					if strings.Compare(f, fishFood) == 0 {
+						fishFood = f
+						break
+					}
+				}
+				return fmt.Errorf("%d fish food with the name '%s' was found: %v", len(relevantFood), fishFood, relevantFood)
+			}
+			food, _, err := getFood(fishFood)
 			if err != nil {
 				return err
 			}
@@ -47,18 +64,31 @@ func newInstallCmd() *cobra.Command {
 	return cmd
 }
 
-func getFood(name string) (*gofish.Food, error) {
+func getFood(foodName string) (*gofish.Food, string, error) {
+	var (
+		name string
+		rig  string
+	)
+	home := gofish.Home(gofish.HomePath)
+	foodInfo := strings.Split(foodName, "/")
+	if len(foodInfo) == 1 {
+		name = foodInfo[0]
+		rig = home.DefaultRig()
+	} else {
+		name = foodInfo[len(foodInfo)-1]
+		rig = path.Dir(foodName)
+	}
 	if strings.Contains(name, "./\\") {
-		return nil, fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", name)
+		return nil, "", fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", name)
 	}
 	l := lua.NewState()
 	defer l.Close()
-	if err := l.DoFile(filepath.Join(gofish.Home(gofish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", name))); err != nil {
-		return nil, err
+	if err := l.DoFile(filepath.Join(home.Rigs(), rig, "Food", fmt.Sprintf("%s.lua", name))); err != nil {
+		return nil, "", err
 	}
 	var food gofish.Food
 	if err := gluamapper.Map(l.GetGlobal(strings.ToLower(reflect.TypeOf(food).Name())).(*lua.LTable), &food); err != nil {
-		return nil, err
+		return nil, "", err
 	}
-	return &food, nil
+	return &food, rig, nil
 }

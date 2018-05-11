@@ -70,7 +70,8 @@ func newCreateCmd() *cobra.Command {
 		Short: "generate fish food and open it in the editor",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			destPath := filepath.Join(gofish.Home(gofish.HomePath).DefaultRig(), "Food", fmt.Sprintf("%s.lua", args[0]))
+			home := gofish.Home(gofish.HomePath)
+			destPath := filepath.Join(home.Rigs(), home.DefaultRig(), "Food", fmt.Sprintf("%s.lua", args[0]))
 			f, err := os.Create(destPath)
 			if err != nil {
 				return nil
