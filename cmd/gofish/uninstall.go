@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/fishworks/gofish/pkg/ohai"
@@ -14,6 +16,22 @@ func newUninstallCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fishFood := args[0]
+			relevantFood := search([]string{fishFood})
+			switch len(relevantFood) {
+			case 0:
+				return fmt.Errorf("no fish food with the name '%s' was found", fishFood)
+			case 1:
+				fishFood = relevantFood[0]
+			default:
+				// check if we have an exact match
+				for _, f := range relevantFood {
+					if strings.Compare(f, fishFood) == 0 {
+						fishFood = f
+						break
+					}
+				}
+				return fmt.Errorf("%d fish food with the name '%s' was found: %v", len(relevantFood), fishFood, relevantFood)
+			}
 			food, _, err := getFood(fishFood)
 			if err != nil {
 				return err
