@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/fishworks/gofish"
@@ -79,5 +80,6 @@ func findFishFood() []string {
 		}
 		return nil
 	})
+	sort.Strings(fudz)
 	return fudz
 }
