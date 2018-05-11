@@ -3,6 +3,7 @@ package gofish
 import (
 	"archive/zip"
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/docker/docker/pkg/archive"
 	"github.com/fishworks/gofish/pkg/osutil"
+	log "github.com/sirupsen/logrus"
 )
 
 // Food provides metadata to install a piece of software.
@@ -67,8 +69,22 @@ func (f *Food) Install() error {
 		return fmt.Errorf("food '%s' does not support the current platform (%s/%s)", f.Name, runtime.GOOS, runtime.GOARCH)
 	}
 	cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s%s", f.Name, f.Version, filepath.Ext(pkg.URL)))
+	var success = true
 	if err := downloadCachedFileToPath(cachedFilePath, pkg.URL); err != nil {
-		return err
+		success = false
+		log.Errorln(err)
+		// try using the mirrors
+		for i := range pkg.Mirrors {
+			if err := downloadCachedFileToPath(cachedFilePath, pkg.Mirrors[i]); err == nil {
+				success = true
+				break
+			} else {
+				log.Errorln(err)
+			}
+		}
+	}
+	if !success {
+		return errors.New("failed to download package")
 	}
 	if err := checksumVerifyPath(cachedFilePath, pkg.SHA256); err != nil {
 		return fmt.Errorf("shasum verify check failed: %v", err)
