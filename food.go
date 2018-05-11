@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -68,7 +69,11 @@ func (f *Food) Install() error {
 	if pkg == nil {
 		return fmt.Errorf("food '%s' does not support the current platform (%s/%s)", f.Name, runtime.GOOS, runtime.GOARCH)
 	}
-	cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s%s", f.Name, f.Version, filepath.Ext(pkg.URL)))
+	u, err := url.Parse(pkg.URL)
+	if err != nil {
+		return fmt.Errorf("could not parse package URL '%s' as a URL: %v", pkg.URL, err)
+	}
+	cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s%s", f.Name, f.Version, filepath.Ext(u.Path)))
 	var success = true
 	if err := downloadCachedFileToPath(cachedFilePath, pkg.URL); err != nil {
 		success = false
@@ -93,7 +98,7 @@ func (f *Food) Install() error {
 	if err := os.MkdirAll(barrelDir, 0755); err != nil {
 		return err
 	}
-	unarchiveOrCopy(cachedFilePath, barrelDir)
+	unarchiveOrCopy(cachedFilePath, barrelDir, u.Path)
 
 	// This is just a safety check to make sure that there's nothing there when we link the package.
 	f.Unlink(pkg)
@@ -147,7 +152,7 @@ func (f *Food) Uninstall() error {
 	return os.RemoveAll(barrelDir)
 }
 
-func unarchiveOrCopy(src, dest string) error {
+func unarchiveOrCopy(src, dest, urlPath string) error {
 	in, err := os.Open(src)
 	if err != nil {
 		return err
@@ -160,7 +165,7 @@ func unarchiveOrCopy(src, dest string) error {
 		in.Close()
 		return unzip(src, dest)
 	}
-	out, err := os.Create(filepath.Join(dest, filepath.Base(src)))
+	out, err := os.Create(filepath.Join(dest, filepath.Base(urlPath)))
 	if err != nil {
 		return err
 	}
