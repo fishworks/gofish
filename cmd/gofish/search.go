@@ -56,6 +56,7 @@ func search(keywords []string) []string {
 	for n := range foundFood {
 		names = append(names, n)
 	}
+	sort.Strings(names)
 	return names
 }
 
