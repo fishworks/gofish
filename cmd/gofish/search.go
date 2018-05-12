@@ -71,8 +71,8 @@ func findFishFood() []string {
 		}
 		if !f.IsDir() && strings.HasSuffix(f.Name(), ".lua") {
 			foodName := strings.TrimSuffix(f.Name(), ".lua")
-			repoName := strings.TrimPrefix(p, rigPath+"/")
-			repoName = strings.TrimSuffix(repoName, "/"+path.Join("Food", f.Name()))
+			repoName := strings.TrimPrefix(p, rigPath+string(os.PathSeparator))
+			repoName = strings.TrimSuffix(repoName, string(os.PathSeparator)+filepath.Join("Food", f.Name()))
 			name := foodName
 			if repoName != home.DefaultRig() {
 				name = path.Join(repoName, foodName)
