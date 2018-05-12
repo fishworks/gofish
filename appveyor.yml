@@ -1,0 +1,16 @@
+version: "{build}"
+clone_folder: c:\go\src\github.com\fishworks\gofish
+environment:
+  GOPATH: c:\go
+  PATH: c:\ProgramData\bin;$(PATH)
+install:
+# install v0.5.0 as a workaround for now
+  - ps: iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/fishworks/gofish/v0.6.0/scripts/install.ps1'))
+  - gofish init
+  - gofish install dep
+  - dep ensure
+build: "off"
+deploy: "off"
+test_script:
+  - go build ./...
+  - go test ./...
