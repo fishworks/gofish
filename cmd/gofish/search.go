@@ -73,6 +73,8 @@ func findFishFood() []string {
 			foodName := strings.TrimSuffix(f.Name(), ".lua")
 			repoName := strings.TrimPrefix(p, rigPath+string(os.PathSeparator))
 			repoName = strings.TrimSuffix(repoName, string(os.PathSeparator)+filepath.Join("Food", f.Name()))
+			// for Windows clients, we need to replace the path separator with forwad slashes
+			repoName = strings.Replace(repoName, "\\", "/", -1)
 			name := foodName
 			if repoName != home.DefaultRig() {
 				name = path.Join(repoName, foodName)
