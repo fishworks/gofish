@@ -26,7 +26,7 @@ PROJECT_NAME="gofish"
 PROJECT_GH="fishworks/gofish"
 
 : ${INSTALL_PREFIX:="/usr/local/bin"}
-: ${VERSION:="v0.6.1"}
+: ${VERSION:="v0.6.2"}
 
 if [[ $SKIP_BIN_INSTALL == "1" ]]; then
   echo "Skipping binary install"
