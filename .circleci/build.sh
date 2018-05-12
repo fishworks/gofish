@@ -6,4 +6,4 @@ ROOT="${BASH_SOURCE[0]%/*}/.."
 
 cd "$ROOT"
 
-make build
+make
