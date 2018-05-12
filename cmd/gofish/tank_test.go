@@ -18,6 +18,14 @@ func TestTankFill(t *testing.T) {
 		"GOFISH_DEFAULT_RIG": "/usr/local/Fish/Rigs/github.com/fishworks/fish-food",
 	}
 
+	if runtime.GOOS == "windows" {
+		gofish.HomePath = "C:\\Fish"
+		expectedTank["GOFISH_HOME"] = "C:\\Fish"
+		expectedTank["GOFISH_BARREL"] = "C:\\Fish\\Barrel"
+		expectedTank["GOFISH_RIGS"] = "C:\\Fish\\Rigs"
+		expectedTank["GOFISH_DEFAULT_RIG"] = "C:\\Fish\\Rigs\\github.com\\fishworks\\fish-food"
+	}
+
 	switch runtime.GOOS {
 	case "darwin":
 		expectedTank["GOFISH_CACHE"] = filepath.Join(gofish.UserHomePath, "Library", "Caches", "Fish")
