@@ -23,14 +23,17 @@ func newUninstallCmd() *cobra.Command {
 			case 1:
 				fishFood = relevantFood[0]
 			default:
+				var match bool
 				// check if we have an exact match
 				for _, f := range relevantFood {
 					if strings.Compare(f, fishFood) == 0 {
 						fishFood = f
-						break
+						match = true
 					}
 				}
-				return fmt.Errorf("%d fish food with the name '%s' was found: %v", len(relevantFood), fishFood, relevantFood)
+				if !match {
+					return fmt.Errorf("%d fish food with the name '%s' was found: %v", len(relevantFood), fishFood, relevantFood)
+				}
 			}
 			food, _, err := getFood(fishFood)
 			if err != nil {
