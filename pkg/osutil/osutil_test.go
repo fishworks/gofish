@@ -13,21 +13,24 @@ func TestExists(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	name := file.Name()
+	// on Windows, we need to close all open handles to a file before we remove it.
+	file.Close()
 
-	exists, err := Exists(file.Name())
+	exists, err := Exists(name)
 	if err != nil {
 		t.Errorf("expected no error when calling Exists() on a file that exists, got %v", err)
 	}
 	if !exists {
 		t.Error("expected tempfile to exist")
 	}
-	os.Remove(file.Name())
-	exists, err = Exists(file.Name())
+	os.Remove(name)
+	stillExists, err := Exists(name)
 	if err != nil {
 		t.Errorf("expected no error when calling Exists() on a file that does not exist, got %v", err)
 	}
-	if exists {
-		t.Error("expected tempfile to NOT exist")
+	if stillExists {
+		t.Error("expected tempfile to NOT exist after removing it")
 	}
 }
 
@@ -45,7 +48,7 @@ func TestSymlinkWithFallback(t *testing.T) {
 	oldFileNamePath := path.Join(tmpDir, oldFileName)
 	newFileNamePath := path.Join(tmpDir, newFileName)
 
-	oldFile, err := os.Create(path.Join(tmpDir, oldFileName))
+	oldFile, err := os.Create(oldFileNamePath)
 	if err != nil {
 		t.Fatal(err)
 	}
