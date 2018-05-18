@@ -74,7 +74,7 @@ func newCreateCmd() *cobra.Command {
 			destPath := filepath.Join(home.Rigs(), home.DefaultRig(), "Food", fmt.Sprintf("%s.lua", args[0]))
 			f, err := os.Create(destPath)
 			if err != nil {
-				return nil
+				return err
 			}
 			defer f.Close()
 			t := template.Must(template.New("create").Parse(createTpl))
