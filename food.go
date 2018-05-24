@@ -3,7 +3,6 @@ package gofish
 import (
 	"archive/zip"
 	"crypto/sha256"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -73,26 +72,9 @@ func (f *Food) Install() error {
 	if err != nil {
 		return fmt.Errorf("could not parse package URL '%s' as a URL: %v", pkg.URL, err)
 	}
-	cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s%s", f.Name, f.Version, filepath.Ext(u.Path)))
-	var success = true
-	if err := downloadCachedFileToPath(cachedFilePath, pkg.URL); err != nil {
-		success = false
-		log.Errorln(err)
-		// try using the mirrors
-		for i := range pkg.Mirrors {
-			if err := downloadCachedFileToPath(cachedFilePath, pkg.Mirrors[i]); err == nil {
-				success = true
-				break
-			} else {
-				log.Errorln(err)
-			}
-		}
-	}
-	if !success {
-		return errors.New("failed to download package")
-	}
-	if err := checksumVerifyPath(cachedFilePath, pkg.SHA256); err != nil {
-		return fmt.Errorf("shasum verify check failed: %v", err)
+	cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, filepath.Ext(u.Path)))
+	if err := f.DownloadTo(pkg, cachedFilePath); err != nil {
+		return err
 	}
 
 	if err := os.MkdirAll(barrelDir, 0755); err != nil {
@@ -221,6 +203,46 @@ func (f *Food) Unlink(pkg *Package) error {
 		if err := os.RemoveAll(filepath.Join(HomePrefix, r.InstallPath)); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+// Lint analyses a given fish food for potential errors, returning a list of errors.
+func (f *Food) Lint() (errs []error) {
+	for _, pkg := range f.Packages {
+		u, err := url.Parse(pkg.URL)
+		if err != nil {
+			errs = append(errs, fmt.Errorf("could not parse package URL '%s' as a URL: %v", pkg.URL, err))
+		}
+		cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, filepath.Ext(u.Path)))
+		if err := f.DownloadTo(pkg, cachedFilePath); err != nil {
+			errs = append(errs, err)
+		}
+	}
+	return
+}
+
+// DownloadTo downloads a particular package to filePath, returning any errors if encountered.
+func (f *Food) DownloadTo(pkg *Package, filePath string) error {
+	var success = true
+	if err := downloadCachedFileToPath(filePath, pkg.URL); err != nil {
+		success = false
+		log.Errorln(err)
+		// try using the mirrors
+		for i := range pkg.Mirrors {
+			if err := downloadCachedFileToPath(filePath, pkg.Mirrors[i]); err == nil {
+				success = true
+				break
+			} else {
+				log.Errorln(err)
+			}
+		}
+	}
+	if !success {
+		return fmt.Errorf("failed to download package for OS/arch %s/%s with URL %s to filepath %s", pkg.OS, pkg.Arch, pkg.URL, filePath)
+	}
+	if err := checksumVerifyPath(filePath, pkg.SHA256); err != nil {
+		return fmt.Errorf("shasum verify check failed: %v", err)
 	}
 	return nil
 }
