@@ -299,6 +299,12 @@ func unzip(src, dest string) error {
 	defer r.Close()
 
 	for _, zf := range r.File {
+		if zf.FileHeader.FileInfo().IsDir() {
+			if err := os.Mkdir(filepath.Join(dest, zf.Name), 0755); err != nil {
+				return err
+			}
+			continue
+		}
 		dst, err := os.Create(filepath.Join(dest, zf.Name))
 		if err != nil {
 			return err
