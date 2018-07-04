@@ -1,4 +1,4 @@
-$version = "v0.6.2"
+$version = "v0.7.0"
 if (-Not $env:VERSION -eq $null) {
   $version = "$env:VERSION"
 }
