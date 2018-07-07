@@ -53,12 +53,12 @@ func FindSource(location string, home gofish.Home) (Installer, error) {
 }
 
 // New determines and returns the correct Installer for the given source
-func New(source, version string, home gofish.Home) (Installer, error) {
+func New(source, name, version string, home gofish.Home) (Installer, error) {
 	if isLocalReference(source) {
-		return NewLocalInstaller(source, home)
+		return NewLocalInstaller(source, name, home)
 	}
 
-	return NewVCSInstaller(source, version, home)
+	return NewVCSInstaller(source, name, version, home)
 }
 
 // isLocalReference checks if the source exists on the filesystem.

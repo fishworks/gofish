@@ -23,7 +23,7 @@ func TestLocalInstaller(t *testing.T) {
 	}
 
 	source := "testdata/fish-food"
-	i, err := New(source, "", home)
+	i, err := New(source, "", "", home)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}

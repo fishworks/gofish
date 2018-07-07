@@ -12,11 +12,15 @@ import (
 
 func newRigAddCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "add <rig>",
+		Use:   "add <rig> [name]",
 		Short: "add rigs",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			i, err := installer.New(args[0], "", gofish.Home(gofish.HomePath))
+			name := ""
+			if len(args) > 1 {
+				name = args[1]
+			}
+			i, err := installer.New(args[0], name, "", gofish.Home(gofish.HomePath))
 			if err != nil {
 				return err
 			}
