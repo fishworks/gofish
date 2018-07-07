@@ -3,6 +3,7 @@ package installer
 import (
 	"net/url"
 	"os"
+	"path"
 	"path/filepath"
 	"sort"
 
@@ -15,48 +16,56 @@ import (
 
 //VCSInstaller installs rigs from a remote repository
 type VCSInstaller struct {
-	Repo    vcs.Repo
 	Version string
 	Source  string
 	Home    gofish.Home
+	Name    string
 }
 
 // NewVCSInstaller creates a new VCSInstaller.
-func NewVCSInstaller(source, version string, home gofish.Home) (*VCSInstaller, error) {
+func NewVCSInstaller(source, name, version string, home gofish.Home) (*VCSInstaller, error) {
 	i := &VCSInstaller{
 		Version: version,
 		Source:  source,
 		Home:    home,
+		Name:    name,
 	}
-	repo, err := vcs.NewRepo(source, i.Path())
-	if err != nil {
-		return nil, err
+	if i.Name == "" {
+		u, err := url.Parse(i.Source)
+		if err != nil {
+			return nil, err
+		}
+		i.Name = path.Join(u.Host, u.Path)
 	}
 
-	i.Repo = repo
-	return i, err
+	return i, nil
 }
 
 // Install clones a remote repository to the rig directory
 //
 // Implements Installer
 func (i *VCSInstaller) Install() error {
-	if err := i.sync(i.Repo); err != nil {
+	repo, err := vcs.NewRepo(i.Source, i.Path())
+	if err != nil {
 		return err
 	}
 
-	ref, err := i.solveVersion(i.Repo)
+	if err := i.sync(repo); err != nil {
+		return err
+	}
+
+	ref, err := i.solveVersion(repo)
 	if err != nil {
 		return err
 	}
 
 	if ref != "" {
-		if err := i.setVersion(i.Repo, ref); err != nil {
+		if err := i.setVersion(repo, ref); err != nil {
 			return err
 		}
 	}
 
-	if !isRig(i.Repo.LocalPath()) {
+	if !isRig(repo.LocalPath()) {
 		return rig.ErrMissingMetadata
 	}
 
@@ -65,13 +74,18 @@ func (i *VCSInstaller) Install() error {
 
 // Update updates a remote repository
 func (i *VCSInstaller) Update() error {
-	if i.Repo.IsDirty() {
-		return rig.ErrRepoDirty
-	}
-	if err := i.Repo.Update(); err != nil {
+	repo, err := vcs.NewRepo(i.Source, i.Path())
+	if err != nil {
 		return err
 	}
-	if !isRig(i.Repo.LocalPath()) {
+
+	if repo.IsDirty() {
+		return rig.ErrRepoDirty
+	}
+	if err := repo.Update(); err != nil {
+		return err
+	}
+	if !isRig(repo.LocalPath()) {
 		return rig.ErrMissingMetadata
 	}
 	return nil
@@ -83,10 +97,14 @@ func existingVCSRepo(location string, home gofish.Home) (Installer, error) {
 		return nil, err
 	}
 	i := &VCSInstaller{
-		Repo:   repo,
 		Source: repo.Remote(),
 		Home:   home,
 	}
+	u, err := url.Parse(i.Source)
+	if err != nil {
+		return nil, err
+	}
+	i.Name = path.Join(u.Host, u.Path)
 
 	return i, err
 }
@@ -157,9 +175,5 @@ func (i *VCSInstaller) sync(repo vcs.Repo) error {
 
 // Path is where the rig will be installed into.
 func (i *VCSInstaller) Path() string {
-	if i.Source == "" {
-		return ""
-	}
-	u, _ := url.Parse(i.Source)
-	return filepath.Join(i.Home.Rigs(), u.Host, u.Path)
+	return filepath.Join(i.Home.Rigs(), i.Name)
 }

@@ -12,13 +12,15 @@ import (
 type LocalInstaller struct {
 	Source string
 	Home   gofish.Home
+	Name   string
 }
 
 // NewLocalInstaller creates a new LocalInstaller
-func NewLocalInstaller(source string, home gofish.Home) (*LocalInstaller, error) {
+func NewLocalInstaller(source string, name string, home gofish.Home) (*LocalInstaller, error) {
 	i := &LocalInstaller{
 		Source: source,
 		Home:   home,
+		Name:   name,
 	}
 
 	return i, nil
@@ -43,7 +45,7 @@ func (i *LocalInstaller) Path() string {
 	if i.Source == "" {
 		return ""
 	}
-	return filepath.Join(i.Home.Rigs(), filepath.Base(i.Source))
+	return filepath.Join(i.Home.Rigs(), i.Name)
 }
 
 // Update updates a local repository, which is a no-op.
