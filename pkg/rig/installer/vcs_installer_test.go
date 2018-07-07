@@ -25,7 +25,7 @@ func TestVCSInstallerSuccess(t *testing.T) {
 	}
 
 	source := "https://github.com/fishworks/fish-food"
-	i, err := New(source, "", home)
+	i, err := New(source, "", "", home)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
@@ -71,7 +71,7 @@ func TestVCSInstallerUpdate(t *testing.T) {
 	}
 
 	source := "https://github.com/fishworks/fish-food"
-	i, err := New(source, "", home)
+	i, err := New(source, "", "", home)
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}

@@ -23,6 +23,10 @@ func NewLocalInstaller(source string, name string, home gofish.Home) (*LocalInst
 		Name:   name,
 	}
 
+	if i.Name == "" {
+		i.Name = filepath.Base(i.Source)
+	}
+
 	return i, nil
 }
 
