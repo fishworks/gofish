@@ -34,6 +34,9 @@ func newRigListCmd() *cobra.Command {
 func findRigs(dir string) []string {
 	var rigs []string
 	filepath.Walk(dir, func(path string, f os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		if f.IsDir() && f.Name() == "Food" {
 			rigName := strings.TrimPrefix(filepath.Dir(path), dir+string(os.PathSeparator))
 			rigs = append(rigs, rigName)
