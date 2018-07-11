@@ -1,4 +1,4 @@
-// +build !windows,!darwin
+// +build !windows
 
 package main
 
@@ -10,10 +10,22 @@ import (
 )
 
 func ensureDirectories(dirs []string) error {
-	curUser := os.Getenv("USER")
-	if curUser == "" {
-		return fmt.Errorf("Could not determine current user: $USER is not present in the environment")
+	userCmd := exec.Command("id", "-un")
+	userOutput, err := userCmd.Output()
+	if err != nil {
+		return err
 	}
+	// strip the newline character from the end
+	curUser := strings.TrimSuffix(string(userOutput), "\n")
+
+	groupCmd := exec.Command("id", "-gn", curUser)
+	groupOutput, err := groupCmd.Output()
+	if err != nil {
+		return err
+	}
+	// strip the newline character from the end
+	curGroup := strings.TrimSuffix(string(groupOutput), "\n")
+
 	fmt.Printf("The following new directories will be created:\n")
 	fmt.Println(strings.Join(dirs, "\n"))
 	for _, dir := range dirs {
@@ -27,7 +39,7 @@ func ensureDirectories(dirs []string) error {
 		} else if !fi.IsDir() {
 			return fmt.Errorf("%s must be a directory", dir)
 		}
-		cmd := exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser, curUser), dir)
+		cmd := exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser, curGroup), dir)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if err := cmd.Run(); err != nil {
