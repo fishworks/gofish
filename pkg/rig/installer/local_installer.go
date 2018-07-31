@@ -33,7 +33,7 @@ func NewLocalInstaller(source string, name string, home gofish.Home) (*LocalInst
 // Install creates a symlink to the rig directory
 func (i *LocalInstaller) Install() error {
 	if !isRig(i.Source) {
-		return rig.ErrMissingMetadata
+		return rig.ErrDoesNotExist
 	}
 
 	src, err := filepath.Abs(i.Source)
