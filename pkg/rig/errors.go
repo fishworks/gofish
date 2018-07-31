@@ -3,8 +3,6 @@ package rig
 import "errors"
 
 var (
-	// ErrMissingMetadata indicates that rig.yaml is missing.
-	ErrMissingMetadata = errors.New("rig metadata (rig.yaml) missing")
 	// ErrExists indicates that a rig already exists
 	ErrExists = errors.New("rig already exists")
 	// ErrDoesNotExist indicates that a rig does not exist

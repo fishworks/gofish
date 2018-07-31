@@ -66,7 +66,7 @@ func (i *VCSInstaller) Install() error {
 	}
 
 	if !isRig(repo.LocalPath()) {
-		return rig.ErrMissingMetadata
+		return rig.ErrDoesNotExist
 	}
 
 	return nil
@@ -86,7 +86,7 @@ func (i *VCSInstaller) Update() error {
 		return err
 	}
 	if !isRig(repo.LocalPath()) {
-		return rig.ErrMissingMetadata
+		return rig.ErrDoesNotExist
 	}
 	return nil
 }
