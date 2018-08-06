@@ -333,7 +333,7 @@ func checksumVerifyPath(path string, checksum string) error {
 	}
 
 	actualChecksum := fmt.Sprintf("%x", hasher.Sum(nil))
-	if strings.Compare(actualChecksum, checksum) != 0 {
+	if strings.Compare(actualChecksum, strings.ToLower(checksum)) != 0 {
 		return fmt.Errorf("checksums differ for %s: expected '%s', got '%s'", path, checksum, actualChecksum)
 	}
 	return nil
