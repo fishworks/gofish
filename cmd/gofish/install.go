@@ -21,46 +21,47 @@ Install fish food.
 
 func newInstallCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "install [food]",
+		Use:   "install <food...>",
 		Short: "install fish food",
 		Long:  installDesc,
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fishFood := args[0]
-			relevantFood := search([]string{fishFood})
-			switch len(relevantFood) {
-			case 0:
-				return fmt.Errorf("no fish food with the name '%s' was found", fishFood)
-			case 1:
-				fishFood = relevantFood[0]
-			default:
-				var match bool
-				// check if we have an exact match
-				for _, f := range relevantFood {
-					if strings.Compare(f, fishFood) == 0 {
-						fishFood = f
-						match = true
+			for _, fishFood := range args {
+				relevantFood := search([]string{fishFood})
+				switch len(relevantFood) {
+				case 0:
+					return fmt.Errorf("no fish food with the name '%s' was found", fishFood)
+				case 1:
+					fishFood = relevantFood[0]
+				default:
+					var match bool
+					// check if we have an exact match
+					for _, f := range relevantFood {
+						if strings.Compare(f, fishFood) == 0 {
+							fishFood = f
+							match = true
+						}
+					}
+					if !match {
+						return fmt.Errorf("%d fish food with the name '%s' was found: %v", len(relevantFood), fishFood, relevantFood)
 					}
 				}
-				if !match {
-					return fmt.Errorf("%d fish food with the name '%s' was found: %v", len(relevantFood), fishFood, relevantFood)
+				food, _, err := getFood(fishFood)
+				if err != nil {
+					return err
 				}
+				if len(findFoodVersions(fishFood)) > 0 {
+					ohai.Ohaif("%s is already installed. Please use `gofish upgrade %s` to upgrade.\n", fishFood, fishFood)
+					return nil
+				}
+				ohai.Ohaif("Installing %s...\n", fishFood)
+				start := time.Now()
+				if err := food.Install(); err != nil {
+					return err
+				}
+				t := time.Now()
+				ohai.Successf("%s %s: installed in %s\n", food.Name, food.Version, t.Sub(start).String())
 			}
-			food, _, err := getFood(fishFood)
-			if err != nil {
-				return err
-			}
-			if len(findFoodVersions(fishFood)) > 0 {
-				ohai.Ohaif("%s is already installed. Please use `gofish upgrade %s` to upgrade.\n", fishFood, fishFood)
-				return nil
-			}
-			ohai.Ohaif("Installing %s...\n", fishFood)
-			start := time.Now()
-			if err := food.Install(); err != nil {
-				return err
-			}
-			t := time.Now()
-			ohai.Successf("%s %s: installed in %s\n", food.Name, food.Version, t.Sub(start).String())
 			return nil
 		},
 	}
