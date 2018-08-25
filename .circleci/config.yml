@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/fishworks/gofish
     docker:
-      - image: golang:1.10
+      - image: golang:1.11
     environment:
       AZURE_CONTAINER: "releases"
       AZURE_STORAGE_ACCOUNT: "gofish"
