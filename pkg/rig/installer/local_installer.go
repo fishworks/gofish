@@ -1,10 +1,10 @@
 package installer
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/fishworks/gofish"
-	"github.com/fishworks/gofish/pkg/osutil"
 	"github.com/fishworks/gofish/pkg/rig"
 )
 
@@ -67,5 +67,5 @@ func (i *LocalInstaller) link(from string) error {
 	if err != nil {
 		return err
 	}
-	return osutil.SymlinkWithFallback(origin, dest)
+	return os.Symlink(origin, dest)
 }
