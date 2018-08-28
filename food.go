@@ -193,7 +193,7 @@ func (f *Food) Link(pkg *Package) error {
 				return err
 			}
 		}
-		if err := osutil.SymlinkWithFallback(filepath.Join(barrelDir, r.Path), destPath); err != nil {
+		if err := os.Symlink(filepath.Join(barrelDir, r.Path), destPath); err != nil {
 			return err
 		}
 	}
