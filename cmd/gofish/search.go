@@ -24,9 +24,9 @@ func newSearchCmd() *cobra.Command {
 			table := uitable.New()
 			table.AddRow("NAME", "RIG", "VERSION")
 			for _, food := range foundFood {
-				f, rig, err := getFood(food)
+				f, err := getFood(food)
 				if err == nil {
-					table.AddRow(f.Name, rig, f.Version)
+					table.AddRow(f.Name, f.Rig, f.Version)
 				} else {
 					log.Debugln(err)
 				}

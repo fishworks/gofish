@@ -23,6 +23,8 @@ import (
 type Food struct {
 	// The canonical name of the software.
 	Name string
+	// The repository where this food resides.
+	Rig string
 	// A (short) description of the software.
 	Description string
 	// The license identifier for the software.

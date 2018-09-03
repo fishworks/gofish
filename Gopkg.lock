@@ -26,6 +26,14 @@
   version = "v0.4.7"
 
 [[projects]]
+  digest = "1:9d013c04ff3012769abc7ea289948bf93bf82e8b22c5909f031127647609523f"
+  name = "github.com/bacongobbler/browser"
+  packages = ["."]
+  pruneopts = ""
+  revision = "792d0443b3e34e0a99a68e254084079ad9356db5"
+  version = "v1.0.1"
+
+[[projects]]
   branch = "master"
   digest = "1:96843e93d86862260d76d1ba589e988b62be6aa26fb8eb7e0d9d301c33fc194f"
   name = "github.com/containerd/continuity"
@@ -226,6 +234,7 @@
   input-imports = [
     "github.com/Masterminds/semver",
     "github.com/Masterminds/vcs",
+    "github.com/bacongobbler/browser",
     "github.com/docker/docker/pkg/archive",
     "github.com/gosuri/uitable",
     "github.com/kyokomi/emoji",

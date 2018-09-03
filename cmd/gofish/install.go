@@ -46,7 +46,7 @@ func newInstallCmd() *cobra.Command {
 						return fmt.Errorf("%d fish food with the name '%s' was found: %v", len(relevantFood), fishFood, relevantFood)
 					}
 				}
-				food, _, err := getFood(fishFood)
+				food, err := getFood(fishFood)
 				if err != nil {
 					return err
 				}
@@ -68,7 +68,7 @@ func newInstallCmd() *cobra.Command {
 	return cmd
 }
 
-func getFood(foodName string) (*gofish.Food, string, error) {
+func getFood(foodName string) (*gofish.Food, error) {
 	var (
 		name string
 		rig  string
@@ -83,16 +83,17 @@ func getFood(foodName string) (*gofish.Food, string, error) {
 		rig = path.Dir(foodName)
 	}
 	if strings.Contains(name, "./\\") {
-		return nil, "", fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", name)
+		return nil, fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", name)
 	}
 	l := lua.NewState()
 	defer l.Close()
 	if err := l.DoFile(filepath.Join(home.Rigs(), rig, "Food", fmt.Sprintf("%s.lua", name))); err != nil {
-		return nil, "", err
+		return nil, err
 	}
 	var food gofish.Food
 	if err := gluamapper.Map(l.GetGlobal(strings.ToLower(reflect.TypeOf(food).Name())).(*lua.LTable), &food); err != nil {
-		return nil, "", err
+		return nil, err
 	}
-	return &food, rig, nil
+	food.Rig = rig
+	return &food, nil
 }
