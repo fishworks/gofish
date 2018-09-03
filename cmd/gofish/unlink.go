@@ -13,7 +13,7 @@ func newUnlinkCmd() *cobra.Command {
 		Short: "unlink fish food",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			f, _, err := getFood(args[0])
+			f, err := getFood(args[0])
 			if err != nil {
 				return err
 			}

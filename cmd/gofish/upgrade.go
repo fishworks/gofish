@@ -36,7 +36,7 @@ func newUpgradeCmd() *cobra.Command {
 				}
 				// we can safely assume there's at least one release installed
 				latestInstalledVersion := vs[len(vs)-1]
-				food, _, err := getFood(name)
+				food, err := getFood(name)
 				if err != nil {
 					return err
 				}

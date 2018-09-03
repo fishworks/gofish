@@ -35,7 +35,7 @@ func newUninstallCmd() *cobra.Command {
 					return fmt.Errorf("%d fish food with the name '%s' was found: %v", len(relevantFood), fishFood, relevantFood)
 				}
 			}
-			food, _, err := getFood(fishFood)
+			food, err := getFood(fishFood)
 			if err != nil {
 				return err
 			}
