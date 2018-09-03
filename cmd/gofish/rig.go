@@ -15,6 +15,7 @@ func newRigCmd() *cobra.Command {
 	cmd.AddCommand(
 		newRigAddCmd(),
 		newRigListCmd(),
+		newRigPathCmd(),
 		newRigRemoveCmd(),
 	)
 	return cmd
