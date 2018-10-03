@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Masterminds/semver"
@@ -25,7 +26,13 @@ func newUpgradeCmd() *cobra.Command {
 			}
 			nothingUpgraded := true
 			for _, name := range foodNames {
-				installedVersions := findFoodVersions(name)
+				// Check the Barrel name for version
+				foodInfo := strings.Split(name, "/")
+				nameVer := foodInfo[len(foodInfo)-1]
+				if len(foodInfo) == 1 {
+					nameVer = foodInfo[0]
+				}
+				installedVersions := findFoodVersions(nameVer)
 				vs := make(semver.Collection, len(installedVersions))
 				for i, r := range installedVersions {
 					v, err := semver.NewVersion(r)

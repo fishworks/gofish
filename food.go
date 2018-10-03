@@ -86,6 +86,8 @@ func (f *Food) Install() error {
 	if err := os.MkdirAll(barrelDir, 0755); err != nil {
 		return err
 	}
+	// Add a conf file with the rig that the file comes from.
+	err = ioutil.WriteFile(strings.Join([]string{Home(HomePath).Barrel(), f.Name, "rig.conf"}, "/"), []byte(f.Rig), 0644)
 	unarchiveOrCopy(cachedFilePath, barrelDir, u.Path)
 
 	// This is just a safety check to make sure that there's nothing there when we link the package.

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 
 	"github.com/fishworks/gofish"
 	"github.com/gosuri/uitable"
@@ -54,7 +55,13 @@ func findFood() []string {
 				continue
 			}
 			if len(files) > 0 {
-				fudz = append(fudz, f.Name())
+				fileName := f.Name()
+				rigConf, err := ioutil.ReadFile(filepath.Join(barrelPath, f.Name()) + "/rig.conf")
+				if err == nil {
+					location := strings.TrimSpace(string(rigConf))
+					fileName = strings.Join([]string{location, fileName}, "/")
+				}
+				fudz = append(fudz, fileName)
 			}
 		}
 	}
