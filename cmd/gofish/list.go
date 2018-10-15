@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -20,7 +21,7 @@ func newListCmd() *cobra.Command {
 			table := uitable.New()
 			if len(args) == 0 {
 				table.AddRow("NAME")
-				for _, food := range findFood() {
+				for _, food := range findFood([]string{}) {
 					table.AddRow(food)
 				}
 			} else {
@@ -40,10 +41,28 @@ func newListCmd() *cobra.Command {
 	return cmd
 }
 
-func findFood() []string {
+// When a request comes in for a single food only load that one
+func compare(X []os.FileInfo, Y []string) []os.FileInfo {
+	var ret []os.FileInfo
+
+	for _, x := range X {
+		for _, y := range Y {
+			if x.Name() == y {
+				ret = append(ret, x)
+			}
+		}
+	}
+	return ret
+}
+
+func findFood(food []string) []string {
 	barrelPath := gofish.Home(gofish.HomePath).Barrel()
 	var fudz []string
 	files, err := ioutil.ReadDir(barrelPath)
+	if len(food) > 0 {
+		files = compare(files, food)
+	}
+
 	if err != nil {
 		return []string{}
 	}
@@ -56,7 +75,7 @@ func findFood() []string {
 			}
 			if len(files) > 0 {
 				fileName := f.Name()
-				rigConf, err := ioutil.ReadFile(filepath.Join(barrelPath, f.Name()) + "/rig.conf")
+				rigConf, err := ioutil.ReadFile(filepath.Join(barrelPath, fileName) + "/rig.conf")
 				if err == nil {
 					location := strings.TrimSpace(string(rigConf))
 					fileName = strings.Join([]string{location, fileName}, "/")

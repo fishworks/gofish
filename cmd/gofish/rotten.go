@@ -15,7 +15,7 @@ func newRottenCmd() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			table := uitable.New()
 			table.AddRow("NAME", "VERSION")
-			for _, name := range findFood() {
+			for _, name := range findFood([]string{}) {
 				versions := findFoodVersions(name)
 				if len(versions) > 1 {
 					for _, ver := range versions {

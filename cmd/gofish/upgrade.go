@@ -19,11 +19,8 @@ func newUpgradeCmd() *cobra.Command {
 				return err
 			}
 			var foodNames []string
-			if len(args) > 0 {
-				foodNames = args
-			} else {
-				foodNames = findFood()
-			}
+			foodNames = findFood(args)
+
 			nothingUpgraded := true
 			for _, name := range foodNames {
 				// Check the Barrel name for version

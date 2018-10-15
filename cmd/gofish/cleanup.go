@@ -10,7 +10,7 @@ func newCleanupCmd() *cobra.Command {
 		Use:   "cleanup",
 		Short: "cleanup unlinked fish food",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			for _, name := range findFood() {
+			for _, name := range findFood([]string{}) {
 				versions := findFoodVersions(name)
 				if len(versions) > 1 {
 					for _, ver := range versions {
