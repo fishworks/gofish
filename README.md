@@ -1,5 +1,7 @@
 # GoFish, The Package Manager
 
+[![CircleCI](https://circleci.com/gh/fishworks/gofish.svg?style=svg)](https://circleci.com/gh/fishworks/gofish)
+
 Features, usage and installation instructions can be found on the [homepage](https://gofi.sh).
 
 ## What does GoFish do?
