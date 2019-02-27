@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 	"github.com/gosuri/uitable"
 	"github.com/renstrom/fuzzysearch/fuzzy"
 	log "github.com/sirupsen/logrus"
@@ -61,7 +61,7 @@ func search(keywords []string) []string {
 }
 
 func findFishFood() []string {
-	home := gofish.Home(gofish.HomePath)
+	home := home.Home(home.HomePath)
 	rigPath := home.Rigs()
 	var fudz []string
 	filepath.Walk(rigPath, func(p string, f os.FileInfo, err error) error {

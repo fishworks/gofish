@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 )
@@ -40,7 +41,7 @@ func newListCmd() *cobra.Command {
 }
 
 func findFood() []string {
-	barrelPath := gofish.Home(gofish.HomePath).Barrel()
+	barrelPath := home.Home(home.HomePath).Barrel()
 	var fudz []string
 	files, err := ioutil.ReadDir(barrelPath)
 	if err != nil {
@@ -62,7 +63,7 @@ func findFood() []string {
 }
 
 func findFoodVersions(name string) []string {
-	barrelPath := gofish.Home(gofish.HomePath).Barrel()
+	barrelPath := home.Home(home.HomePath).Barrel()
 	var versions []string
 	files, err := ioutil.ReadDir(filepath.Join(barrelPath, name))
 	if err != nil {

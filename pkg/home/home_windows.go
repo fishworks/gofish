@@ -1,6 +1,6 @@
 // +build windows
 
-package gofish
+package home
 
 import (
 	"os"

@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 )
 
 func TestSearch(t *testing.T) {
@@ -15,7 +15,7 @@ func TestSearch(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	gofish.HomePath = filepath.Join(cwd, "testdata")
+	home.HomePath = filepath.Join(cwd, "testdata")
 
 	expectedFoodList := []string{
 		"github.com/customorg/fish-food/hugo",

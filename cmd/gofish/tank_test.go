@@ -6,11 +6,11 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 )
 
 func TestTankFill(t *testing.T) {
-	gofish.HomePath = "/usr/local/Fish"
+	home.HomePath = "/usr/local/Fish"
 	expectedTank := tank{
 		"GOFISH_HOME":        "/usr/local/Fish",
 		"GOFISH_BARREL":      "/usr/local/Fish/Barrel",
@@ -19,7 +19,7 @@ func TestTankFill(t *testing.T) {
 	}
 
 	if runtime.GOOS == "windows" {
-		gofish.HomePath = "C:\\Fish"
+		home.HomePath = "C:\\Fish"
 		expectedTank["GOFISH_HOME"] = "C:\\Fish"
 		expectedTank["GOFISH_BARREL"] = "C:\\Fish\\Barrel"
 		expectedTank["GOFISH_RIGS"] = "C:\\Fish\\Rigs"
@@ -28,11 +28,11 @@ func TestTankFill(t *testing.T) {
 
 	switch runtime.GOOS {
 	case "darwin":
-		expectedTank["GOFISH_CACHE"] = filepath.Join(gofish.UserHomePath, "Library", "Caches", "Fish")
+		expectedTank["GOFISH_CACHE"] = filepath.Join(home.UserHomePath, "Library", "Caches", "Fish")
 	case "linux":
-		expectedTank["GOFISH_CACHE"] = filepath.Join(gofish.UserHomePath, ".gofish")
+		expectedTank["GOFISH_CACHE"] = filepath.Join(home.UserHomePath, ".gofish")
 	case "windows":
-		expectedTank["GOFISH_CACHE"] = filepath.Join(gofish.UserHomePath, "AppData", "Local", "Fish")
+		expectedTank["GOFISH_CACHE"] = filepath.Join(home.UserHomePath, "AppData", "Local", "Fish")
 	}
 
 	tank := tank{}

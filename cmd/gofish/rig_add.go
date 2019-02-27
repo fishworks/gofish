@@ -3,9 +3,8 @@ package main
 import (
 	"time"
 
-	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 	"github.com/fishworks/gofish/pkg/ohai"
-
 	"github.com/fishworks/gofish/pkg/rig/installer"
 	"github.com/spf13/cobra"
 )
@@ -20,7 +19,7 @@ func newRigAddCmd() *cobra.Command {
 			if len(args) > 1 {
 				name = args[1]
 			}
-			i, err := installer.New(args[0], name, "", gofish.Home(gofish.HomePath))
+			i, err := installer.New(args[0], name, "", home.Home(home.HomePath))
 			if err != nil {
 				return err
 			}

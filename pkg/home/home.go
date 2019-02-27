@@ -1,4 +1,4 @@
-package gofish
+package home
 
 import (
 	"path"

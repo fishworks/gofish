@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 	"github.com/gosuri/uitable"
 	"github.com/spf13/cobra"
 )
@@ -16,7 +16,7 @@ func newRigListCmd() *cobra.Command {
 		Use:   "list",
 		Short: "list rigs",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			rigPath := gofish.Home(gofish.HomePath).Rigs()
+			rigPath := home.Home(home.HomePath).Rigs()
 			rigs := findRigs(rigPath)
 
 			table := uitable.New()

@@ -2,17 +2,22 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"path"
 	"path/filepath"
 	"reflect"
 	"strings"
 	"time"
 
+	"github.com/fishworks/gofish/receipt"
+
 	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 	"github.com/fishworks/gofish/pkg/ohai"
 	"github.com/spf13/cobra"
 	"github.com/yuin/gluamapper"
-	"github.com/yuin/gopher-lua"
+	lua "github.com/yuin/gopher-lua"
 )
 
 const installDesc = `
@@ -73,11 +78,11 @@ func getFood(foodName string) (*gofish.Food, error) {
 		name string
 		rig  string
 	)
-	home := gofish.Home(gofish.HomePath)
+	h := home.Home(home.HomePath)
 	foodInfo := strings.Split(foodName, "/")
 	if len(foodInfo) == 1 {
 		name = foodInfo[0]
-		rig = home.DefaultRig()
+		rig = h.DefaultRig()
 	} else {
 		name = foodInfo[len(foodInfo)-1]
 		rig = path.Dir(foodName)
@@ -85,9 +90,25 @@ func getFood(foodName string) (*gofish.Food, error) {
 	if strings.Contains(name, "./\\") {
 		return nil, fmt.Errorf("food name '%s' is invalid. Food names cannot include the following characters: './\\'", name)
 	}
+
+	// check if there's an install receipt available to check what rig this was installed from
+	receiptFile, err := os.Open(filepath.Join(h.Barrel(), name, receipt.ReceiptFilename))
+	if err == nil {
+		defer receiptFile.Close()
+		installReceipt, err := receipt.NewFromReader(receiptFile)
+		if err != nil && err != io.EOF {
+			return nil, err
+		}
+		if installReceipt.Rig != "" {
+			rig = installReceipt.Rig
+		}
+	} else if !os.IsNotExist(err) {
+		ohai.Warningf("could not read from install receipt: %v", err)
+	}
+
 	l := lua.NewState()
 	defer l.Close()
-	if err := l.DoFile(filepath.Join(home.Rigs(), rig, "Food", fmt.Sprintf("%s.lua", name))); err != nil {
+	if err := l.DoFile(filepath.Join(h.Rigs(), rig, "Food", fmt.Sprintf("%s.lua", name))); err != nil {
 		return nil, err
 	}
 	var food gofish.Food
