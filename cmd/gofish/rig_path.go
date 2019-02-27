@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/fishworks/gofish"
-
+	"github.com/fishworks/gofish/pkg/home"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +15,7 @@ func newRigPathCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			name := args[0]
-			home := gofish.Home(gofish.HomePath)
+			home := home.Home(home.HomePath)
 			fmt.Println(filepath.Join(home.Rigs(), name))
 		},
 	}

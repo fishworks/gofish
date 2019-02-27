@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 	"github.com/spf13/cobra"
 )
 
@@ -36,13 +36,13 @@ func newInitCmd() *cobra.Command {
 }
 
 func (i *initCmd) run() error {
-	home := gofish.Home(gofish.HomePath)
-	userHome := gofish.UserHome(gofish.UserHomePath)
+	h := home.Home(home.HomePath)
+	userHome := home.UserHome(home.UserHomePath)
 	dirs := []string{
-		home.String(),
-		home.Barrel(),
-		home.Rigs(),
-		gofish.BinPath,
+		h.String(),
+		h.Barrel(),
+		h.Rigs(),
+		home.BinPath,
 		userHome.Cache(),
 	}
 

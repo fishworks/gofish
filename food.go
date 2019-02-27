@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -13,9 +12,13 @@ import (
 	"runtime"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/docker/docker/pkg/archive"
+	"github.com/fishworks/gofish/pkg/home"
 	"github.com/fishworks/gofish/pkg/osutil"
+	"github.com/fishworks/gofish/receipt"
+	"github.com/fishworks/gofish/version"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -66,7 +69,8 @@ type Resource struct {
 
 // Install attempts to install the package, returning errors if it fails.
 func (f *Food) Install() error {
-	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
+	h := home.Home(home.HomePath)
+	barrelDir := filepath.Join(h.Barrel(), f.Name, f.Version)
 	pkg := f.GetPackage(runtime.GOOS, runtime.GOARCH)
 	if pkg == nil {
 		return fmt.Errorf("food '%s' does not support the current platform (%s/%s)", f.Name, runtime.GOOS, runtime.GOARCH)
@@ -75,7 +79,7 @@ func (f *Food) Install() error {
 	if err != nil {
 		return fmt.Errorf("could not parse package URL '%s' as a URL: %v", pkg.URL, err)
 	}
-	cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, filepath.Ext(u.Path)))
+	cachedFilePath := filepath.Join(home.UserHome(home.UserHomePath).Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, filepath.Ext(u.Path)))
 	if err := f.DownloadTo(pkg, cachedFilePath); err != nil {
 		return err
 	}
@@ -93,7 +97,7 @@ func (f *Food) Install() error {
 	// special case: gofish is replacing itself on windows
 	// https://github.com/fishworks/gofish/issues/46
 	if runtime.GOOS == "windows" && f.Name == "gofish" {
-		gofishBinPath := filepath.Join(HomePrefix, "bin/gofish.exe")
+		gofishBinPath := filepath.Join(home.HomePrefix, "bin/gofish.exe")
 		exists, err := osutil.Exists(gofishBinPath)
 		if err != nil {
 			return err
@@ -112,17 +116,29 @@ func (f *Food) Install() error {
 		fmt.Println(f.Caveats)
 	}
 
-	return nil
-}
+	// write to the install receipt to record what's been done here
+	receiptFilepath := filepath.Join(h.Barrel(), f.Name, receipt.ReceiptFilename)
 
-// Installed checks to see if this fish food is installed. This is actually just a check for if the
-// directory exists and is not empty.
-func (f *Food) Installed() bool {
-	files, err := ioutil.ReadDir(filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version))
+	receiptFile, err := os.OpenFile(receiptFilepath, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
-		return false
+		return err
 	}
-	return len(files) > 0
+	defer receiptFile.Close()
+
+	installReceipt, err := receipt.NewFromReader(receiptFile)
+	if err != nil && err != io.EOF {
+		return err
+	}
+
+	// rewind to the beginning to overwrite the receipt's contents
+	receiptFile.Seek(0, 0)
+
+	installReceipt.Name = f.Name
+	installReceipt.Rig = f.Rig
+	installReceipt.LastModified = time.Now()
+	installReceipt.GoFishVersion = version.String()
+
+	return installReceipt.Save(receiptFile)
 }
 
 // Uninstall attempts to uninstall the package, returning errors if it fails.
@@ -136,7 +152,8 @@ func (f *Food) Uninstall() error {
 			return err
 		}
 	}
-	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
+	barrelDir := filepath.Join(home.Home(home.HomePath).Barrel(), f.Name, f.Version)
+	os.Remove(filepath.Join(home.Home(home.HomePath).Barrel(), f.Name, receipt.ReceiptFilename))
 	return os.RemoveAll(barrelDir)
 }
 
@@ -176,8 +193,8 @@ func (f *Food) GetPackage(os, arch string) *Package {
 // Linked checks to see if a particular package owned by this fish food is linked to /usr/local/bin.
 // This is just a check if the binaries symlinked in /usr/local/bin link back to the barrel.
 func (f *Food) Linked() bool {
-	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
-	link, err := os.Readlink(filepath.Join(BinPath, f.Name))
+	barrelDir := filepath.Join(home.Home(home.HomePath).Barrel(), f.Name, f.Version)
+	link, err := os.Readlink(filepath.Join(home.BinPath, f.Name))
 	if err != nil {
 		return false
 	}
@@ -186,10 +203,10 @@ func (f *Food) Linked() bool {
 
 // Link creates links to any linked resources owned by the package.
 func (f *Food) Link(pkg *Package) error {
-	barrelDir := filepath.Join(Home(HomePath).Barrel(), f.Name, f.Version)
+	barrelDir := filepath.Join(home.Home(home.HomePath).Barrel(), f.Name, f.Version)
 	for _, r := range pkg.Resources {
 		// TODO: run this in parallel
-		destPath := filepath.Join(HomePrefix, r.InstallPath)
+		destPath := filepath.Join(home.HomePrefix, r.InstallPath)
 		if r.Executable {
 			if err := os.Chmod(filepath.Join(barrelDir, r.Path), 0755); err != nil {
 				return err
@@ -206,7 +223,7 @@ func (f *Food) Link(pkg *Package) error {
 func (f *Food) Unlink(pkg *Package) error {
 	for _, r := range pkg.Resources {
 		// TODO: check if the linked path we are about to remove is really owned by us
-		if err := os.RemoveAll(filepath.Join(HomePrefix, r.InstallPath)); err != nil {
+		if err := os.RemoveAll(filepath.Join(home.HomePrefix, r.InstallPath)); err != nil {
 			return err
 		}
 	}
@@ -224,7 +241,7 @@ func (f *Food) Lint() (errs []error) {
 			if err != nil {
 				errs = append(errs, fmt.Errorf("could not parse package URL '%s' as a URL: %v", pkg.URL, err))
 			}
-			cachedFilePath := filepath.Join(UserHome(UserHomePath).Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, filepath.Ext(u.Path)))
+			cachedFilePath := filepath.Join(home.UserHome(home.UserHomePath).Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, filepath.Ext(u.Path)))
 			if err := f.DownloadTo(pkg, cachedFilePath); err != nil {
 				errs = append(errs, err)
 			}

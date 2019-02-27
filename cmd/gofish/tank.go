@@ -3,14 +3,14 @@ package main
 import (
 	"path/filepath"
 
-	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 )
 
 type tank map[string]string
 
 func (t tank) fill() {
-	fishHome := gofish.Home(gofish.HomePath)
-	userHome := gofish.UserHome(gofish.UserHomePath)
+	fishHome := home.Home(home.HomePath)
+	userHome := home.UserHome(home.UserHomePath)
 
 	t["GOFISH_HOME"] = fishHome.String()
 	t["GOFISH_CACHE"] = userHome.Cache()

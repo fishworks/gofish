@@ -1,6 +1,6 @@
-// +build !windows,!darwin
+// +build darwin
 
-package gofish
+package home
 
 import (
 	"os"
@@ -17,5 +17,5 @@ var UserHomePath = os.Getenv("HOME")
 
 // Cache returns the path to the cache.
 func (h UserHome) Cache() string {
-	return h.Path(".gofish")
+	return h.Path("Library", "Caches", "Fish")
 }

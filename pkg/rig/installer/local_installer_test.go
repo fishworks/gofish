@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/fishworks/gofish"
+	"github.com/fishworks/gofish/pkg/home"
 )
 
 var _ Installer = new(LocalInstaller)
@@ -17,7 +17,7 @@ func TestLocalInstaller(t *testing.T) {
 	}
 	defer os.RemoveAll(dh)
 
-	home := gofish.Home(dh)
+	home := home.Home(dh)
 	if err := os.MkdirAll(home.Rigs(), 0755); err != nil {
 		t.Fatalf("Could not create %s: %s", home.Rigs(), err)
 	}
