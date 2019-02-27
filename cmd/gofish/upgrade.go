@@ -25,7 +25,6 @@ func newUpgradeCmd() *cobra.Command {
 			}
 			nothingUpgraded := true
 			for _, name := range foodNames {
-				fmt.Println(name)
 				installedVersions := findFoodVersions(name)
 				vs := make(semver.Collection, len(installedVersions))
 				for i, r := range installedVersions {
