@@ -207,6 +207,9 @@ func (f *Food) Link(pkg *Package) error {
 	for _, r := range pkg.Resources {
 		// TODO: run this in parallel
 		destPath := filepath.Join(home.HomePrefix, r.InstallPath)
+		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil && !os.IsExist(err) {
+			return err
+		}
 		if r.Executable {
 			if err := os.Chmod(filepath.Join(barrelDir, r.Path), 0755); err != nil {
 				return err
