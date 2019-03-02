@@ -6,7 +6,7 @@ if ! hash gometalinter.v1 2>/dev/null ; then
 fi
 
 # Mandatory tests
-echo -e "\033[0;31mManadatory Linters: These must pass\033[0m"
+echo -e "\033[0;31mMandatory Linters: These must pass\033[0m"
 gometalinter.v1 --vendor --tests --deadline=20s --disable-all \
 --enable=gofmt \
 --enable=misspell \
