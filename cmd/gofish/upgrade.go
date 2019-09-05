@@ -26,6 +26,10 @@ func newUpgradeCmd() *cobra.Command {
 			nothingUpgraded := true
 			for _, name := range foodNames {
 				installedVersions := findFoodVersions(name)
+				if len(installedVersions) == 0 {
+					ohai.Ohaif("%s: no installed versions to upgrade\n", name)
+					continue
+				}
 				vs := make(semver.Collection, len(installedVersions))
 				for i, r := range installedVersions {
 					v, err := semver.NewVersion(r)
