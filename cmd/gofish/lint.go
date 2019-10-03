@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"path"
 	"reflect"
 	"strings"
 
@@ -31,6 +32,12 @@ func newLintCmd() *cobra.Command {
 					return err
 				}
 				errs := food.Lint()
+
+				base := strings.TrimSuffix(path.Base(arg), ".lua")
+				if base != food.Name {
+					errs = append(errs, fmt.Errorf("File name '%v' must match name in file '%v'", base, food.Name))
+				}
+
 				for _, err := range errs {
 					ohai.Warningln(err)
 				}
@@ -38,6 +45,8 @@ func newLintCmd() *cobra.Command {
 					failed = true
 					return fmt.Errorf("%d errors encountered while linting %s", len(errs), food.Name)
 				}
+
+				ohai.Successf("No errors discovered in '%v'\n", food.Name)
 			}
 			if failed {
 				return errors.New("linting failed")
