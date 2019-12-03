@@ -18,18 +18,21 @@ jobs:
         go-version: 1.13
       id: go
 
-    - name: get dependencies
+    - name: set GOPATH
+      # temporary fix for https://github.com/actions/setup-go/issues/12
       run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
+        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
+
+    - name: install dependencies
+      run: |
+        curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+        dep ensure
 
     - name: build
       run: make dist checksum
 
-    - name: deploy to Azure Blob Storage
+    - name: upload to azure
       uses: bacongobbler/azure-blob-storage-upload@master
       with:
         source-dir: ./_dist
