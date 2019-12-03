@@ -1,6 +1,6 @@
 # GoFish, The Package Manager
 
-[![CircleCI](https://circleci.com/gh/fishworks/gofish.svg?style=svg)](https://circleci.com/gh/fishworks/gofish)
+![Build Status](https://github.com/fishworks/gofish/workflows/upload%20to%20azure/badge.svg)
 
 Features, usage and installation instructions can be found on the [homepage](https://gofi.sh).
 
