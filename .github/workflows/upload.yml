@@ -11,29 +11,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+      with:
+        path: src/github.com/fishworks/gofish
 
     - name: set up go 1.13
       uses: actions/setup-go@v1
       with:
         go-version: 1.13
-      id: go
 
     - name: set GOPATH
       # temporary fix for https://github.com/actions/setup-go/issues/12
       run: |
-        mkdir $(dirname $GITHUB_WORKSPACE)/bin
-        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
-        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
+        echo "##[set-env name=GOPATH;]$GITHUB_WORKSPACE"
+        echo "##[add-path]$GITHUB_WORKSPACE/bin"
+        mkdir bin
 
     - name: install dependencies
+      working-directory: src/github.com/fishworks/gofish
       run: |
         curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
         dep ensure
 
     - name: build
+      working-directory: src/github.com/fishworks/gofish
       run: make dist checksum
 
     - name: upload to azure
+      working-directory: src/github.com/fishworks/gofish
       uses: bacongobbler/azure-blob-storage-upload@master
       with:
         source-dir: ./_dist
