@@ -11,25 +11,31 @@ jobs:
     - uses: actions/checkout@master
       with:
         path: src/github.com/fishworks/gofish
+
     - name: set up go 1.13
       uses: actions/setup-go@v1
       with:
         go-version: 1.13
+
     - name: set GOPATH
       # temporary fix for https://github.com/actions/setup-go/issues/12
       run: |
         echo "##[set-env name=GOPATH;]$GITHUB_WORKSPACE"
         echo "##[add-path]$GITHUB_WORKSPACE/bin"
         mkdir bin
+
     - name: install dependencies
       working-directory: src/github.com/fishworks/gofish
       run: make bootstrap
+
     - name: build
       working-directory: src/github.com/fishworks/gofish
       run: make build
+
     - name: run style tests
       working-directory: src/github.com/fishworks/gofish
       run: make test-style
+
     - name: run unit tests
       working-directory: src/github.com/fishworks/gofish
       run: make test-unit

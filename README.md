@@ -1,6 +1,6 @@
 # GoFish, The Package Manager
 
-![Build Status](https://github.com/fishworks/gofish/workflows/upload%20to%20azure/badge.svg)
+![Build Status](https://github.com/fishworks/gofish/workflows/build/badge.svg)
 
 Features, usage and installation instructions can be found on the [homepage](https://gofi.sh).
 

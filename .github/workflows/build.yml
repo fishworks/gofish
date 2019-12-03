@@ -1,5 +1,4 @@
-name: upload to azure
-
+name: build
 on:
   push:
     branches:
@@ -7,7 +6,6 @@ on:
   release:
     types:
     - published
-
 jobs:
   run:
     name: run
@@ -33,6 +31,14 @@ jobs:
       working-directory: src/github.com/fishworks/gofish
       run: |
         make bootstrap
+
+    - name: run style tests
+      working-directory: src/github.com/fishworks/gofish
+      run: make test-style
+
+    - name: run unit tests
+      working-directory: src/github.com/fishworks/gofish
+      run: make test-unit
 
     - name: build
       working-directory: src/github.com/fishworks/gofish
