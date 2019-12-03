@@ -43,4 +43,4 @@ jobs:
         source_dir: src/github.com/fishworks/gofish/_dist
         container_name: releases
         connection_string: ${{ secrets.ConnectionString }}
-        extra_args: '--pattern "*.[tar||zip]*"'
+        extra_args: '--pattern "*.[tz][ai][rp]*"'
