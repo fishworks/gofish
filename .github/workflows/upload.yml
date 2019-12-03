@@ -34,7 +34,9 @@ jobs:
 
     - name: build
       working-directory: src/github.com/fishworks/gofish
-      run: make dist checksum
+      run: |
+        make build-cross
+        make dist checksum
 
     - name: upload to azure
       uses: bacongobbler/azure-blob-storage-upload@master
