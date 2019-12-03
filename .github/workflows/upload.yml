@@ -21,6 +21,7 @@ jobs:
     - name: set GOPATH
       # temporary fix for https://github.com/actions/setup-go/issues/12
       run: |
+        mkdir $(dirname $GITHUB_WORKSPACE/bin)
         echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
         echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
 
