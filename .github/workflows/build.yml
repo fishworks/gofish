@@ -47,7 +47,7 @@ jobs:
         make dist checksum
 
     - name: upload tarballs to azure
-      uses: bacongobbler/azure-blob-storage-upload@master
+      uses: bacongobbler/azure-blob-storage-upload@v1.0.0
       with:
         source_dir: src/github.com/fishworks/gofish/_dist/
         container_name: releases
@@ -55,7 +55,7 @@ jobs:
         extra_args: '--pattern *.tar*'
 
     - name: upload zip files to azure
-      uses: bacongobbler/azure-blob-storage-upload@master
+      uses: bacongobbler/azure-blob-storage-upload@v1.0.0
       with:
         source_dir: src/github.com/fishworks/gofish/_dist/
         container_name: releases
