@@ -1,4 +1,4 @@
-name: Build and Deploy to Azure
+name: upload to azure
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
     - master
 
 jobs:
-  build-and-deploy:
-    name: build and deploy
+  run:
+    name: run
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -29,8 +29,7 @@ jobs:
     - name: install dependencies
       working-directory: src/github.com/fishworks/gofish
       run: |
-        curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-        dep ensure
+        make bootstrap
 
     - name: build
       working-directory: src/github.com/fishworks/gofish
