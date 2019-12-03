@@ -40,6 +40,6 @@ jobs:
     - name: upload to azure
       uses: bacongobbler/azure-blob-storage-upload@master
       with:
-        source-dir: src/github.com/fishworks/gofish/_dist
-        connection-string: ${{ secrets.ConnectionString }}
-        extra-args: "--pattern [*.tar.gz*, *.zip*]"
+        source_dir: src/github.com/fishworks/gofish/_dist
+        connection_string: ${{ secrets.ConnectionString }}
+        extra_args: "--pattern [*.tar.gz*, *.zip*]"
