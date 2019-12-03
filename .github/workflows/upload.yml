@@ -1,0 +1,39 @@
+name: Build and Deploy to Azure
+
+on:
+  push:
+    branches:
+    - master
+  release:
+    types: [published]
+
+jobs:
+  build-and-deploy:
+    name: build and deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+
+    - name: set up go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+
+    - name: get dependencies
+      run: |
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi
+
+    - name: build
+      run: make dist checksum
+
+    - name: deploy to Azure Blob Storage
+      uses: bacongobbler/azure-blob-storage-upload@master
+      with:
+        source-dir: ./_dist
+        connection-string: ${{ secrets.ConnectionString }}
+        extra-args: "--pattern [*.tar.gz*, *.zip*]"

@@ -4,48 +4,18 @@ GIT_COMMIT = $(shell git rev-parse HEAD)
 GIT_SHA    = $(shell git rev-parse --short HEAD)
 GIT_TAG    = $(shell git describe --tags --abbrev=0 --exact-match 2>/dev/null)
 
-ifdef VERSION
-	DOCKER_VERSION = $(VERSION)
-	BINARY_VERSION = $(VERSION)
-endif
-
-DOCKER_VERSION ?= git-${GIT_SHA}
 BINARY_VERSION ?= ${GIT_TAG}
 
 # Only set Version if building a tag or VERSION is set
 ifneq ($(BINARY_VERSION),)
 	LDFLAGS += -X github.com/fishworks/gofish/version.Version=${BINARY_VERSION}
+	VERSION = ${BINARY_VERSION}
 else
 	LDFLAGS += -X github.com/fishworks/gofish/version.BuildMetadata=git.${GIT_COMMIT}
-endif
-
-IMAGE                := ${DOCKER_REGISTRY}/${IMAGE_PREFIX}/${SHORT_NAME}:${DOCKER_VERSION}
-IMAGE_RUDDER         := ${DOCKER_REGISTRY}/${IMAGE_PREFIX}/${SHORT_NAME_RUDDER}:${DOCKER_VERSION}
-MUTABLE_IMAGE        := ${DOCKER_REGISTRY}/${IMAGE_PREFIX}/${SHORT_NAME}:${MUTABLE_VERSION}
-MUTABLE_IMAGE_RUDDER := ${DOCKER_REGISTRY}/${IMAGE_PREFIX}/${SHORT_NAME_RUDDER}:${MUTABLE_VERSION}
-
-DOCKER_PUSH = docker push
-ifeq ($(DOCKER_REGISTRY),gcr.io)
-	DOCKER_PUSH = gcloud docker push
+	VERSION = ${MUTABLE_VERSION}
 endif
 
 info:
 	 @echo "Version:           ${VERSION}"
 	 @echo "Git Tag:           ${GIT_TAG}"
 	 @echo "Git Commit:        ${GIT_COMMIT}"
-	
-	 @echo "Docker Version:    ${DOCKER_VERSION}"
-	 @echo "Registry:          ${DOCKER_REGISTRY}"
-	 @echo "Immutable Image:   ${IMAGE}"
-	 @echo "Mutable Image:     ${MUTABLE_IMAGE}"
-
-.PHONY: docker-push
-docker-push: docker-mutable-push docker-immutable-push
-
-.PHONY: docker-immutable-push
-docker-immutable-push:
-	${DOCKER_PUSH} ${IMAGE}
-
-.PHONY: docker-mutable-push
-docker-mutable-push:
-	${DOCKER_PUSH} ${MUTABLE_IMAGE}
