@@ -37,9 +37,8 @@ jobs:
       run: make dist checksum
 
     - name: upload to azure
-      working-directory: src/github.com/fishworks/gofish
       uses: bacongobbler/azure-blob-storage-upload@master
       with:
-        source-dir: ./_dist
+        source-dir: src/github.com/fishworks/gofish/_dist
         connection-string: ${{ secrets.ConnectionString }}
         extra-args: "--pattern [*.tar.gz*, *.zip*]"
