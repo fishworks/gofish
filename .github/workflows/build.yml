@@ -34,7 +34,7 @@ jobs:
 
     - name: run style tests
       working-directory: src/github.com/fishworks/gofish
-      run: make test-style
+      run: make test-lint
 
     - name: run unit tests
       working-directory: src/github.com/fishworks/gofish
