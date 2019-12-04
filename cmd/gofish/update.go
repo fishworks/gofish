@@ -25,10 +25,9 @@ func newUpdateCmd() *cobra.Command {
 
 func updateRigs() error {
 	start := time.Now()
-	home := home.Home(home.HomePath)
 	rigs := findRigs(home.Rigs())
 	for _, rig := range rigs {
-		i, err := installer.FindSource(filepath.Join(home.Rigs(), rig), home)
+		i, err := installer.FindSource(filepath.Join(home.Rigs(), rig))
 		if err != nil {
 			return err
 		}

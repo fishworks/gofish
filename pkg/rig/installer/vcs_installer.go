@@ -18,16 +18,14 @@ import (
 type VCSInstaller struct {
 	Version string
 	Source  string
-	Home    home.Home
 	Name    string
 }
 
 // NewVCSInstaller creates a new VCSInstaller.
-func NewVCSInstaller(source, name, version string, home home.Home) (*VCSInstaller, error) {
+func NewVCSInstaller(source, name, version string) (*VCSInstaller, error) {
 	i := &VCSInstaller{
 		Version: version,
 		Source:  source,
-		Home:    home,
 		Name:    name,
 	}
 	if i.Name == "" {
@@ -91,14 +89,13 @@ func (i *VCSInstaller) Update() error {
 	return nil
 }
 
-func existingVCSRepo(location string, home home.Home) (Installer, error) {
+func existingVCSRepo(location string) (Installer, error) {
 	repo, err := vcs.NewRepo("", location)
 	if err != nil {
 		return nil, err
 	}
 	i := &VCSInstaller{
 		Source: repo.Remote(),
-		Home:   home,
 	}
 	u, err := url.Parse(i.Source)
 	if err != nil {
@@ -175,5 +172,5 @@ func (i *VCSInstaller) sync(repo vcs.Repo) error {
 
 // Path is where the rig will be installed into.
 func (i *VCSInstaller) Path() string {
-	return filepath.Join(i.Home.Rigs(), i.Name)
+	return filepath.Join(home.Rigs(), i.Name)
 }

@@ -3,6 +3,7 @@ package installer
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/fishworks/gofish/pkg/home"
@@ -16,14 +17,14 @@ func TestLocalInstaller(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(dh)
+	os.Setenv(home.DefaultHomeEnvVar, dh)
 
-	home := home.Home(dh)
 	if err := os.MkdirAll(home.Rigs(), 0755); err != nil {
 		t.Fatalf("Could not create %s: %s", home.Rigs(), err)
 	}
 
 	source := "testdata/fish-food"
-	i, err := New(source, "", "", home)
+	i, err := New(source, "", "")
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
@@ -32,7 +33,7 @@ func TestLocalInstaller(t *testing.T) {
 		t.Error(err)
 	}
 
-	expectedPath := home.Path("Rigs", "fish-food")
+	expectedPath := filepath.Join(home.String(), "Rigs", "fish-food")
 	if i.Path() != expectedPath {
 		t.Errorf("expected path '%s', got %q", expectedPath, i.Path())
 	}

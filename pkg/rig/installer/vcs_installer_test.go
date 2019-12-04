@@ -18,19 +18,19 @@ func TestVCSInstallerSuccess(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(dh)
+	os.Setenv(home.DefaultHomeEnvVar, dh)
 
-	home := home.Home(dh)
 	if err := os.MkdirAll(home.Rigs(), 0755); err != nil {
 		t.Fatalf("Could not create %s: %s", home.Rigs(), err)
 	}
 
 	source := "https://github.com/fishworks/fish-food"
-	i, err := New(source, "", "", home)
+	i, err := New(source, "", "")
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}
 
-	expectedPath := home.Path("Rigs", "github.com", "fishworks", "fish-food")
+	expectedPath := filepath.Join(home.Rigs(), "github.com", "fishworks", "fish-food")
 	if i.Path() != expectedPath {
 		t.Errorf("expected path '%s', got %q", expectedPath, i.Path())
 	}
@@ -48,7 +48,7 @@ func TestVCSInstallerSuccess(t *testing.T) {
 
 	vi.Name = "foo"
 
-	expectedPath = home.Path("Rigs", "foo")
+	expectedPath = filepath.Join(home.Rigs(), "foo")
 	if i.Path() != expectedPath {
 		t.Errorf("expected path '%s', got %q", expectedPath, i.Path())
 	}
@@ -64,14 +64,14 @@ func TestVCSInstallerUpdate(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer os.RemoveAll(dh)
+	os.Setenv(home.DefaultHomeEnvVar, dh)
 
-	home := home.Home(dh)
 	if err := os.MkdirAll(home.Rigs(), 0755); err != nil {
 		t.Fatalf("Could not create %s: %s", home.Rigs(), err)
 	}
 
 	source := "https://github.com/fishworks/fish-food"
-	i, err := New(source, "", "", home)
+	i, err := New(source, "", "")
 	if err != nil {
 		t.Errorf("unexpected error: %s", err)
 	}

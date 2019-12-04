@@ -36,14 +36,12 @@ func newInitCmd() *cobra.Command {
 }
 
 func (i *initCmd) run() error {
-	h := home.Home(home.HomePath)
-	userHome := home.UserHome(home.UserHomePath)
 	dirs := []string{
-		h.String(),
-		h.Barrel(),
-		h.Rigs(),
-		home.BinPath,
-		userHome.Cache(),
+		home.String(),
+		home.Barrel(),
+		home.Rigs(),
+		home.BinPath(),
+		home.Cache(),
 	}
 
 	if !i.dryRun {

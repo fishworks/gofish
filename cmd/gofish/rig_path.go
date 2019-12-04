@@ -15,7 +15,6 @@ func newRigPathCmd() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			name := args[0]
-			home := home.Home(home.HomePath)
 			fmt.Println(filepath.Join(home.Rigs(), name))
 		},
 	}

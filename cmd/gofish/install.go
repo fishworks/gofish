@@ -78,11 +78,10 @@ func getFood(foodName string) (*gofish.Food, error) {
 		name string
 		rig  string
 	)
-	h := home.Home(home.HomePath)
 	foodInfo := strings.Split(foodName, "/")
 	if len(foodInfo) == 1 {
 		name = foodInfo[0]
-		rig = h.DefaultRig()
+		rig = home.DefaultRig()
 	} else {
 		name = foodInfo[len(foodInfo)-1]
 		rig = path.Dir(foodName)
@@ -92,7 +91,7 @@ func getFood(foodName string) (*gofish.Food, error) {
 	}
 
 	// check if there's an install receipt available to check what rig this was installed from
-	receiptFile, err := os.Open(filepath.Join(h.Barrel(), name, receipt.ReceiptFilename))
+	receiptFile, err := os.Open(filepath.Join(home.Barrel(), name, receipt.ReceiptFilename))
 	if err == nil {
 		defer receiptFile.Close()
 		installReceipt, err := receipt.NewFromReader(receiptFile)
@@ -108,7 +107,7 @@ func getFood(foodName string) (*gofish.Food, error) {
 
 	l := lua.NewState()
 	defer l.Close()
-	if err := l.DoFile(filepath.Join(h.Rigs(), rig, "Food", fmt.Sprintf("%s.lua", name))); err != nil {
+	if err := l.DoFile(filepath.Join(home.Rigs(), rig, "Food", fmt.Sprintf("%s.lua", name))); err != nil {
 		return nil, err
 	}
 	var food gofish.Food

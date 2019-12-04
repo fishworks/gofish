@@ -61,7 +61,6 @@ func search(keywords []string) []string {
 }
 
 func findFishFood() []string {
-	home := home.Home(home.HomePath)
 	rigPath := home.Rigs()
 	var fudz []string
 	filepath.Walk(rigPath, func(p string, f os.FileInfo, err error) error {
