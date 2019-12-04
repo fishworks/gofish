@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -40,6 +41,10 @@ type Food struct {
 	Version string
 	// The list of binary distributions available for this fish food.
 	Packages []*Package
+	// The script to run before installation
+	PreInstallScript string
+	// The script to run after a successful installation
+	PostInstallScript string
 }
 
 // Package provides metadata to install a piece of software on a given operating system and architecture.
@@ -87,6 +92,13 @@ func (f *Food) Install() error {
 		return fmt.Errorf("shasum verify check failed: %v", err)
 	}
 
+	if f.PreInstallScript != "" {
+		cmd := exec.Command(f.PreInstallScript)
+		if err := cmd.Run(); err != nil {
+			return err
+		}
+	}
+
 	if err := os.MkdirAll(barrelDir, 0755); err != nil {
 		return err
 	}
@@ -110,6 +122,13 @@ func (f *Food) Install() error {
 	}
 	if err := f.Link(pkg); err != nil {
 		return err
+	}
+
+	if f.PostInstallScript != "" {
+		cmd := exec.Command(f.PostInstallScript)
+		if err := cmd.Run(); err != nil {
+			return err
+		}
 	}
 
 	if f.Caveats != "" {
