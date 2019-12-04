@@ -18,7 +18,7 @@ func newHomeCmd() *cobra.Command {
 		Short: "print the location of fish's home directory",
 		Long:  homeDesc,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Println(home.Home(home.HomePath))
+			fmt.Println(home.String())
 			return nil
 		},
 	}

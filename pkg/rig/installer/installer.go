@@ -4,7 +4,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/fishworks/gofish/pkg/home"
 	"github.com/fishworks/gofish/pkg/rig"
 )
 
@@ -44,8 +43,8 @@ func Update(i Installer) error {
 }
 
 // FindSource determines the correct Installer for the given source.
-func FindSource(location string, home home.Home) (Installer, error) {
-	installer, err := existingVCSRepo(location, home)
+func FindSource(location string) (Installer, error) {
+	installer, err := existingVCSRepo(location)
 	if err != nil && err.Error() == "Cannot detect VCS" {
 		return installer, rig.ErrMissingSource
 	}
@@ -53,12 +52,12 @@ func FindSource(location string, home home.Home) (Installer, error) {
 }
 
 // New determines and returns the correct Installer for the given source
-func New(source, name, version string, home home.Home) (Installer, error) {
+func New(source, name, version string) (Installer, error) {
 	if isLocalReference(source) {
-		return NewLocalInstaller(source, name, home)
+		return NewLocalInstaller(source, name)
 	}
 
-	return NewVCSInstaller(source, name, version, home)
+	return NewVCSInstaller(source, name, version)
 }
 
 // isLocalReference checks if the source exists on the filesystem.

@@ -16,8 +16,7 @@ func newRigRemoveCmd() *cobra.Command {
 		Short: "remove rigs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			start := time.Now()
-			rigPath := home.Home(home.HomePath).Rigs()
-			rigs := findRigs(rigPath)
+			rigs := findRigs(home.Rigs())
 			foundRigs := map[string]bool{}
 			for _, arg := range args {
 				foundRigs[arg] = false
@@ -26,7 +25,7 @@ func newRigRemoveCmd() *cobra.Command {
 				for _, arg := range args {
 					if rig == arg {
 						foundRigs[rig] = true
-						if err := os.RemoveAll(filepath.Join(rigPath, rig)); err != nil {
+						if err := os.RemoveAll(filepath.Join(home.Rigs(), rig)); err != nil {
 							return err
 						}
 					}

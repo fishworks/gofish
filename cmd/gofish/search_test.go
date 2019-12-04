@@ -15,7 +15,7 @@ func TestSearch(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	home.HomePath = filepath.Join(cwd, "testdata")
+	os.Setenv(home.DefaultHomeEnvVar, filepath.Join(cwd, "testdata"))
 
 	expectedFoodList := []string{
 		"github.com/customorg/fish-food/hugo",

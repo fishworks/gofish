@@ -16,8 +16,7 @@ func newRigListCmd() *cobra.Command {
 		Use:   "list",
 		Short: "list rigs",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			rigPath := home.Home(home.HomePath).Rigs()
-			rigs := findRigs(rigPath)
+			rigs := findRigs(home.Rigs())
 
 			table := uitable.New()
 			table.AddRow("NAME")

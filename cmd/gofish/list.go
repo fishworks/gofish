@@ -41,16 +41,15 @@ func newListCmd() *cobra.Command {
 }
 
 func findFood() []string {
-	barrelPath := home.Home(home.HomePath).Barrel()
 	var fudz []string
-	files, err := ioutil.ReadDir(barrelPath)
+	files, err := ioutil.ReadDir(home.Barrel())
 	if err != nil {
 		return []string{}
 	}
 
 	for _, f := range files {
 		if f.IsDir() {
-			files, err := ioutil.ReadDir(filepath.Join(barrelPath, f.Name()))
+			files, err := ioutil.ReadDir(filepath.Join(home.Barrel(), f.Name()))
 			if err != nil {
 				continue
 			}
@@ -63,9 +62,8 @@ func findFood() []string {
 }
 
 func findFoodVersions(name string) []string {
-	barrelPath := home.Home(home.HomePath).Barrel()
 	var versions []string
-	files, err := ioutil.ReadDir(filepath.Join(barrelPath, name))
+	files, err := ioutil.ReadDir(filepath.Join(home.Barrel(), name))
 	if err != nil {
 		return []string{}
 	}

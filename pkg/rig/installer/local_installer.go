@@ -11,15 +11,13 @@ import (
 // LocalInstaller installs rigs from the filesystem
 type LocalInstaller struct {
 	Source string
-	Home   home.Home
 	Name   string
 }
 
 // NewLocalInstaller creates a new LocalInstaller
-func NewLocalInstaller(source string, name string, home home.Home) (*LocalInstaller, error) {
+func NewLocalInstaller(source string, name string) (*LocalInstaller, error) {
 	i := &LocalInstaller{
 		Source: source,
-		Home:   home,
 		Name:   name,
 	}
 
@@ -49,7 +47,7 @@ func (i *LocalInstaller) Path() string {
 	if i.Source == "" {
 		return ""
 	}
-	return filepath.Join(i.Home.Rigs(), i.Name)
+	return filepath.Join(home.Rigs(), i.Name)
 }
 
 // Update updates a local repository, which is a no-op.
