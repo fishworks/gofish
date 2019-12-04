@@ -3,9 +3,8 @@ on:
   push:
     branches:
     - master
-  release:
-    types:
-    - published
+    tags:
+    - '*'
 jobs:
   run:
     name: run
