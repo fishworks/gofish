@@ -15,11 +15,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/docker/docker/pkg/archive"
 	"github.com/fishworks/gofish/pkg/home"
 	"github.com/fishworks/gofish/pkg/osutil"
 	"github.com/fishworks/gofish/receipt"
 	"github.com/fishworks/gofish/version"
+	"github.com/mholt/archiver"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -182,11 +182,9 @@ func unarchiveOrCopy(src, dest, urlPath string) error {
 	}
 	defer in.Close()
 
-	if archive.IsArchivePath(src) {
-		return archive.Untar(in, dest, &archive.TarOptions{NoLchown: true})
-	} else if isZipPath(src) {
-		in.Close()
-		return unzip(src, dest)
+	err = archiver.Unarchive(src, dest)
+	if err == nil {
+		return nil
 	}
 	out, err := os.Create(filepath.Join(dest, filepath.Base(urlPath)))
 	if err != nil {

@@ -26,6 +26,14 @@
   version = "v0.4.7"
 
 [[projects]]
+  digest = "1:67363874cb9ef800804cbd9cdd853953c3826ae1511011cd3467ab331ca3c63d"
+  name = "github.com/andybalholm/brotli"
+  packages = ["."]
+  pruneopts = ""
+  revision = "b60f0d972eeb79a5fba5fb60f1e0568bc8c97e42"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:9d013c04ff3012769abc7ea289948bf93bf82e8b22c5909f031127647609523f"
   name = "github.com/bacongobbler/browser"
   packages = ["."]
@@ -43,7 +51,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:5fcfd7c83aa89c5cbe9682f04306c8745cf7c8ea1b3d8467253efcb5b6775394"
+  digest = "1:b5dd3e0b0bab1ee60331d1528636de395900879f8ae026461cb7eb45e08c1088"
   name = "github.com/docker/docker"
   packages = [
     "pkg/archive",
@@ -67,6 +75,29 @@
   version = "v0.3.3"
 
 [[projects]]
+  digest = "1:ba9a3ee3359edeeec2c6c1ddb6976db4b7ca6ad045e73b43471e32f01b5786e4"
+  name = "github.com/dsnet/compress"
+  packages = [
+    ".",
+    "bzip2",
+    "bzip2/internal/sais",
+    "internal",
+    "internal/errors",
+    "internal/prefix",
+  ]
+  pruneopts = ""
+  revision = "da652975a8eea9fa0735aba8056747a751db0bd3"
+  version = "v0.0.1"
+
+[[projects]]
+  digest = "1:6a6322a15aa8e99bd156fbba0aae4e5d67b4bb05251d860b348a45dfdcba9cce"
+  name = "github.com/golang/snappy"
+  packages = ["."]
+  pruneopts = ""
+  revision = "2a8bb927dd31d8daada140a5d09578521ce5c36a"
+  version = "v0.0.1"
+
+[[projects]]
   branch = "master"
   digest = "1:b4e7b1e55d849b7d1a4d96d1a029141d7ac963b4403e6ddb1cdb6e5384ab4781"
   name = "github.com/gosuri/uitable"
@@ -87,6 +118,29 @@
   version = "v1.0"
 
 [[projects]]
+  digest = "1:869328e75483b90d94966c4355ef737c3f311b0627db1d37612d97d6896da405"
+  name = "github.com/klauspost/compress"
+  packages = [
+    "flate",
+    "fse",
+    "huff0",
+    "snappy",
+    "zstd",
+    "zstd/internal/xxhash",
+  ]
+  pruneopts = ""
+  revision = "459b83aadb42b806aed42f0f4b3240c8834e0cc1"
+  version = "v1.9.8"
+
+[[projects]]
+  digest = "1:0a36eb96ea34a66384e17bf1927f42ffa5856ffcae35561ff7936f968c43776a"
+  name = "github.com/klauspost/pgzip"
+  packages = ["."]
+  pruneopts = ""
+  revision = "083b1c3f84dd6486588802e5ce295de3a7f41a8b"
+  version = "v1.2.1"
+
+[[projects]]
   branch = "master"
   digest = "1:41ea0e53c25c1c7f51b3ff6589bcf586a0fb548caceeb6a5dd60b91ed19ea801"
   name = "github.com/kyokomi/emoji"
@@ -103,12 +157,28 @@
   version = "v0.0.2"
 
 [[projects]]
+  digest = "1:d0612e2ce73b9236d3986923e0d474f276d8c57183047752c48894750e7be125"
+  name = "github.com/mholt/archiver"
+  packages = ["."]
+  pruneopts = ""
+  revision = "3bd45bda8a6db94a901d9f39983d3b2298438e43"
+  version = "v3.3.0"
+
+[[projects]]
   branch = "master"
   digest = "1:59fa50d593e5673a0dfffa1852b66fd700c05b35e368680b4b89a68fdb2c1379"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
   pruneopts = ""
   revision = "00c29f56e2386353d58c599509e8dc3801b0d716"
+
+[[projects]]
+  digest = "1:b93a939355dc613ca1c23bf39f6d4c207da431a31dd8af001cc334ad24cab9d3"
+  name = "github.com/nwaples/rardecode"
+  packages = ["."]
+  pruneopts = ""
+  revision = "cc3e4b2381762c56dbcdf9f93be03349a1dc1c14"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:5d9b668b0b4581a978f07e7d2e3314af18eb27b3fb5d19b70185b7c575723d11"
@@ -139,6 +209,17 @@
   pruneopts = ""
   revision = "baf6536d6259209c3edfa2b22237af82942d3dfa"
   version = "v0.1.1"
+
+[[projects]]
+  digest = "1:9acd22bf007b5c9a85af260b7abf6b7e02e0bfac256a51b6cefefabad59de183"
+  name = "github.com/pierrec/lz4"
+  packages = [
+    ".",
+    "internal/xxh32",
+  ]
+  pruneopts = ""
+  revision = "edce7c4c96dac9adc01d38b18fd2456a7c0c5773"
+  version = "v2.4.1"
 
 [[projects]]
   digest = "1:7365acd48986e205ccb8652cc746f09c8b7876030d53710ea6ef7d0bd0dcd7ca"
@@ -179,6 +260,27 @@
   pruneopts = ""
   revision = "583c0c0531f06d5278b7d917446061adc344b5cd"
   version = "v1.0.1"
+
+[[projects]]
+  digest = "1:cc4c87dc4fa2a87abd2a0901cbd8c0ca10a4a83929d62947de0ad111ab830e01"
+  name = "github.com/ulikunitz/xz"
+  packages = [
+    ".",
+    "internal/hash",
+    "internal/xlog",
+    "lzma",
+  ]
+  pruneopts = ""
+  revision = "6f934d456d51e742b4eeab20d925a827ef22320a"
+  version = "v0.5.6"
+
+[[projects]]
+  branch = "master"
+  digest = "1:5d5ea0c53c32b0465b910eb1d98b045c2f14c416880c54dd5356a1c6b4569041"
+  name = "github.com/xi2/xz"
+  packages = ["."]
+  pruneopts = ""
+  revision = "48954b6210f8d154cb5f8484d3a3e1f83489309e"
 
 [[projects]]
   branch = "master"
@@ -238,6 +340,7 @@
     "github.com/docker/docker/pkg/archive",
     "github.com/gosuri/uitable",
     "github.com/kyokomi/emoji",
+    "github.com/mholt/archiver",
     "github.com/renstrom/fuzzysearch/fuzzy",
     "github.com/sirupsen/logrus",
     "github.com/spf13/cobra",
