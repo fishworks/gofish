@@ -175,15 +175,15 @@ func (f *Food) Uninstall() error {
 }
 
 func unarchiveOrCopy(src, dest, urlPath string) error {
+	if err := archiver.Unarchive(src, dest); err == nil {
+		return nil
+	}
+
 	in, err := os.Open(src)
 	if err != nil {
 		return err
 	}
 	defer in.Close()
-
-	if err := archiver.Unarchive(src, dest); err == nil {
-		return nil
-	}
 	out, err := os.Create(filepath.Join(dest, filepath.Base(urlPath)))
 	if err != nil {
 		return err
