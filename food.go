@@ -1,7 +1,6 @@
 package gofish
 
 import (
-	"archive/zip"
 	"crypto/sha256"
 	"fmt"
 	"io"
@@ -322,41 +321,6 @@ func downloadCachedFileToPath(filePath string, url string) error {
 
 	_, err = io.Copy(out, resp.Body)
 	return err
-}
-
-func isZipPath(path string) bool {
-	_, err := zip.OpenReader(path)
-	return err == nil
-}
-
-func unzip(src, dest string) error {
-	r, err := zip.OpenReader(src)
-	if err != nil {
-		return err
-	}
-	defer r.Close()
-
-	for _, zf := range r.File {
-		if zf.FileHeader.FileInfo().IsDir() {
-			if err := os.Mkdir(filepath.Join(dest, zf.Name), 0755); err != nil {
-				return err
-			}
-			continue
-		}
-		dst, err := os.Create(filepath.Join(dest, zf.Name))
-		if err != nil {
-			return err
-		}
-		defer dst.Close()
-		src, err := zf.Open()
-		if err != nil {
-			return err
-		}
-		defer src.Close()
-
-		io.Copy(dst, src)
-	}
-	return nil
 }
 
 func checksumVerifyPath(path string, checksum string) error {

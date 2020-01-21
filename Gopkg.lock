@@ -18,14 +18,6 @@
   version = "v1.12.0"
 
 [[projects]]
-  digest = "1:6331095c1906771fbe129fe4a1f94ac5b5a97b0f60f2f80653bb95c3e5dad81e"
-  name = "github.com/Microsoft/go-winio"
-  packages = ["."]
-  pruneopts = ""
-  revision = "7da180ee92d8bd8bb8c37fc560e673e6557c392f"
-  version = "v0.4.7"
-
-[[projects]]
   digest = "1:67363874cb9ef800804cbd9cdd853953c3826ae1511011cd3467ab331ca3c63d"
   name = "github.com/andybalholm/brotli"
   packages = ["."]
@@ -40,39 +32,6 @@
   pruneopts = ""
   revision = "792d0443b3e34e0a99a68e254084079ad9356db5"
   version = "v1.0.1"
-
-[[projects]]
-  branch = "master"
-  digest = "1:96843e93d86862260d76d1ba589e988b62be6aa26fb8eb7e0d9d301c33fc194f"
-  name = "github.com/containerd/continuity"
-  packages = ["pathdriver"]
-  pruneopts = ""
-  revision = "c6cef34830231743494fe2969284df7b82cc0ad0"
-
-[[projects]]
-  branch = "master"
-  digest = "1:b5dd3e0b0bab1ee60331d1528636de395900879f8ae026461cb7eb45e08c1088"
-  name = "github.com/docker/docker"
-  packages = [
-    "pkg/archive",
-    "pkg/fileutils",
-    "pkg/idtools",
-    "pkg/ioutils",
-    "pkg/longpath",
-    "pkg/mount",
-    "pkg/pools",
-    "pkg/system",
-  ]
-  pruneopts = ""
-  revision = "cf9c48bb3ecf47ed56a4b7b466eda577913f838e"
-
-[[projects]]
-  digest = "1:582d54fcb7233da8dde1dfd2210a5b9675d0685f84246a8d317b07d680c18b1b"
-  name = "github.com/docker/go-units"
-  packages = ["."]
-  pruneopts = ""
-  revision = "47565b4f722fb6ceae66b95f853feed578a4a51c"
-  version = "v0.3.3"
 
 [[projects]]
   digest = "1:ba9a3ee3359edeeec2c6c1ddb6976db4b7ca6ad045e73b43471e32f01b5786e4"
@@ -181,36 +140,6 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:5d9b668b0b4581a978f07e7d2e3314af18eb27b3fb5d19b70185b7c575723d11"
-  name = "github.com/opencontainers/go-digest"
-  packages = ["."]
-  pruneopts = ""
-  revision = "279bed98673dd5bef374d3b6e4b09e2af76183bf"
-  version = "v1.0.0-rc1"
-
-[[projects]]
-  digest = "1:f26c8670b11e29a49c8e45f7ec7f2d5bac62e8fd4e3c0ae1662baa4a697f984a"
-  name = "github.com/opencontainers/image-spec"
-  packages = [
-    "specs-go",
-    "specs-go/v1",
-  ]
-  pruneopts = ""
-  revision = "d60099175f88c47cd379c4738d158884749ed235"
-  version = "v1.0.1"
-
-[[projects]]
-  digest = "1:fa19ddee0e5ee5951a6a450a4b6ec635a42957f86bfc87d9d778eeee04ad2036"
-  name = "github.com/opencontainers/runc"
-  packages = [
-    "libcontainer/system",
-    "libcontainer/user",
-  ]
-  pruneopts = ""
-  revision = "baf6536d6259209c3edfa2b22237af82942d3dfa"
-  version = "v0.1.1"
-
-[[projects]]
   digest = "1:9acd22bf007b5c9a85af260b7abf6b7e02e0bfac256a51b6cefefabad59de183"
   name = "github.com/pierrec/lz4"
   packages = [
@@ -220,14 +149,6 @@
   pruneopts = ""
   revision = "edce7c4c96dac9adc01d38b18fd2456a7c0c5773"
   version = "v2.4.1"
-
-[[projects]]
-  digest = "1:7365acd48986e205ccb8652cc746f09c8b7876030d53710ea6ef7d0bd0dcd7ca"
-  name = "github.com/pkg/errors"
-  packages = ["."]
-  pruneopts = ""
-  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
-  version = "v0.8.0"
 
 [[projects]]
   digest = "1:54b56e41fbe67fa032aef3c985939ca17a61f0c21fd81aee753018f8f3f70889"
@@ -313,14 +234,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:80ec738f420f13c23460cc92cd893d3e403588c60682afebbd4515eca5e19578"
-  name = "golang.org/x/net"
-  packages = ["context"]
-  pruneopts = ""
-  revision = "5f9ae10d9af5b1c89ae6904293b14b064d4ada23"
-
-[[projects]]
-  branch = "master"
   digest = "1:e947dc04c62cf4cca2b3b137d3f266fb592f5de429b9e18c0c3018df0eb78c76"
   name = "golang.org/x/sys"
   packages = [
@@ -337,7 +250,6 @@
     "github.com/Masterminds/semver",
     "github.com/Masterminds/vcs",
     "github.com/bacongobbler/browser",
-    "github.com/docker/docker/pkg/archive",
     "github.com/gosuri/uitable",
     "github.com/kyokomi/emoji",
     "github.com/mholt/archiver",
