@@ -26,11 +26,6 @@ jobs:
         echo "##[add-path]$GITHUB_WORKSPACE/bin"
         mkdir bin
 
-    - name: install dependencies
-      working-directory: src/github.com/fishworks/gofish
-      run: |
-        make bootstrap
-
     - name: run style tests
       working-directory: src/github.com/fishworks/gofish
       run: make test-lint
@@ -42,6 +37,7 @@ jobs:
     - name: build
       working-directory: src/github.com/fishworks/gofish
       run: |
+        go get -u github.com/mitchellh/gox
         make build-cross
         make dist checksum
 
