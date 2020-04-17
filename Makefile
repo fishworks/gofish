@@ -62,26 +62,4 @@ protoc:
 clean:
 	@rm -rf $(BINDIR) ./_dist
 
-HAS_DEP := $(shell command -v dep;)
-HAS_GOX := $(shell command -v gox;)
-HAS_GIT := $(shell command -v git;)
-HAS_HG := $(shell command -v hg;)
-
-.PHONY: bootstrap
-bootstrap:
-ifndef HAS_DEP
-	go get -u github.com/golang/dep/cmd/...
-endif
-ifndef HAS_GOX
-	go get -u github.com/mitchellh/gox
-endif
-
-ifndef HAS_GIT
-	$(error You must install Git)
-endif
-ifndef HAS_HG
-	$(error You must install Mercurial)
-endif
-	dep ensure -v
-
 include versioning.mk

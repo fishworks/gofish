@@ -1,7 +1,6 @@
 package gofish
 
 import (
-	"archive/zip"
 	"crypto/sha256"
 	"fmt"
 	"io"
@@ -15,12 +14,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/docker/docker/pkg/archive"
+	"github.com/mholt/archiver/v3"
+	log "github.com/sirupsen/logrus"
+
 	"github.com/fishworks/gofish/pkg/home"
 	"github.com/fishworks/gofish/pkg/osutil"
 	"github.com/fishworks/gofish/receipt"
 	"github.com/fishworks/gofish/version"
-	log "github.com/sirupsen/logrus"
 )
 
 // Food provides metadata to install a piece of software.
@@ -176,18 +176,18 @@ func (f *Food) Uninstall() error {
 }
 
 func unarchiveOrCopy(src, dest, urlPath string) error {
+
+	// check and see if it can be unarchived by archiver
+	if _, err := archiver.ByExtension(src); err == nil {
+		return archiver.Unarchive(src, dest)
+	}
+
 	in, err := os.Open(src)
 	if err != nil {
 		return err
 	}
 	defer in.Close()
 
-	if archive.IsArchivePath(src) {
-		return archive.Untar(in, dest, &archive.TarOptions{NoLchown: true})
-	} else if isZipPath(src) {
-		in.Close()
-		return unzip(src, dest)
-	}
 	out, err := os.Create(filepath.Join(dest, filepath.Base(urlPath)))
 	if err != nil {
 		return err
@@ -324,41 +324,6 @@ func downloadCachedFileToPath(filePath string, url string) error {
 
 	_, err = io.Copy(out, resp.Body)
 	return err
-}
-
-func isZipPath(path string) bool {
-	_, err := zip.OpenReader(path)
-	return err == nil
-}
-
-func unzip(src, dest string) error {
-	r, err := zip.OpenReader(src)
-	if err != nil {
-		return err
-	}
-	defer r.Close()
-
-	for _, zf := range r.File {
-		if zf.FileHeader.FileInfo().IsDir() {
-			if err := os.Mkdir(filepath.Join(dest, zf.Name), 0755); err != nil {
-				return err
-			}
-			continue
-		}
-		dst, err := os.Create(filepath.Join(dest, zf.Name))
-		if err != nil {
-			return err
-		}
-		defer dst.Close()
-		src, err := zf.Open()
-		if err != nil {
-			return err
-		}
-		defer src.Close()
-
-		io.Copy(dst, src)
-	}
-	return nil
 }
 
 func checksumVerifyPath(path string, checksum string) error {
