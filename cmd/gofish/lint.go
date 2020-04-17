@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"path"
 	"reflect"
@@ -20,7 +19,6 @@ func newLintCmd() *cobra.Command {
 		Short: "lint fish food",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			var failed bool
 			for _, arg := range args {
 				l := lua.NewState()
 				defer l.Close()
@@ -42,14 +40,10 @@ func newLintCmd() *cobra.Command {
 					ohai.Warningln(err)
 				}
 				if len(errs) != 0 {
-					failed = true
 					return fmt.Errorf("%d errors encountered while linting %s", len(errs), food.Name)
 				}
 
 				ohai.Successf("No errors discovered in '%v'\n", food.Name)
-			}
-			if failed {
-				return errors.New("linting failed")
 			}
 			return nil
 		},
