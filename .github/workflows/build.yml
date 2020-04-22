@@ -42,17 +42,17 @@ jobs:
         make dist checksum
 
     - name: upload tarballs to azure
-      uses: bacongobbler/azure-blob-storage-upload@v1.0.0
+      uses: bacongobbler/azure-blob-storage-upload@v1.1.1
       with:
         source_dir: src/github.com/fishworks/gofish/_dist/
-        container_name: releases
+        container_name: '$web'
         connection_string: ${{ secrets.ConnectionString }}
-        extra_args: '--pattern *.tar*'
+        extra_args: '--pattern *.tar* --destination-path releases'
 
     - name: upload zip files to azure
-      uses: bacongobbler/azure-blob-storage-upload@v1.0.0
+      uses: bacongobbler/azure-blob-storage-upload@v1.1.1
       with:
         source_dir: src/github.com/fishworks/gofish/_dist/
-        container_name: releases
+        container_name: '$web'
         connection_string: ${{ secrets.ConnectionString }}
-        extra_args: '--pattern *.zip*'
+        extra_args: '--pattern *.zip* --destination-path releases'
