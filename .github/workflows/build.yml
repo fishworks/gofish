@@ -77,4 +77,4 @@ jobs:
           source_dir: gofish
           container_name: '$web'
           connection_string: ${{ secrets.CONNECTIONSTRING }}
-          exta_args: "--destination-path releases"
+          extra_args: "--destination-path releases"
