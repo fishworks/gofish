@@ -47,7 +47,7 @@ jobs:
         source_dir: src/github.com/fishworks/gofish/_dist/
         container_name: '$web'
         connection_string: ${{ secrets.ConnectionString }}
-        extra_args: '--pattern *.tar* --destination-path releases'
+        extra_args: '--pattern "*.tar*" --destination-path "releases"'
 
     - name: upload zip files to azure
       uses: bacongobbler/azure-blob-storage-upload@v1.1.1
@@ -55,4 +55,4 @@ jobs:
         source_dir: src/github.com/fishworks/gofish/_dist/
         container_name: '$web'
         connection_string: ${{ secrets.ConnectionString }}
-        extra_args: '--pattern *.zip* --destination-path releases'
+        extra_args: '--pattern "*.zip*" --destination-path "releases"'
