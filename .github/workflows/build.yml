@@ -14,10 +14,10 @@ jobs:
       with:
         path: src/github.com/fishworks/gofish
 
-    - name: set up go 1.13
+    - name: set up go
       uses: actions/setup-go@v1
       with:
-        go-version: 1.13
+        go-version: 1.14
 
     - name: set GOPATH
       # temporary fix for https://github.com/actions/setup-go/issues/12
