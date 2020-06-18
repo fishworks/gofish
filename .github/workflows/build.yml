@@ -36,15 +36,6 @@ jobs:
     - name: build release assets
       run: make
 
-    - name: run style tests
-      uses: golangci/golangci-lint-action@v1
-      with:
-        version: v1.27
-        args: --tests --disable-all --enable=gofmt --enable=misspell --enable=deadcode --enable=ineffassign --enable=govet
-
-    - name: run unit tests
-      run: make test-unit
-
     - name: package release assets
       run: |
         mkdir _dist
