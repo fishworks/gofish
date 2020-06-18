@@ -6,53 +6,75 @@ on:
     tags:
     - '*'
 jobs:
-  run:
-    name: run
-    runs-on: ubuntu-latest
+  build:
+    name: build release assets
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        arch: [amd64]
     steps:
-    - uses: actions/checkout@master
-      with:
-        path: src/github.com/fishworks/gofish
+    - uses: actions/checkout@v2
 
-    - name: set up go
-      uses: actions/setup-go@v1
+    - name: set the release version (tag)
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF/refs\/tags\//}
+
+    - name: set the release version (master)
+      if: github.ref == 'refs/heads/master'
+      run: echo ::set-env name=RELEASE_VERSION::canary
+
+    - name: lowercase the runner OS name
+      run: |
+        OS=$(echo "${{ runner.os }}" | tr '[:upper:]' '[:lower:]')
+        echo ::set-env name=RUNNER_OS::$OS
+
+    - uses: actions/setup-go@v2
       with:
         go-version: 1.14
 
-    - name: set GOPATH
-      # temporary fix for https://github.com/actions/setup-go/issues/12
+    - name: build release assets
+      run: make
+
+    - name: package release assets
       run: |
-        echo "##[set-env name=GOPATH;]$GITHUB_WORKSPACE"
-        echo "##[add-path]$GITHUB_WORKSPACE/bin"
-        mkdir bin
+        mkdir _dist
+        cp README.md LICENSE bin/gofish _dist/
+        cd _dist
+        tar czf gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.tar.gz README.md LICENSE gofish
 
-    - name: run style tests
-      working-directory: src/github.com/fishworks/gofish
-      run: make test-lint
-
-    - name: run unit tests
-      working-directory: src/github.com/fishworks/gofish
-      run: make test-unit
-
-    - name: build
-      working-directory: src/github.com/fishworks/gofish
-      run: |
-        go get -u github.com/mitchellh/gox
-        make build-cross
-        make dist checksum
-
-    - name: upload tarballs to azure
-      uses: bacongobbler/azure-blob-storage-upload@v1.1.1
+    - uses: actions/upload-artifact@v1
       with:
-        source_dir: src/github.com/fishworks/gofish/_dist/
-        container_name: '$web'
-        connection_string: ${{ secrets.ConnectionString }}
-        extra_args: '--pattern "*.tar*" --destination-path "releases"'
+        name: gofish
+        path: _dist/gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.tar.gz
 
-    - name: upload zip files to azure
-      uses: bacongobbler/azure-blob-storage-upload@v1.1.1
-      with:
-        source_dir: src/github.com/fishworks/gofish/_dist/
-        container_name: '$web'
-        connection_string: ${{ secrets.ConnectionString }}
-        extra_args: '--pattern "*.zip*" --destination-path "releases"'
+  publish:
+    name: publish release assets
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: set the release version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: set the release version
+        if: github.ref == 'refs/heads/master'
+        run: echo ::set-env name=RELEASE_VERSION::canary
+
+      - name: download release assets
+        uses: actions/download-artifact@v1
+        with:
+          name: gofish
+
+      - name: generate checksums
+        run: |
+          cd gofish
+          sha256sum * > checksums-${{ env.RELEASE_VERSION }}.txt
+
+      - name: upload to azure
+        uses: bacongobbler/azure-blob-storage-upload@v1.1.1
+        with:
+          source_dir: gofish
+          container_name: '$web'
+          connection_string: ${{ secrets.AzureStorageConnectionString }}
+          exta_args: "--destination-path releases"

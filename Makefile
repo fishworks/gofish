@@ -21,34 +21,9 @@ all: build
 build:
 	$(GO) build -o $(BINDIR)/$(NAME) $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' ./cmd/$(NAME)
 
-.PHONY: build-cross
-build-cross: LDFLAGS += -extldflags "-static"
-build-cross:
-	CGO_ENABLED=0 gox -parallel=3 -output="_dist/{{.OS}}-{{.Arch}}/{{.Dir}}" -osarch='$(TARGETS)' $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' github.com/fishworks/gofish/cmd/$(NAME)
-
-.PHONY: dist
-dist:
-	( \
-		cd _dist && \
-		$(DIST_DIRS) cp ../LICENSE {} \; && \
-		$(DIST_DIRS) cp ../README.md {} \; && \
-		$(DIST_DIRS) tar -zcf $(NAME)-${VERSION}-{}.tar.gz {} \; && \
-		$(DIST_DIRS) zip -r $(NAME)-${VERSION}-{}.zip {} \; \
-	)
-
-.PHONY: checksum
-checksum:
-	for f in _dist/*.{gz,zip} ; do \
-		shasum -a 256 "$${f}"  | awk '{print $$1}' > "$${f}.sha256" ; \
-	done
-
 .PHONY: test
 test: TESTFLAGS += -race -v
 test: test-lint test-unit
-
-.PHONY: test-lint
-test-lint:
-	scripts/lint.sh
 
 .PHONY: test-unit
 test-unit:
