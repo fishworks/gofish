@@ -25,10 +25,6 @@ build:
 test: TESTFLAGS += -race -v
 test: test-lint test-unit
 
-.PHONY: test-lint
-test-lint:
-	scripts/lint.sh
-
 .PHONY: test-unit
 test-unit:
 	$(GO) test $(GOFLAGS) -cover -run $(TESTS) ./... $(TESTFLAGS)
