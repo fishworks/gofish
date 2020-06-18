@@ -1,38 +1,21 @@
 name: test
-on: [pull_request]
+on: pull_request
 jobs:
   test:
-    name: test on ${{ matrix.os }}
+    name: test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # TODO: run on macOS and Windows
-        os: [ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        arch: [amd64]
     steps:
-    - uses: actions/checkout@master
-      with:
-        path: src/github.com/fishworks/gofish
-
-    - name: set up go
-      uses: actions/setup-go@v1
+    - uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
       with:
         go-version: 1.14
-
-    - name: set GOPATH
-      # temporary fix for https://github.com/actions/setup-go/issues/12
-      run: |
-        echo "##[set-env name=GOPATH;]$GITHUB_WORKSPACE"
-        echo "##[add-path]$GITHUB_WORKSPACE/bin"
-        mkdir bin
-
     - name: build
-      working-directory: src/github.com/fishworks/gofish
-      run: make build
-
+      run: make
     - name: run style tests
-      working-directory: src/github.com/fishworks/gofish
       run: make test-lint
-
     - name: run unit tests
-      working-directory: src/github.com/fishworks/gofish
       run: make test-unit
