@@ -76,5 +76,5 @@ jobs:
         with:
           source_dir: gofish
           container_name: '$web'
-          connection_string: ${{ secrets.AzureStorageConnectionString }}
+          connection_string: ${{ secrets.CONNECTIONSTRING }}
           exta_args: "--destination-path releases"
