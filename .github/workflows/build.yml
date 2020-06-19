@@ -37,15 +37,28 @@ jobs:
         go-version: 1.14
 
     - name: build release assets
-      run: make
-
-    - name: package release assets
       run: |
+        make
         mkdir _dist
         cp README.md LICENSE bin/gofish _dist/
+
+    - name: create tar.gz archive
+      run: |
         cd _dist
         tar czf gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.tar.gz README.md LICENSE gofish
+
+    - name: create zip archive (bash)
+      if: matrix.os != 'windows-latest'
+      run: |
+        cd _dist
         zip gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.zip README.md LICENSE gofish
+
+    - name: create zip archive (powershell)
+      if: matrix.os == 'windows-latest'
+      shell: powershell
+      run: |
+        cd _dist
+        Compress-Archive -Path README.md, LICENSE, gofish -DestinationPath gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.zip
 
     - uses: actions/upload-artifact@v1
       with:
