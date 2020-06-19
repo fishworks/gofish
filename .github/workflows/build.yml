@@ -11,8 +11,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         arch: [amd64]
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v2
 
