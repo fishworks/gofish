@@ -45,11 +45,17 @@ jobs:
         cp README.md LICENSE bin/gofish _dist/
         cd _dist
         tar czf gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.tar.gz README.md LICENSE gofish
+        zip gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.zip README.md LICENSE gofish
 
     - uses: actions/upload-artifact@v1
       with:
         name: gofish
         path: _dist/gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.tar.gz
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: gofish
+        path: _dist/gofish-${{ env.RELEASE_VERSION }}-${{ env.RUNNER_OS }}-${{ matrix.arch }}.zip
 
   publish:
     name: publish release assets
