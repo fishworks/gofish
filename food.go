@@ -276,7 +276,8 @@ func (f *Food) Lint() (errs []error) {
 }
 
 func getExtension(path string) string {
-	parts := strings.Split(path, ".")
+	urlParts := strings.Split(path, "/")
+	parts := strings.Split(urlParts[len(urlParts)-1], ".")
 	if len(parts) < 2 {
 		return filepath.Ext(path)
 	}
