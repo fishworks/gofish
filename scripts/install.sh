@@ -26,7 +26,7 @@ PROJECT_NAME="gofish"
 PROJECT_GH="fishworks/gofish"
 
 : ${INSTALL_PREFIX:="/usr/local/bin"}
-: ${VERSION:="v0.11.0"}
+: ${VERSION:="v0.12.0"}
 
 if [[ $SKIP_BIN_INSTALL == "1" ]]; then
   echo "Skipping binary install"
@@ -57,13 +57,14 @@ initOS() {
     msys*) OS='windows';;
     # Minimalist GNU for Windows
     mingw*) OS='windows';;
+    darwin*) OS='macos';;
   esac
 }
 
 # verifySupported checks that the os/arch combination is supported for
 # binary builds.
 verifySupported() {
-  local supported="linux-386\nlinux-amd64\nlinux-arm\nlinux-arm64\nlinux-ppc64le\ndarwin-amd64\nwindows-amd64"
+  local supported="linux-amd64\nmacos-amd64\nwindows-amd64"
   if ! echo "${supported}" | grep -q "${OS}-${ARCH}"; then
     echo "No prebuilt binary for ${OS}-${ARCH}."
     exit 1

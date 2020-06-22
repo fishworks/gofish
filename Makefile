@@ -1,12 +1,8 @@
-NAME              ?= gofish
-TARGETS           ?= darwin/amd64 linux/amd64 linux/386 linux/arm linux/arm64 linux/ppc64le windows/amd64
-DIST_DIRS         = find * -type d -exec
+BIN_NAME      ?= gofish
 
 # go option
 GO        ?= go
 TAGS      :=
-TESTS     := .
-TESTFLAGS :=
 LDFLAGS   :=
 GOFLAGS   :=
 BINDIR    := $(CURDIR)/bin
@@ -15,26 +11,13 @@ BINDIR    := $(CURDIR)/bin
 SHELL=/bin/bash
 
 .PHONY: all
-all: build
+all: $(BINDIR)/$(BIN_NAME)
 
-.PHONY: build
-build:
-	$(GO) build -o $(BINDIR)/$(NAME) $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' ./cmd/$(NAME)
-
-.PHONY: test
-test: TESTFLAGS += -race -v
-test: test-lint test-unit
-
-.PHONY: test-unit
-test-unit:
-	$(GO) test $(GOFLAGS) -cover -run $(TESTS) ./... $(TESTFLAGS)
-
-.PHONY: protoc
-protoc:
-	$(MAKE) -C _proto/ all
+$(BINDIR)/$(BIN_NAME):
+	$(GO) build -o $(BINDIR)/$(BIN_NAME) $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' ./cmd/$(BIN_NAME)
 
 .PHONY: clean
 clean:
-	@rm -rf $(BINDIR) ./_dist
+	@rm -rf $(BINDIR)
 
 include versioning.mk
