@@ -83,7 +83,7 @@ func (f *Food) Install() error {
 	if err != nil {
 		return fmt.Errorf("could not parse package URL '%s' as a URL: %v", pkg.URL, err)
 	}
-	cachedFilePath := filepath.Join(home.Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, filepath.Ext(u.Path)))
+	cachedFilePath := filepath.Join(home.Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, getExtension(u.Path)))
 	if err := f.DownloadTo(pkg, cachedFilePath); err != nil {
 		return err
 	}
@@ -262,7 +262,7 @@ func (f *Food) Lint() (errs []error) {
 			if err != nil {
 				errs = append(errs, fmt.Errorf("could not parse package URL '%s' as a URL: %v", pkg.URL, err))
 			}
-			cachedFilePath := filepath.Join(home.Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, filepath.Ext(u.Path)))
+			cachedFilePath := filepath.Join(home.Cache(), fmt.Sprintf("%s-%s-%s-%s%s", f.Name, f.Version, pkg.OS, pkg.Arch, getExtension(u.Path)))
 			if err := f.DownloadTo(pkg, cachedFilePath); err != nil {
 				errs = append(errs, err)
 			}
@@ -273,6 +273,14 @@ func (f *Food) Lint() (errs []error) {
 	}
 	wg.Wait()
 	return
+}
+
+func getExtension(path string) string {
+	parts := strings.Split(p, ".")
+	if len(parts) < 2 {
+		return filepath.Ext(p)
+	}
+	return "." + strings.Join([]string{parts[len(parts)-2], parts[len(parts)-1]}, ".")
 }
 
 // DownloadTo downloads a particular package to filePath, returning any errors if encountered.
