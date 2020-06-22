@@ -276,9 +276,9 @@ func (f *Food) Lint() (errs []error) {
 }
 
 func getExtension(path string) string {
-	parts := strings.Split(p, ".")
+	parts := strings.Split(path, ".")
 	if len(parts) < 2 {
-		return filepath.Ext(p)
+		return filepath.Ext(path)
 	}
 	return "." + strings.Join([]string{parts[len(parts)-2], parts[len(parts)-1]}, ".")
 }
