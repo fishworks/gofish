@@ -11,9 +11,10 @@ import (
 
 func newUninstallCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "uninstall <food>",
-		Short: "uninstall fish food",
-		Args:  cobra.ExactArgs(1),
+		Use:     "uninstall <food>",
+		Aliases: []string{"rm", "remove"},
+		Short:   "uninstall fish food",
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fishFood := args[0]
 			relevantFood := search([]string{fishFood})
