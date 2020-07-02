@@ -21,4 +21,4 @@ jobs:
         version: v1.26
         args: --tests --disable-all --enable=gofmt --enable=misspell --enable=deadcode --enable=ineffassign --enable=govet
     - name: run unit tests
-      run: make test-unit
+      run: go test ./...
