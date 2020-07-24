@@ -33,7 +33,7 @@ jobs:
     - name: build release assets
       run: |
         mkdir _dist
-        CGO_ENABLED=0 gox -parallel=3 -output="_dist/{{.OS}}-{{.Arch}}/{{.Dir}}" -osarch='darwin/amd64 linux/amd64 linux/386 linux/arm linux/arm64 linux/ppc64le windows/amd64' -ldflags '-X github.com/fishworks/gofish/version.Version=${{ env.RELEASE_VERSION }} -X github.com/fishworks/gofish/version.BuildMetadata=git.${GITHUB_SHA}' github.com/fishworks/gofish/cmd/gofish
+        CGO_ENABLED=0 gox -parallel=3 -output="_dist/{{.OS}}-{{.Arch}}/{{.Dir}}" -osarch='darwin/amd64 linux/amd64 linux/386 linux/arm linux/arm64 linux/ppc64le windows/amd64' -ldflags "-X github.com/fishworks/gofish/version.Version=${{ env.RELEASE_VERSION }} -X github.com/fishworks/gofish/version.BuildMetadata=git.${GITHUB_SHA}" github.com/fishworks/gofish/cmd/gofish
 
     - name: create archives
       run: |
