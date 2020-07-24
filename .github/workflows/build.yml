@@ -38,10 +38,10 @@ jobs:
     - name: create archives
       run: |
         cd _dist
-        find * -type d -exec cp ../LICENSE {}
-        find * -type d -exec cp ../README.md {}
-        find * -type d -exec tar -zcf gofish-${{ env.RELEASE_VERSION }}-{}.tar.gz {}
-        find * -type d -exec zip -r gofish-${{ env.RELEASE_VERSION }}-{}.zip {}
+        find * -type d -exec cp ../LICENSE {} \;
+        find * -type d -exec cp ../README.md {} \;
+        find * -type d -exec tar -zcf gofish-${{ env.RELEASE_VERSION }}-{}.tar.gz {} \;
+        find * -type d -exec zip -r gofish-${{ env.RELEASE_VERSION }}-{}.zip {} \;
 
     - uses: actions/upload-artifact@v1
       with:
