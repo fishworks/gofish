@@ -106,7 +106,7 @@ func (f *Food) Install() error {
 	// This is just a safety check to make sure that there's nothing there when we link the package.
 	err = f.Unlink(pkg)
 	if err != nil {
-		return fmt.Errorf("an error occured while unlinking '%v' try running 'gofish unlink %v': %v", f.Name, err, f.Name)
+		return fmt.Errorf("an error occurred while unlinking '%v' try running 'gofish unlink %v': %v", f.Name, err, f.Name)
 	}
 
 	// special case: gofish is replacing itself on windows
@@ -124,7 +124,7 @@ func (f *Food) Install() error {
 		}
 	}
 	if err := f.Link(pkg); err != nil {
-		return fmt.Errorf("an error occured while linking '%v' try running 'gofish link %v': %v", f.Name, err, f.Name)
+		return fmt.Errorf("an error occurred while linking '%v' try running 'gofish link %v': %v", f.Name, err, f.Name)
 	}
 
 	if f.PostInstallScript != "" {
