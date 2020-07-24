@@ -104,7 +104,11 @@ func (f *Food) Install() error {
 	unarchiveOrCopy(cachedFilePath, barrelDir, u.Path)
 
 	// This is just a safety check to make sure that there's nothing there when we link the package.
-	f.Unlink(pkg)
+	err = f.Unlink(pkg)
+	if err != nil {
+		return fmt.Errorf("an error occured while unlinking '%v' try running 'gofish unlink %v': %v", f.Name, err, f.Name)
+	}
+
 	// special case: gofish is replacing itself on windows
 	// https://github.com/fishworks/gofish/issues/46
 	if runtime.GOOS == "windows" && f.Name == "gofish" {
@@ -120,7 +124,7 @@ func (f *Food) Install() error {
 		}
 	}
 	if err := f.Link(pkg); err != nil {
-		return err
+		return fmt.Errorf("an error occured while linking '%v' try running 'gofish link %v': %v", f.Name, err, f.Name)
 	}
 
 	if f.PostInstallScript != "" {
