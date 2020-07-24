@@ -73,13 +73,12 @@ jobs:
 
       - name: generate checksums
         run: |
-          cd gofish
           sha256sum * > checksums-${{ env.RELEASE_VERSION }}.txt
 
       - name: upload to azure
         uses: bacongobbler/azure-blob-storage-upload@v1.1.1
         with:
-          source_dir: gofish
+          source_dir: '.'
           container_name: '$web'
           connection_string: ${{ secrets.CONNECTIONSTRING }}
           extra_args: "--destination-path releases"
