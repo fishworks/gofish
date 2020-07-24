@@ -46,12 +46,12 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: gofish
-        path: _dist/**/*.tar.gz
+        path: _dist/*.tar.gz
 
     - uses: actions/upload-artifact@v1
       with:
         name: gofish
-        path: _dist/**/*.zip
+        path: _dist/*.zip
 
   publish:
     name: publish release assets
