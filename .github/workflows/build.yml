@@ -43,12 +43,12 @@ jobs:
         find * -type d -exec tar -zcf gofish-${{ env.RELEASE_VERSION }}-{}.tar.gz {} \;
         find * -type d -exec zip -r gofish-${{ env.RELEASE_VERSION }}-{}.zip {} \;
 
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2
       with:
         name: gofish
         path: _dist/*.tar.gz
 
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2
       with:
         name: gofish
         path: _dist/*.zip
@@ -67,7 +67,7 @@ jobs:
         run: echo ::set-env name=RELEASE_VERSION::canary
 
       - name: download release assets
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: gofish
 
