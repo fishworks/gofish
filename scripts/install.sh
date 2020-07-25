@@ -98,7 +98,7 @@ downloadFile() {
 installFile() {
   TMPDIR="/tmp/$PROJECT_NAME"
   mkdir -p "$TMPDIR"
-  tar xf "$TMP_CACHE_FILE" -C "$TMPDIR"
+  tar -zxf "$TMP_CACHE_FILE" -C "$TMPDIR"
   echo "Preparing to install into ${INSTALL_PREFIX}"
   # Use * to also copy the file withe the exe suffix on Windows
   sudo mkdir -p "$INSTALL_PREFIX"
