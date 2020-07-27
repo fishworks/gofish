@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -62,7 +63,13 @@ func newInstallCmd() *cobra.Command {
 				ohai.Ohaif("Installing %s...\n", fishFood)
 				start := time.Now()
 				if err := food.Install(); err != nil {
-					return err
+					if errors.Is(err, gofish.ErrCouldNotUnlink{}) {
+						ohai.Warningf("%s could not be 'unlinked' try running 'gofish unlink %s': %s", fishFood, fishFood, err.Error())
+					} else if errors.Is(err, gofish.ErrCouldNotLink{}) {
+						ohai.Warningf("%s could not be 'linked' try running 'gofish link %s': %s", fishFood, fishFood, err.Error())
+					} else {
+						return err
+					}
 				}
 				t := time.Now()
 				ohai.Successf("%s %s: installed in %s\n", food.Name, food.Version, t.Sub(start).String())

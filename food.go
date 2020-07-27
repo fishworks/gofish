@@ -72,6 +72,24 @@ type Resource struct {
 	Executable bool
 }
 
+// ErrCouldNotUnlink is returned when the 'unlink' operation does not succeed
+type ErrCouldNotUnlink struct {
+	Err error
+}
+
+func (e ErrCouldNotUnlink) Error() string {
+	return fmt.Sprintf("could not unlink: %s", e.Err.Error())
+}
+
+// ErrCouldNotLink is returned when the 'link' operation does not succeed
+type ErrCouldNotLink struct {
+	Err error
+}
+
+func (e ErrCouldNotLink) Error() string {
+	return fmt.Sprintf("could not link: %s", e.Err.Error())
+}
+
 // Install attempts to install the package, returning errors if it fails.
 func (f *Food) Install() error {
 	barrelDir := filepath.Join(home.Barrel(), f.Name, f.Version)
@@ -106,7 +124,7 @@ func (f *Food) Install() error {
 	// This is just a safety check to make sure that there's nothing there when we link the package.
 	err = f.Unlink(pkg)
 	if err != nil {
-		return fmt.Errorf("an error occurred while unlinking '%v' try running 'gofish unlink %v': %v", f.Name, err, f.Name)
+		return ErrCouldNotUnlink{err}
 	}
 
 	// special case: gofish is replacing itself on windows
@@ -124,7 +142,7 @@ func (f *Food) Install() error {
 		}
 	}
 	if err := f.Link(pkg); err != nil {
-		return fmt.Errorf("an error occurred while linking '%v' try running 'gofish link %v': %v", f.Name, err, f.Name)
+		return ErrCouldNotLink{err}
 	}
 
 	if f.PostInstallScript != "" {
