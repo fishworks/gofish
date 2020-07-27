@@ -64,9 +64,9 @@ func newInstallCmd() *cobra.Command {
 				start := time.Now()
 				if err := food.Install(); err != nil {
 					if errors.Is(err, gofish.ErrCouldNotUnlink{}) {
-						ohai.Warningf("%s could not be 'unlinked' try running 'gofish unlink %s': %s", fishFood, fishFood, err.Error())
+						return fmt.Errorf("%s could not be 'unlinked' try running 'gofish unlink %s': %s", fishFood, fishFood, err.Error())
 					} else if errors.Is(err, gofish.ErrCouldNotLink{}) {
-						ohai.Warningf("%s could not be 'linked' try running 'gofish link %s': %s", fishFood, fishFood, err.Error())
+						return fmt.Errorf("%s could not be 'linked' try running 'gofish link %s': %s", fishFood, fishFood, err.Error())
 					} else {
 						return err
 					}
