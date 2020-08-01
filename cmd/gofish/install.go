@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -17,8 +18,7 @@ import (
 	"github.com/fishworks/gofish/pkg/home"
 	"github.com/fishworks/gofish/pkg/ohai"
 	"github.com/spf13/cobra"
-	"github.com/yuin/gluamapper"
-	lua "github.com/yuin/gopher-lua"
+	ruby "github.com/SeekingMeaning/go-mruby"
 )
 
 const installDesc = `
@@ -112,13 +112,17 @@ func getFood(foodName string) (*gofish.Food, error) {
 		ohai.Warningf("could not read from install receipt: %v", err)
 	}
 
-	l := lua.NewState()
-	defer l.Close()
-	if err := l.DoFile(filepath.Join(home.Rigs(), rig, "Food", fmt.Sprintf("%s.lua", name))); err != nil {
+	foodBytes, err := ioutil.ReadFile(filepath.Join(home.Rigs(), rig, "Food", fmt.Sprintf("%s.rb", name)))
+	if err != nil {
+		return nil, err
+	}
+	mrb := ruby.NewMrb()
+	defer mrb.Close()
+	if _, err := mrb.LoadString(string(foodBytes)); err != nil {
 		return nil, err
 	}
 	var food gofish.Food
-	if err := gluamapper.Map(l.GetGlobal(strings.ToLower(reflect.TypeOf(food).Name())).(*lua.LTable), &food); err != nil {
+	if err := ruby.Decode(&food, mrb.GetGlobalVariable(fmt.Sprintf("$%s", strings.ToLower(reflect.TypeOf(food).Name())))); err != nil {
 		return nil, err
 	}
 	food.Rig = rig

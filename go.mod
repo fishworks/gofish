@@ -5,6 +5,7 @@ go 1.14
 require (
 	github.com/Masterminds/semver v1.5.0
 	github.com/Masterminds/vcs v1.13.1
+	github.com/SeekingMeaning/go-mruby v0.0.0-20200802182122-533070ae21cd
 	github.com/bacongobbler/browser v1.1.0
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/frankban/quicktest v1.9.0 // indirect
