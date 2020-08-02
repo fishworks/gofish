@@ -8,7 +8,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"reflect"
 	"strings"
 	"time"
 
@@ -23,6 +22,76 @@ import (
 
 const installDesc = `
 Install fish food.
+`
+
+const rubyDsl = `
+def food(&block)
+  Food.new(&block)
+end
+
+class Food
+  def initialize(&block)
+    instance_eval(&block)
+  end
+
+  def name(val = nil); val.nil? ? @name : @name = val; end
+  def rig; '@RIG@'; end
+  def description(val = nil); val.nil? ? @description : @description = val; end
+  def license(val = nil); val.nil? ? @license : @license = val; end
+  def homepage(val = nil); val.nil? ? @homepage : @homepage = val; end
+  def caveats(val = nil); val.nil? ? @caveats : @caveats = val; end
+  def version(val = nil); val.nil? ? @version : @version = val; end
+  def packages; @packages ||= []; end
+  def package(&block); packages << Package.new(self, &block); end
+  def preinstallscript(val = nil); val.nil? ? @preinstallscript : @preinstallscript = val; end
+  def postinstallscript(val = nil); val.nil? ? @postinstallscript : @postinstallscript = val; end
+end
+
+class Package
+  def initialize(food, &block)
+    @food = food
+    instance_eval(&block)
+  end
+
+  def name; @food.name; end
+  def description; @food.description; end
+  def license; @food.license; end
+  def homepage; @food.homepage; end
+  def version; @food.version; end
+
+  def os(val = nil); val.nil? ? @os : @os = val; end
+  def arch(val = nil); val.nil? ? @arch : @arch = val; end
+  def url(val = nil); val.nil? ? @url : @url = val; end
+  def sha256(val = nil); val.nil? ? @sha256 : @sha256 = val; end
+  def resources; @resources ||= []; end
+  def resource(&block); resources << Resource.new(@food, self, &block); end
+  def mirrors; @mirrors ||= []; end
+  def mirror(val); @mirrors << mirror; end
+end
+
+class Resource
+  def initialize(food, package, &block)
+    @food = food
+    @package = package
+    instance_eval(&block)
+  end
+
+
+  def name; @food.name; end
+  def description; @food.description; end
+  def license; @food.license; end
+  def homepage; @food.homepage; end
+  def version; @food.version; end
+
+  def os; @package.os; end
+  def arch; @package.arch; end
+  def url; @package.url; end
+  def sha256; @package.sha256; end
+
+  def path(val = nil); val.nil? ? @path : @path = val; end
+  def installpath(val = nil); val.nil? ? @installpath : @installpath = val; end
+  def executable(val = nil); val.nil? ? @executable : @executable = val; end
+end
 `
 
 func newInstallCmd() *cobra.Command {
@@ -118,13 +187,16 @@ func getFood(foodName string) (*gofish.Food, error) {
 	}
 	mrb := ruby.NewMrb()
 	defer mrb.Close()
-	if _, err := mrb.LoadString(string(foodBytes)); err != nil {
+	if _, err := mrb.LoadString(strings.ReplaceAll(rubyDsl, "@RIG@", rig)); err != nil {
+		return nil, err
+	}
+	value, err := mrb.LoadString(string(foodBytes))
+	if err != nil {
 		return nil, err
 	}
 	var food gofish.Food
-	if err := ruby.Decode(&food, mrb.GetGlobalVariable(fmt.Sprintf("$%s", strings.ToLower(reflect.TypeOf(food).Name())))); err != nil {
+	if err := ruby.Decode(&food, value); err != nil {
 		return nil, err
 	}
-	food.Rig = rig
 	return &food, nil
 }
