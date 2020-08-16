@@ -246,7 +246,14 @@ func (f *Food) Link(pkg *Package) error {
 	barrelDir := filepath.Join(home.Barrel(), f.Name, f.Version)
 	for _, r := range pkg.Resources {
 		// TODO: run this in parallel
-		destPath := filepath.Join(home.HomePrefix, r.InstallPath)
+
+		// We assume every Food's InstallPath begins with `bin/` (`bin\\` on Windows)
+		installPath, err := filepath.Rel("bin", r.InstallPath)
+		if err != nil {
+			return err
+		}
+
+		destPath := filepath.Join(home.BinPath(), installPath)
 		if err := os.MkdirAll(filepath.Dir(destPath), 0755); err != nil && !os.IsExist(err) {
 			return err
 		}
