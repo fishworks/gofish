@@ -272,8 +272,16 @@ func (f *Food) Link(pkg *Package) error {
 // Unlink removes any linked resources owned by the package.
 func (f *Food) Unlink(pkg *Package) error {
 	for _, r := range pkg.Resources {
+		// We assume every Food's InstallPath begins with `bin/` (`bin\\` on Windows)
+		installPath, err := filepath.Rel("bin", r.InstallPath)
+		if err != nil {
+			return err
+		}
+
+		destPath := filepath.Join(home.BinPath(), installPath)
+
 		// TODO: check if the linked path we are about to remove is really owned by us
-		if err := os.RemoveAll(filepath.Join(home.HomePrefix, r.InstallPath)); err != nil {
+		if err := os.RemoveAll(destPath); err != nil {
 			return err
 		}
 	}
