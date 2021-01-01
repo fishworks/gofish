@@ -16,9 +16,9 @@ jobs:
     - name: build
       run: make
     - name: run style tests
-      uses: golangci/golangci-lint-action@v1
+      uses: golangci/golangci-lint-action@v2
       with:
-        version: v1.26
+        version: v1.34
         args: --tests --disable-all --enable=gofmt --enable=misspell --enable=deadcode --enable=ineffassign --enable=govet
     - name: run unit tests
       run: go test ./...
