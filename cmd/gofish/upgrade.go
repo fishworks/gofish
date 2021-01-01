@@ -34,6 +34,7 @@ func newUpgradeCmd() *cobra.Command {
 				for i, r := range installedVersions {
 					v, err := semver.NewVersion(r)
 					if err != nil {
+						ohai.Ohaif("Upgrading %s...\n", name)
 						return fmt.Errorf("Error parsing version: %v", err)
 					}
 					vs[i] = v
