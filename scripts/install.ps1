@@ -11,7 +11,7 @@ $tempDir = Join-Path $env:TEMP 'Fish'
 if (![System.IO.Directory]::Exists($tempDir)) {[void][System.IO.Directory]::CreateDirectory($tempDir)}
 $file = Join-Path $env:TEMP "gofish-$version-windows-amd64.zip"
 
-# Download fish
+# Download gofish
 Write-Output "Downloading '$url'"
 (new-object System.Net.WebClient).DownloadFile($url, $file)
 
