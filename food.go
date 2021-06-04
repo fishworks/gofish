@@ -291,10 +291,52 @@ func (f *Food) Lint() (errs []error) {
 			if err := checksumVerifyPath(cachedFilePath, pkg.SHA256); err != nil {
 				errs = append(errs, fmt.Errorf("shasum verify check failed: %v", err))
 			}
+			if err := installVerify(f, pkg, cachedFilePath); err != nil {
+				errs = append(errs, fmt.Errorf("install verify check failed: %v", err))
+			}
 		}(pkg)
 	}
 	wg.Wait()
 	return
+}
+
+func installVerify(f *Food, pkg *Package, src string) error {
+	barrel := filepath.Join(home.Cache(), "barrel")
+	barrelDir := filepath.Join(barrel, f.Name, f.Version, pkg.OS, pkg.Arch)
+
+	u, err := url.Parse(pkg.URL)
+	if err != nil {
+		return fmt.Errorf("could not parse package URL '%s' as a URL: %v", pkg.URL, err)
+	}
+
+	err = os.RemoveAll(barrelDir)
+	if err != nil {
+		return err
+	}
+
+	if err := os.MkdirAll(barrelDir, 0755); err != nil && !os.IsExist(err) {
+		return err
+	}
+
+	err = unarchiveOrCopy(src, barrelDir, u.Path)
+	if err != nil {
+		return err
+	}
+
+	for _, r := range pkg.Resources {
+		rPath := r.Path
+		// If we are validating windows packages on a non-windows machine
+		// we need to change the directory seperator
+		if runtime.GOOS != "windows" {
+			strings.ReplaceAll(r.Path, "\\", "/")
+		}
+		resourcePath := filepath.Join(barrelDir, rPath)
+		_, err := os.Stat(resourcePath)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func getExtension(path string) string {
