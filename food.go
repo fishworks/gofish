@@ -337,6 +337,18 @@ func downloadCachedFileToPath(filePath string, url string) error {
 		return err
 	}
 
+	// ensure directory exist
+	dirPath := filepath.Dir(filePath)
+	if _, err = os.Stat(dirPath); err != nil {
+		if os.IsNotExist(err) {
+			if err = os.MkdirAll(dirPath, 0755); err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+	}
+
 	if _, err = os.Stat(filePath); err == nil {
 		return nil
 	}
