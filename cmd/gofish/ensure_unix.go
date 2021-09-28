@@ -1,3 +1,4 @@
+//go:build !windows
 // +build !windows
 
 package main
@@ -6,39 +7,24 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
+	"strconv"
 	"strings"
 )
 
 func ensureDirectories(dirs []string) error {
 	var isRoot bool = false
 
-	userCmd := exec.Command("id", "-un")
-	userOutput, err := userCmd.Output()
+	curUser, err := user.Current()
 	if err != nil {
 		return err
 	}
 
-	userCmd = exec.Command("id", "-u")
-	userId, err := userCmd.Output()
-	if err != nil {
-		return err
-	}
-
-	if strings.TrimSuffix(string(userId), "\n") == "0" {
+	if i, _ := strconv.Atoi(curUser.Uid); i == 0 {
 		isRoot = true
 	}
 
-	// strip the newline character from the end
-	curUser := strings.TrimSuffix(string(userOutput), "\n")
-
-	groupCmd := exec.Command("id", "-gn", curUser)
-	groupOutput, err := groupCmd.Output()
-	if err != nil {
-		return err
-	}
-
-	// strip the newline character from the end
-	curGroup := strings.TrimSuffix(string(groupOutput), "\n")
+	curGroup, _ := user.LookupGroupId(curUser.Gid)
 
 	fmt.Printf("The following new directories will be created:\n")
 	fmt.Println(strings.Join(dirs, "\n"))
@@ -59,9 +45,9 @@ func ensureDirectories(dirs []string) error {
 			return fmt.Errorf("%s must be a directory", dir)
 		}
 		if isRoot {
-			cmd = exec.Command("chown", fmt.Sprintf("%s:%s", curUser, curGroup), dir)
+			cmd = exec.Command("chown", fmt.Sprintf("%s:%s", curUser.Username, curGroup.Name), dir)
 		} else {
-			cmd = exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser, curGroup), dir)
+			cmd = exec.Command("sudo", "chown", fmt.Sprintf("%s:%s", curUser.Username, curGroup.Name), dir)
 		}
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
