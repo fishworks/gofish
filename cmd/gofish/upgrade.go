@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
+	"sort"
 
 	"github.com/Masterminds/semver"
 	"github.com/fishworks/gofish/pkg/ohai"
@@ -39,6 +40,7 @@ func newUpgradeCmd() *cobra.Command {
 					}
 					vs[i] = v
 				}
+				sort.Sort(vs)
 				// we can safely assume there's at least one release installed
 				latestInstalledVersion := vs[len(vs)-1]
 				food, err := getFood(name)
