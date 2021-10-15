@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"sort"
+	"time"
 
 	"github.com/Masterminds/semver"
 	"github.com/fishworks/gofish/pkg/ohai"
