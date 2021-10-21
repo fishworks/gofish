@@ -26,7 +26,7 @@ PROJECT_NAME="gofish"
 PROJECT_GH="fishworks/gofish"
 
 : ${INSTALL_PREFIX:="/usr/local/bin"}
-: ${VERSION:="v0.14.0"}
+: ${GOFISH_VERSION:="v0.14.0"}
 
 if [[ $SKIP_BIN_INSTALL == "1" ]]; then
   echo "Skipping binary install"
@@ -77,7 +77,7 @@ verifySupported() {
 
 # getDownloadURL checks the latest available version.
 getDownloadURL() {
-  DOWNLOAD_URL="https://gofi.sh/releases/$PROJECT_NAME-$VERSION-$OS-$ARCH.tar.gz"
+  DOWNLOAD_URL="https://gofi.sh/releases/$PROJECT_NAME-$GOFISH_VERSION-$OS-$ARCH.tar.gz"
 }
 
 # downloadFile downloads the latest binary package and also the checksum
