@@ -20,11 +20,19 @@ func ensureDirectories(dirs []string) error {
 		return err
 	}
 
-	if i, _ := strconv.Atoi(curUser.Uid); i == 0 {
+	i, err := strconv.Atoi(curUser.Uid)
+	if err != nil {
+		return err
+	}
+
+	if i == 0 {
 		isRoot = true
 	}
 
-	curGroup, _ := user.LookupGroupId(curUser.Gid)
+	curGroup, err := user.LookupGroupId(curUser.Gid)
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf("The following new directories will be created:\n")
 	fmt.Println(strings.Join(dirs, "\n"))
