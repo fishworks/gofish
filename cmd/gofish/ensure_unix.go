@@ -23,9 +23,7 @@ func ensureDirectories(dirs []string) error {
 	i, err := strconv.Atoi(curUser.Uid)
 	if err != nil {
 		return err
-	}
-
-	if i == 0 {
+	} else if i == 0 {
 		isRoot = true
 	}
 
