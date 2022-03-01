@@ -81,5 +81,5 @@ jobs:
           source_dir: '.'
           container_name: '$web'
           connection_string: ${{ secrets.CONNECTIONSTRING }}
-          extra_args: "--destination-path releases --overwrite"
+          extra_args: "--destination-path releases"
           sync: false
