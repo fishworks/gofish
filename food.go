@@ -328,7 +328,7 @@ func installVerify(f *Food, pkg *Package, src string) error {
 		// If we are validating windows packages on a non-windows machine
 		// we need to change the directory separator
 		if runtime.GOOS != "windows" {
-			strings.ReplaceAll(r.Path, "\\", "/")
+			rPath = strings.ReplaceAll(r.Path, "\\", "/")
 		}
 		resourcePath := filepath.Join(barrelDir, rPath)
 		_, err := os.Stat(resourcePath)
