@@ -81,4 +81,5 @@ jobs:
           source_dir: '.'
           container_name: '$web'
           connection_string: ${{ secrets.CONNECTIONSTRING }}
+          overwrite: 'true'
           extra_args: "--destination-path releases"
