@@ -1,5 +1,9 @@
 # GoFish, The Package Manager
 
+## THIS PROJECT IS BEING ARCHIVED
+
+Due to the amount of time and money required to maintain this side project, I am archiving it. Please feel free to [send me an email](mailto:matt.fisher@fishworks.io) if you have any questions or comments.
+
 ![Build Status](https://github.com/fishworks/gofish/workflows/build/badge.svg)
 
 Features, usage and installation instructions can be found on the [homepage](https://gofi.sh).
@@ -29,7 +33,7 @@ For troubleshooting, see the [Troubleshooting Guide](https://gofi.sh#troubleshoo
 
 ## Security
 
-Please email security issues to [Matt Fisher](mailto:matt.fisher+security-issues@fishworks.io).
+Please email security issues to [Matt Fisher](mailto:matt.fisher@fishworks.io).
 
 ## License
 
