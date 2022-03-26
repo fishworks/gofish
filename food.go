@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/jdxcode/netrc"
 	"github.com/mholt/archiver/v3"
 	log "github.com/sirupsen/logrus"
 
@@ -370,6 +371,30 @@ func (f *Food) DownloadTo(pkg *Package, filePath string) error {
 	return nil
 }
 
+// userNetrcCredentials will attempt to load login and password from the users netrc file
+func userNetrcCredentials(host string) (login, password string) {
+	var netrcMachine *netrc.Machine
+	for _, netrcFilePath := range []string{os.Getenv("NETRC"), home.GPGNetrc(), home.Netrc()} {
+		if netrcFile, err := netrc.Parse(netrcFilePath); err != nil {
+			if !os.IsNotExist(err) {
+				log.Errorln(err)
+			}
+		} else {
+			netrcMachine = netrcFile.Machine(host)
+			return netrcMachine.Get("login"), netrcMachine.Get("password")
+		}
+	}
+	return "", ""
+}
+
+// addCredentialsToRequest will attempt to attach relevant credentials to the http.Request
+func addCredentialsToRequest(req *http.Request) {
+	login, password := userNetrcCredentials(req.Host)
+	if login != "" && password != "" {
+		req.SetBasicAuth(login, password)
+	}
+}
+
 // downloadCachedFileToPath will download a file from the given url to a directory, returning the
 // path to the cached file. If it already exists, it'll skip downloading the file and just return
 // the path to the cached file.
@@ -378,6 +403,10 @@ func downloadCachedFileToPath(filePath string, url string) error {
 	if err != nil {
 		return err
 	}
+
+	req.Header.Set("Accept", "application/octet-stream")
+
+	addCredentialsToRequest(req)
 
 	if _, err = os.Stat(filePath); err == nil {
 		return nil
